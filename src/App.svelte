@@ -8,9 +8,7 @@
   import { onMount } from 'svelte';
   import * as _ from 'lodash';
   import { appStore } from './stores/app';
-
-  let circleText = '';
-  $: circleText = $appStore.circleText;
+  import Dialog from './components/Dialog.svelte';
 
   let iconLinks = [
     {
@@ -30,17 +28,20 @@
     }
   ];
 
+  let active = false;
+
   onMount(() => {
     appStore.startChangingCircleText('Hello');
   })
 </script>
 
 <MaterialApp>
+  <Dialog bind:active></Dialog>
   <div style="height: 100vh;" class="d-flex flex-column align-center justify-center">
     <div class="d-flex flex-row justify-center">
       <Circle color="black" width="250px" height="250px">
-        {#if circleText}
-          <div style="color: yellow;" class="text-h3" transition:fade><strong>{_.capitalize(circleText)}</strong></div>
+        {#if $appStore.circleText}
+          <div style="color: yellow;" class="text-h3" transition:fade><strong>{_.capitalize($appStore.circleText)}</strong></div>
         {/if}
       </Circle>
     </div>
@@ -65,6 +66,10 @@
             appStore.setCircleText('');
             appStore.startChangingCircleText('Hello');
             // circleText = '';
+          }}
+          on:click={() => {
+            active = !active;
+            console.log('active', active)
           }}
         >
           <Icon size="65px" style="color: {link.color};" path={link.path} />

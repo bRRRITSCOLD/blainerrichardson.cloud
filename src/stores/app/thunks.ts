@@ -15,7 +15,6 @@ export const createAppStoreThunks = (appStoreActions: AppStoreActionsInterface):
   let changeCircleText$: Observable<any>;
 
   const startChangingCircleText = (circleText: string) => {
-    console.log(circleText)
     // create unsubscribe so that
     // we may cancel/stop when needed
     changeCircleTextUnsubscribe$ = new Subject();
@@ -47,7 +46,6 @@ export const createAppStoreThunks = (appStoreActions: AppStoreActionsInterface):
       // and set a handler
       if (changeCircleText$) {
         changeCircleText$.subscribe((newCircleText: string) => {
-          console.log(newCircleText)
           // set the app's circle text
           // with the new circle text
           appStoreActions.setCircleText(newCircleText);
