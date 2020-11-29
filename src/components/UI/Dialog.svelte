@@ -14,19 +14,13 @@
 <Dialog bind:fullscreen bind:active>
   <Card>
     <CardTitle>
-      <slot name="title">
-        <span >Unknown Title</span>
-      </slot>
+      <slot name="title" />
     </CardTitle>
     <CardText>
-      <slot name="body">
-        <span >Unknown Body</span>
-      </slot>
+      <slot name="body" />
     </CardText>
     <CardActions class="justify-end">
-      <slot name="footer">
-        <span >Unknown Footer</span>
-      </slot>
+      <slot name="footer" />
     </CardActions>
   </Card>
 </Dialog>

@@ -1,5 +1,5 @@
 // node_modules
-import { mdiLinkedin, mdiGithub, mdiEmail } from '@mdi/js';
+import { mdiLinkedin, mdiGithub, mdiEmail, mdiFileDocument } from '@mdi/js';
 
 // libraries
 import { _ } from '../../lib/utils';
@@ -7,7 +7,7 @@ import { _ } from '../../lib/utils';
 export interface AppStoreStateInterface {
   circleText: string;
   isChangingCircleText: boolean;
-  iconLinks: { name: string; path: string; color: string; }[];
+  iconLinks: { name: string; path: string; href?: string; }[];
 }
 
 export const initialAppStoreState: AppStoreStateInterface = {
@@ -17,17 +17,20 @@ export const initialAppStoreState: AppStoreStateInterface = {
     {
       name: 'linkedin',
       path: mdiLinkedin,
-      color: 'black'
+      href: 'https://www.linkedin.com/in/blainerrichardson'
     },
     {
       name: 'github',
       path: mdiGithub,
-      color: 'black'
+      href: 'https://github.com/bRRRITSCOLD'
     },
     {
       name: 'email',
-      path: mdiEmail,
-      color: 'black'
+      path: mdiEmail
+    },
+    {
+      name: 'resume',
+      path: mdiFileDocument
     }
   ],
 };
