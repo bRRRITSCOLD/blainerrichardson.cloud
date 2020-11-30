@@ -49,13 +49,3 @@
     </CardActions>
   </Card>
 </Dialog>
-
-<style lang="scss">
-.close-icon {
-  color: black;
-}
-
-.close-icon:hover {
-    color: gray;
-  }
-</style>
