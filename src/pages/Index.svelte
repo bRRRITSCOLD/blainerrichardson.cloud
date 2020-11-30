@@ -11,6 +11,7 @@
 
   // stores
   import { appStore } from '../stores/app';
+import ResumeDialog from '../components/ResumeDialog.svelte';
 
   let iconLinks = $appStore.iconLinks.map((iconLink) => _.assign(
     {},
@@ -40,14 +41,10 @@
 {/if}
 
 {#if resumeDialogActive}
-  <EmailDialog
-    bind:active={emailDialogActive}
-    on:onCancelButtonClick={() => {
-      emailDialogActive = false;
-    }}
-    on:onSendButtonClick={(event) => {
-      console.log(event.detail);
-      emailDialogActive = false;
+  <ResumeDialog
+    bind:active={resumeDialogActive}
+    on:onCloseIconClick={() => {
+      resumeDialogActive = false;
     }}
   />
 {/if}
@@ -80,6 +77,8 @@
         on:click={() => {
           if (link.name.toLowerCase() === 'email') {
             emailDialogActive = true;
+          } else  if (link.name.toLowerCase() === 'resume') {
+            resumeDialogActive = true;
           } else if (link.href) {
             window.location.href = link.href;
           }
