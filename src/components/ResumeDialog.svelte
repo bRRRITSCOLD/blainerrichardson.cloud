@@ -11,6 +11,8 @@
 
   // file constants
   const dispatch = createEventDispatcher();
+
+  let closeIconColor = 'black';
 </script>
 
 <Dialog bind:active fullscreen>
@@ -19,11 +21,17 @@
       <div class="d-flex flex-row justify-space-between" style="width: 100%;">
         <div>Resume Dialog Header</div>
         <span
+          on:mouseenter={() => {
+            closeIconColor = 'gray';
+          }}
+          on:mouseleave={() => {
+            closeIconColor = 'black';
+          }}
           on:click={() => {
             dispatch('onCloseIconClick', true);
           }}
         >
-          <Icon size="30px" style="color: black;" path={mdiClose} />
+          <Icon style="color: {closeIconColor};" size="30px" path={mdiClose} />
         </span>
       </div>
     </CardTitle>
@@ -41,3 +49,13 @@
     </CardActions>
   </Card>
 </Dialog>
+
+<style lang="scss">
+.close-icon {
+  color: black;
+}
+
+.close-icon:hover {
+    color: gray;
+  }
+</style>
