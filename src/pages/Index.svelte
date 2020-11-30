@@ -1,14 +1,16 @@
 <script lang="ts">
   // node_modules
-  import { push } from 'svelte-spa-router';
-	import { fade } from 'svelte/transition';
-  import { MaterialApp, Button } from 'svelte-materialify/src'
-  import Circle from '../components/Circle.svelte';
+  import { fade } from 'svelte/transition';
   import Icon from 'svelte-materialify/src/components/Icon';
   import { onMount } from 'svelte';
   import * as _ from 'lodash';
-  import { appStore } from '../stores/app';
+  
+  // components
+  import Circle from '../components/Circle.svelte';
   import EmailDialog from '../components/EmailDialog.svelte';
+
+  // stores
+  import { appStore } from '../stores/app';
 
   let iconLinks = $appStore.iconLinks.map((iconLink) => _.assign(
     {},
@@ -17,13 +19,39 @@
   ));
 
   let emailDialogActive = false;
+  let resumeDialogActive = false;
 
   onMount(() => {
     appStore.startChangingCircleText('Hello');
   })
 </script>
 
-<EmailDialog bind:active={emailDialogActive} />
+{#if emailDialogActive}
+  <EmailDialog
+    bind:active={emailDialogActive}
+    on:onCancelButtonClick={() => {
+      emailDialogActive = false;
+    }}
+    on:onSendButtonClick={(event) => {
+      console.log(event.detail);
+      emailDialogActive = false;
+    }}
+  />
+{/if}
+
+{#if resumeDialogActive}
+  <EmailDialog
+    bind:active={emailDialogActive}
+    on:onCancelButtonClick={() => {
+      emailDialogActive = false;
+    }}
+    on:onSendButtonClick={(event) => {
+      console.log(event.detail);
+      emailDialogActive = false;
+    }}
+  />
+{/if}
+
 <div style="height: 100vh;" class="d-flex flex-column align-center justify-center">
   <div class="d-flex flex-row justify-center">
     <Circle color="black" width="250px" height="250px">

@@ -45,16 +45,31 @@ export const createAppStoreThunks = (appStoreActions: AppStoreActionsInterface):
       // now subscribe to the subscription
       // and set a handler
       if (changeCircleText$) {
-        changeCircleText$.subscribe((newCircleText: string) => {
-          // set the app's circle text
-          // with the new circle text
-          appStoreActions.setCircleText(newCircleText);
-          // unsubscribe to the changing
-          // circle text observable
-          stopChangingCircleText();
-          // indicate that we are not changing
-          // the cirle text for the app
-          appStoreActions.setIsChangingCircleText(false);
+        changeCircleText$.subscribe({
+          next: (newCircleText: string) => {
+            // set the app's circle text
+            // with the new circle text
+            appStoreActions.setCircleText(newCircleText);
+            // unsubscribe to the changing
+            // circle text observable
+            stopChangingCircleText();
+            // indicate that we are not changing
+            // the cirle text for the app
+            appStoreActions.setIsChangingCircleText(false);
+          },
+          error: (error: string) => {
+            // log error for conext
+            console.log('change circle text error ', error);
+            // set the app's circle text
+            // with the new circle text
+            appStoreActions.setCircleText(circleText);
+            // unsubscribe to the changing
+            // circle text observable
+            stopChangingCircleText();
+            // indicate that we are not changing
+            // the cirle text for the app
+            appStoreActions.setIsChangingCircleText(false);
+          }
         });
       }
     },
