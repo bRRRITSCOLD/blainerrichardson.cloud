@@ -38,7 +38,6 @@
 
 <Dialog bind:active>
   <Card>
-    {JSON.stringify($state)}
     <form on:submit={handleSubmit}>
       <CardTitle>
         <div class="d-flex flex-row">
