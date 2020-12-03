@@ -4,8 +4,9 @@ import * as faker from 'faker';
 
 // libraries
 import { _ } from '../../lib/utils';
-import type { Certification, SchoolExperience } from '../../models/resume';
-import { WorkExperience } from '../../models/resume';
+
+// models
+import { WorkExperience, SchoolExperience, Certification } from '../../models/resume';
 
 export interface AppStoreStateInterface {
   circleText: string;
@@ -52,9 +53,27 @@ export const initialAppStoreState: AppStoreStateInterface = {
     },
     position: faker.name.jobTitle()
   })),
-  schoolExperience: [],
-  certifications: [],
-  skills: []
+  schoolExperience: Array.from({ length: 10 }).map(() => new SchoolExperience({
+    startDate: faker.date.past(),
+    endDate: faker.date.past(),
+    schoolName: faker.company.companyName(),
+    schoolAddress: {
+      addressLine1: faker.address.streetAddress(),
+      city: faker.address.city(),
+      state: faker.address.state(),
+      zipCode: faker.address.zipCode()
+    },
+    degree: faker.name.jobTitle(),
+    classes: Array.from({ length: _.sample([8, 9, 10, 11, 12, 13]) })
+      .map(() => faker.random.word())
+  })),
+  certifications: Array.from({ length: 10 }).map(() => new Certification({
+    startDate: faker.date.past(),
+    endDate: faker.date.past(),
+    name: faker.company.companyName(),
+    institution: faker.company.companyName()
+  })),
+  skills: Array.from({ length: 10 }).map(() => faker.random.word())
 };
 
 export function hydrateAppStoreState(_appStoreState: AppStoreStateInterface): Partial<AppStoreStateInterface> {
