@@ -61,7 +61,7 @@
   right: -13px;
   background-color: white;
   border: 4px solid #FF6600;
-  top: 15px;
+  top: 19px;
   border-radius: 50%;
   z-index: 1;
 }

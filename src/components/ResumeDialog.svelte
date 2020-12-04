@@ -24,7 +24,7 @@
       <div>Resume</div>
       <span
         on:mouseenter={() => {
-          closeIconColor = 'gray';
+          closeIconColor = 'lightgray';
         }}
         on:mouseleave={() => {
           closeIconColor = 'white';
@@ -42,34 +42,37 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Work Experience</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.workExperience} let:item>
-          <!-- Header -->
-          <div class="d-flex flex-column">
-            <div style="font-size: 15px;">
-              <strong>{item.position}</strong>
+          <!-- Card -->
+          <div style="padding: 10px;">
+            <!-- Header -->
+            <div class="d-flex flex-column">
+              <div style="font-size: 16px;">
+                <strong>{item.position}</strong>
+              </div>
+              <div style="font-size: 14px;">
+                {item.companyName}
+              </div>
+              <div style="font-size: 12px;">
+                {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+              </div>
+              <div class="secondary-text" style="font-size: 12px;">
+                {item.companyAddress.city}, {item.companyAddress.state}
+              </div>
             </div>
-            <div style="font-size: 15px;">
-              {item.companyName}
+  
+            <!-- Footer/Actions -->
+            <div class="d-flex flex-column">
+              <ul>
+                {#each item.duties as duty}
+                  <li style="font-size: 14px;">{duty}</li>
+                {/each}
+              </ul>
+              <ul>
+                {#each item.accomplishments as accomplishment}
+                  <li style="font-size: 14px;">{accomplishment}</li>
+                {/each}
+              </ul>
             </div>
-            <div style="font-size: 15px;">
-              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
-            </div>
-            <div style="font-size: 15px;">
-              {item.companyAddress.city}, {item.companyAddress.state}
-            </div>
-          </div>
-
-          <!-- Footer/Actions -->
-          <div class="d-flex flex-column">
-            <ul>
-              {#each item.duties as duty}
-                <li style="font-size: 13px;">{duty}</li>
-              {/each}
-            </ul>
-            <ul>
-              {#each item.accomplishments as accomplishment}
-                <li style="font-size: 13px;">{accomplishment}</li>
-              {/each}
-            </ul>
           </div>
         </MultiSidedTimeline>
       </div>
@@ -78,29 +81,32 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">School Experience</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.schoolExperience} let:item>
-          <!-- Header -->
-          <div class="d-flex flex-column">
-            <div style="font-size: 15px;">
-              <strong>{item.degree}</strong>
+          <!-- Card -->
+          <div style="padding: 10px;">
+            <!-- Header -->
+            <div class="d-flex flex-column">
+              <div style="font-size: 16px;">
+                <strong>{item.degree}</strong>
+              </div>
+              <div style="font-size: 14px;">
+                {item.schoolName}
+              </div>
+              <div style="font-size: 12px;">
+                {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+              </div>
+              <div style="font-size: 12px;">
+                {item.schoolAddress.city}, {item.schoolAddress.state}
+              </div>
             </div>
-            <div style="font-size: 15px;">
-              {item.schoolName}
+  
+            <!-- Body -->
+            <div class="d-flex flex-column">
+              <ul>
+                {#each item.classes as klass}
+                  <li style="font-size: 14px;">{klass}</li>
+                {/each}
+              </ul>
             </div>
-            <div style="font-size: 15px;">
-              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
-            </div>
-            <div style="font-size: 15px;">
-              {item.schoolAddress.city}, {item.schoolAddress.state}
-            </div>
-          </div>
-
-          <!-- Body -->
-          <div class="d-flex flex-column">
-            <ul>
-              {#each item.classes as klass}
-                <li style="font-size: 13px;">{klass}</li>
-              {/each}
-            </ul>
           </div>
         </MultiSidedTimeline>
       </div>
@@ -109,16 +115,19 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Certifications</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.certifications} let:item>
-          <!-- Header -->
-          <div class="d-flex flex-column">
-            <div style="font-size: 15px;">
-              <strong>{item.name}</strong>
-            </div>
-            <div style="font-size: 15px;">
-              {item.institution}
-            </div>
-            <div style="font-size: 15px;">
-              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+          <!-- Card -->
+          <div style="padding: 10px;">
+            <!-- Header -->
+            <div class="d-flex flex-column">
+              <div style="font-size: 16px;">
+                <strong>{item.name}</strong>
+              </div>
+              <div style="font-size: 14px;">
+                {item.institution}
+              </div>
+              <div style="font-size: 12px;">
+                {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+              </div>
             </div>
           </div>
         </MultiSidedTimeline>
@@ -145,6 +154,8 @@
 </Dialog>
 
 <style lang="scss">
+  @import 'svelte-materialify/src/styles/tools/colors';
+
 .title-bar {
   background-color: black;
   color: #FF6600;
