@@ -33,6 +33,7 @@
   "dependencies": {
     "@mdi/js": "^5.8.55",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "rxjs": "^6.6.3",
     "sirv-cli": "^1.0.0",
     "svelte-forms-lib": "^1.2.2",

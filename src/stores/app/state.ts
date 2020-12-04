@@ -51,7 +51,11 @@ export const initialAppStoreState: AppStoreStateInterface = {
       state: faker.address.state(),
       zipCode: faker.address.zipCode()
     },
-    position: faker.name.jobTitle()
+    position: faker.name.jobTitle(),
+    duties: Array.from({ length: _.sample([4, 5, 6]) })
+      .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4]))),
+    accomplishments: Array.from({ length: _.sample([4, 5, 6]) })
+      .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4])))
   })),
   schoolExperience: Array.from({ length: 10 }).map(() => new SchoolExperience({
     startDate: faker.date.past(),

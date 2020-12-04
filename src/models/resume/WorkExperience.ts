@@ -13,6 +13,8 @@ export interface WorkExperienceInterface {
     zipCode: string;
   };
   position: string;
+  duties: string[];
+  accomplishments: string[];
 }
 
 export class WorkExperience implements WorkExperienceInterface {
@@ -27,6 +29,8 @@ export class WorkExperience implements WorkExperienceInterface {
     zipCode: string;
   };
   public position: string;
+  public duties: string[];
+  public accomplishments: string[];
 
   public constructor(workExperience: Partial<WorkExperienceInterface>) {
     _.assign(
@@ -36,7 +40,10 @@ export class WorkExperience implements WorkExperienceInterface {
         startDate: new Date(_.get(workExperience  , 'startDate', new Date)),
         endDate: _.get(workExperience  , 'endDate') ? new Date(_.get(workExperience  , 'endDate')) : undefined,
         companyName: _.get(workExperience, 'companyName'),
-        companyAddress: _.get(workExperience, 'companyAddress')
+        companyAddress: _.get(workExperience, 'companyAddress'),
+        position: _.get(workExperience, 'position'),
+        duties: _.get(workExperience, 'duties', []),
+        accomplishments: _.get(workExperience, 'accomplishments', [])
       }
     )
   }

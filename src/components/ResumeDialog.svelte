@@ -5,6 +5,7 @@
   import { createEventDispatcher  } from 'svelte';
   import MultiSidedTimeline from './MultiSidedTimeline.svelte';
   import { appStore } from '../stores/app';
+  import moment from 'moment';
 
   // components
 
@@ -41,13 +42,34 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Work Experience</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.workExperience} let:item>
-          <div>
-            <CardTitle>
-              {item.startDate} to {item.endDate}
-            </CardTitle>
-            <CardText>
+          <!-- Header -->
+          <div class="d-flex flex-column">
+            <div style="font-size: 15px;">
+              <strong>{item.position}</strong>
+            </div>
+            <div style="font-size: 15px;">
               {item.companyName}
-            </CardText>
+            </div>
+            <div style="font-size: 15px;">
+              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+            </div>
+            <div style="font-size: 15px;">
+              {item.companyAddress.city}, {item.companyAddress.state}
+            </div>
+          </div>
+
+          <!-- Footer/Actions -->
+          <div class="d-flex flex-column">
+            <ul>
+              {#each item.duties as duty}
+                <li style="font-size: 13px;">{duty}</li>
+              {/each}
+            </ul>
+            <ul>
+              {#each item.accomplishments as accomplishment}
+                <li style="font-size: 13px;">{accomplishment}</li>
+              {/each}
+            </ul>
           </div>
         </MultiSidedTimeline>
       </div>
@@ -56,8 +78,29 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">School Experience</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.schoolExperience} let:item>
-          <div>
-            {JSON.stringify(item)}
+          <!-- Header -->
+          <div class="d-flex flex-column">
+            <div style="font-size: 15px;">
+              <strong>{item.degree}</strong>
+            </div>
+            <div style="font-size: 15px;">
+              {item.schoolName}
+            </div>
+            <div style="font-size: 15px;">
+              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+            </div>
+            <div style="font-size: 15px;">
+              {item.schoolAddress.city}, {item.schoolAddress.state}
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="d-flex flex-column">
+            <ul>
+              {#each item.classes as klass}
+                <li style="font-size: 13px;">{klass}</li>
+              {/each}
+            </ul>
           </div>
         </MultiSidedTimeline>
       </div>
@@ -66,8 +109,17 @@
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Certifications</div>
       <div style="padding-top: 20px;">
         <MultiSidedTimeline items={$appStore.certifications} let:item>
-          <div>
-            {JSON.stringify(item)}
+          <!-- Header -->
+          <div class="d-flex flex-column">
+            <div style="font-size: 15px;">
+              <strong>{item.name}</strong>
+            </div>
+            <div style="font-size: 15px;">
+              {item.institution}
+            </div>
+            <div style="font-size: 15px;">
+              {moment(item.startDate).format('MMM YYYY')} to {moment(item.endDate).format('MMM YYYY')}
+            </div>
           </div>
         </MultiSidedTimeline>
       </div>
@@ -84,7 +136,7 @@
     {/if}
   </div>
   <div id="footer" class="actions-bar" style="position:absolute; bottom:0px; height: 50px; left:0px; right:0px; overflow:hidden;">
-    <div class="d-flex flex-row justify-end" style="padding-top: 20px;">
+    <div class="d-flex flex-row justify-end">
       <Button class="primary-color">
         Download
       </Button>
