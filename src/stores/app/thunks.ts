@@ -4,10 +4,14 @@ import { _ } from '../../lib/utils';
 import { Observable, of, Subject } from "rxjs";
 import { delay, takeUntil, tap } from "rxjs/operators";
 import type { AppStoreActionsInterface } from "./actions";
+import type { EmailInterface } from "../../models/email";
+
+import * as emailService from '../../services/email';
 
 export interface AppStoreThunksInterface {
   startChangingCircleText: (circleText) => void;
   stopChangingCircleText: () => void;
+  sendEmail: (sendEmailRequest: { email: EmailInterface }) => void;
 }
 
 export const createAppStoreThunks = (appStoreActions: AppStoreActionsInterface): AppStoreThunksInterface => {
@@ -80,6 +84,37 @@ export const createAppStoreThunks = (appStoreActions: AppStoreActionsInterface):
       // indicate that we are not changing
       // the cirle text for the app
       appStoreActions.setIsChangingCircleText(false);
+    },
+    sendEmail: async (sendEmailRequest) => {
+      try {
+        // deconstruct for ease
+        const { email } = sendEmailRequest;
+
+        // indicate that we are sending an email
+        appStoreActions.setIsSendingEmail(true);
+
+        // log email for now
+        console.log(email);
+        console.log(sendEmailRequest);
+        const sendEmailResponse = await emailService.sendEmail({
+          email
+        });
+        console.log(email);
+
+        // indicate that we are sending an email
+        appStoreActions.setIsSendingEmail(false);
+
+        // return explictly to make sure
+        // the closure closes
+        return;
+      } catch (err) {
+        console.log(`sendEmailError`, err);
+        // indicate that we are sending an email
+        appStoreActions.setIsSendingEmail(false);
+
+        // thow error explicitly
+        throw err;
+      }
     }
   }
 }

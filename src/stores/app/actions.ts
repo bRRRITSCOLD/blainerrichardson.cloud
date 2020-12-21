@@ -6,6 +6,7 @@ export interface AppStoreActionsInterface {
   setCircleText: (circleText: string) => void;
   setIsChangingCircleText: (isChangingCircleText: boolean) => void;
   setIconLinks: (iconLinks: any[]) => void;
+  setIsSendingEmail: (isSendingEmail: boolean) => void;
 }
 
 export const createAppStoreActions = (appStore: Writable<AppStoreStateInterface & object>): AppStoreActionsInterface => {
@@ -51,6 +52,16 @@ export const createAppStoreActions = (appStore: Writable<AppStoreStateInterface 
           { iconLinks: newIconLinks }
         )
       })
+    },
+    setIsSendingEmail: (isSendingEmail: boolean) => {
+      appStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isSendingEmail }
+        )
+      });
     },
   }
 }

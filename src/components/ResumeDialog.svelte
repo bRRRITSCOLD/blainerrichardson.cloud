@@ -2,7 +2,7 @@
   // node_modules
   import { Button, Dialog, Card, CardTitle, CardText, CardActions, Icon, Chip } from 'svelte-materialify/src';
   import { mdiClose } from '@mdi/js';
-  import { createEventDispatcher  } from 'svelte';
+  import { createEventDispatcher, onMount  } from 'svelte';
   import MultiSidedTimeline from './MultiSidedTimeline.svelte';
   import { appStore } from '../stores/app';
   import moment from 'moment';
@@ -16,6 +16,12 @@
   const dispatch = createEventDispatcher();
 
   let closeIconColor = 'white';
+
+  onMount(() => {
+    console.log('workExperience', JSON.stringify($appStore.workExperience));
+    console.log('schoolExperience', JSON.stringify($appStore.schoolExperience));
+    console.log('certifications', JSON.stringify($appStore.certifications));
+  });
 </script>
 
 <Dialog bind:active fullscreen>

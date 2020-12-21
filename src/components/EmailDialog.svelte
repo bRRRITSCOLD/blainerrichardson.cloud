@@ -9,6 +9,7 @@
   // components
 
   export let active = false;
+  export let isEmailing = true;
 
   const dispatch = createEventDispatcher();
 
@@ -89,9 +90,15 @@
       <CardActions class="justify-end">
         <div class="d-flex flex-row" style="padding-top: 10px;">
           <div style="padding-right: 5px;">
-            <Button class="primary-color" type="submit">
-              Send
-            </Button>
+            {#if !isEmailing}
+              <Button class="primary-color" type="submit">
+                Email
+              </Button>
+            {:else}
+              <Button disabled>
+                Emailing
+              </Button>
+            {/if}
           </div>
           <div>
             <Button

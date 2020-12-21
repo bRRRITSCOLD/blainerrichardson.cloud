@@ -29,12 +29,29 @@ import ResumeDialog from '../components/ResumeDialog.svelte';
 
 {#if emailDialogActive}
   <EmailDialog
+    isEmailing={$appStore.isSendingEmail}
     bind:active={emailDialogActive}
     on:onCancelButtonClick={() => {
       emailDialogActive = false;
     }}
-    on:onSendButtonClick={(event) => {
-      console.log(event.detail);
+    on:onSendButtonClick={async (event) => {
+      // create request to api
+      const sendEmailRequest = { email: {
+        from: {
+          address: 'blainerrichardson@gmail.com'
+        },
+        to: [{
+          address: event.detail.emailAddress
+        }],
+        subject: event.detail.subject,
+        text: event.detail.body,
+      } };
+      
+      // call service and send email
+      await appStore.sendEmail(sendEmailRequest);
+
+      // indicate that the dialog
+      // is not to be open now
       emailDialogActive = false;
     }}
   />
@@ -49,7 +66,7 @@ import ResumeDialog from '../components/ResumeDialog.svelte';
   />
 {/if}
 
-<div style="height: 100vh;" class="d-flex flex-column align-center justify-center">
+<div style="height: 100%; padding-top: 100px;" class="d-flex flex-column align-center justify-center">
   <div class="d-flex flex-row justify-center">
     <Circle color="black" width="250px" height="250px">
       {#if $appStore.circleText}

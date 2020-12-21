@@ -16,6 +16,8 @@ export interface AppStoreStateInterface {
   schoolExperience: SchoolExperience[];
   certifications: Certification[];
   skills: string[];
+  isSendingEmail: boolean,
+  sendEmailError: any,
 }
 
 export const initialAppStoreState: AppStoreStateInterface = {
@@ -77,7 +79,9 @@ export const initialAppStoreState: AppStoreStateInterface = {
     name: faker.company.companyName(),
     institution: faker.company.companyName()
   })),
-  skills: Array.from({ length: 10 }).map(() => faker.random.word())
+  skills: Array.from({ length: 10 }).map(() => faker.random.word()),
+  isSendingEmail: false,
+  sendEmailError: undefined
 };
 
 export function hydrateAppStoreState(_appStoreState: AppStoreStateInterface): Partial<AppStoreStateInterface> {
