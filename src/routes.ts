@@ -6,4 +6,5 @@ import Index from './pages/Index.svelte'
 export default {
     // Exact path
     '/': Index,
+    '/admin': Index,
 } as RouteDefinition

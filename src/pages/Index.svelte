@@ -8,10 +8,11 @@
   // components
   import Circle from '../components/Circle.svelte';
   import EmailDialog from '../components/EmailDialog.svelte';
+  import ResumeDialog from '../components/ResumeDialog.svelte';
 
   // stores
   import { appStore } from '../stores/app';
-import ResumeDialog from '../components/ResumeDialog.svelte';
+  import { uiStore } from '../stores/ui';
 
   let iconLinks = $appStore.iconLinks.map((iconLink) => _.assign(
     {},
@@ -19,20 +20,17 @@ import ResumeDialog from '../components/ResumeDialog.svelte';
     { color: 'black' }
   ));
 
-  let emailDialogActive = false;
-  let resumeDialogActive = false;
-
   onMount(() => {
     appStore.startChangingCircleText('Hello');
   })
 </script>
 
-{#if emailDialogActive}
+{#if $uiStore.isEmailModalOpen}
   <EmailDialog
     isEmailing={$appStore.isSendingEmail}
-    bind:active={emailDialogActive}
+    active={$uiStore.isEmailModalOpen}
     on:onCancelButtonClick={() => {
-      emailDialogActive = false;
+      uiStore.closeEmailModal()
     }}
     on:onSendButtonClick={async (event) => {
       // create request to api
@@ -47,21 +45,21 @@ import ResumeDialog from '../components/ResumeDialog.svelte';
         text: event.detail.body,
       } };
       
-      // call service and send email
+      // call store thunk and send email
       await appStore.sendEmail(sendEmailRequest);
 
       // indicate that the dialog
       // is not to be open now
-      emailDialogActive = false;
+      uiStore.closeEmailModal();
     }}
   />
 {/if}
 
-{#if resumeDialogActive}
+{#if $uiStore.isResumeModalOpen}
   <ResumeDialog
-    bind:active={resumeDialogActive}
+    active={$uiStore.isResumeModalOpen}
     on:onCloseIconClick={() => {
-      resumeDialogActive = false;
+      uiStore.closeResumeModal()
     }}
   />
 {/if}
@@ -93,9 +91,9 @@ import ResumeDialog from '../components/ResumeDialog.svelte';
         }}
         on:click={() => {
           if (link.name.toLowerCase() === 'email') {
-            emailDialogActive = true;
+            uiStore.openEmailModal()
           } else  if (link.name.toLowerCase() === 'resume') {
-            resumeDialogActive = true;
+            uiStore.openResumeModal()
           } else if (link.href) {
             window.location.href = link.href;
           }

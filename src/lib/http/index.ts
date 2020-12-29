@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // create a new base axios iinstance
-const httpClient = axios.create();
+const httpClient = axios.create({
+  withCredentials: true
+});
 
 // initiate any interceptors we would like to have
 httpClient.interceptors.request.use(
