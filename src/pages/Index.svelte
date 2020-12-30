@@ -28,7 +28,7 @@
 {#if $uiStore.isEmailModalOpen}
   <EmailDialog
     isEmailing={$appStore.isSendingEmail}
-    active={$uiStore.isEmailModalOpen}
+    bind:active={$uiStore.isEmailModalOpen}
     on:onCancelButtonClick={() => {
       uiStore.closeEmailModal()
     }}
@@ -57,7 +57,7 @@
 
 {#if $uiStore.isResumeModalOpen}
   <ResumeDialog
-    active={$uiStore.isResumeModalOpen}
+    bind:active={$uiStore.isResumeModalOpen}
     on:onCloseIconClick={() => {
       uiStore.closeResumeModal()
     }}

@@ -9,21 +9,39 @@ import { _ } from '../../lib/utils';
 import { initialUserStoreState } from "./state";
 import { createUserStoreActions } from "./actions";
 import { createUserStoreThunks } from "./thunks";
+import { createUserStoreSelectors } from "./selectors";
 
 
 
 function createUserStore() {
   // create writable
   const _userStore = writable(assign({}, initialUserStoreState));
+
+  // create writable
+  const _userStoreSelectors = createUserStoreSelectors(_userStore);
+
   // create actions
   const _userStoreActions = createUserStoreActions(_userStore);
+
   // create thunks
   const _userStoreThunks = createUserStoreThunks(_userStoreActions);
+
   // return store
   return {
     update: _userStore.update,
-    subscribe: _userStore.subscribe,
+    subscribe: _userStoreSelectors.subscribe,
+    set: (value: any) =>  {
+      _userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          value
+        )
+      });
+    },
     reset: () => _userStore.set(initialUserStoreState),
+    ..._userStoreSelectors,
     ..._userStoreActions,
     ..._userStoreThunks
   };
