@@ -16,33 +16,6 @@
 </script>
 
 <MaterialApp>
-  <NavBar
-    loginModalActive={$uiStore.isLoginModalOpen}
-    on:onLoginButtonClick={() => {
-      uiStore.openLoginModal();
-    }}
-    on:onLoginModalLoginButtonClick={async (event) => {
-      // create request to api
-      const authenticateUserRequest = {
-        username: event.detail.username,
-        password: event.detail.password
-      };
-      
-      // call store thunk and send email
-      await userStore.authenticateUser(authenticateUserRequest);
-
-      // indicate that the dialog
-      // is not to be open now
-      uiStore.closeLoginModal();
-
-      // reroute user to dashboard
-      // TODO: reroute to dashboard/admin (build Dashboard/Admin page)
-    }}
-    on:onLoginModalCancelButtonClick={() => {
-      uiStore.closeLoginModal();
-    }}
-    isLoggingIn={$userStore.isAuthenticatingUser}
-  />
   <Router {routes}/>
 </MaterialApp>
 
