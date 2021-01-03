@@ -6,16 +6,25 @@ import { get as _get, assign } from 'lodash';
 import { _ } from '../../lib/utils';
 
 // store specific
-import { initialUserStoreState } from "./state";
+import { cachedUserStoreState, initialUserStoreState } from "./state";
 import { createUserStoreActions } from "./actions";
 import { createUserStoreThunks } from "./thunks";
 import { createUserStoreSelectors } from "./selectors";
+import { USER_STORE_KEY } from "./keys";
 
 
 
 function createUserStore() {
+  // get persisted item
+  const storedUserStore = JSON.parse(sessionStorage.getItem(USER_STORE_KEY));
+
   // create writable
-  const _userStore = writable(assign({}, initialUserStoreState));
+  const _userStore = writable(assign({}, initialUserStoreState, _.isObject(storedUserStore) ? storedUserStore : {}));
+
+  // cache and uncache
+  _userStore.subscribe(value => {
+    sessionStorage.setItem(USER_STORE_KEY, JSON.stringify(cachedUserStoreState(value)));
+  });
 
   // create writable
   const _userStoreSelectors = createUserStoreSelectors(_userStore);

@@ -40,7 +40,7 @@ function createUiStore() {
       });
     },
     reset: () => _uiStore.set(initialUiStoreState),
-    ..._uiStoreSelectors
+    ..._uiStoreSelectors,
     ..._uiStoreActions,
     ..._uiStoreThunks
   };

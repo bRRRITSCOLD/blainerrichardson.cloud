@@ -8,7 +8,7 @@ import { _ } from '../../lib/utils';
 import type { UserStoreStateInterface } from "./state";
 
 export interface UserStoreSelectorsInterface extends UserStoreStateInterface {
-  isLoggedIn: boolean;
+  isAuthenticated: boolean;
 }
 
 export const createUserStoreSelectors = (uiStore: Writable<UserStoreStateInterface & object>): Readable<UserStoreSelectorsInterface> => {
@@ -18,6 +18,6 @@ export const createUserStoreSelectors = (uiStore: Writable<UserStoreStateInterfa
       jwt: $uiStore.jwt,
       isAuthenticatingUser: $uiStore.isAuthenticatingUser,
       authenticateUserError: $uiStore.authenticateUserError,
-      isLoggedIn: _.isString($uiStore.jwt) && $uiStore.jwt.length > 0
+      isAuthenticated: _.isString($uiStore.jwt) && $uiStore.jwt.length > 0
     }));
 }
