@@ -84,7 +84,7 @@ export const initialAppStoreState: AppStoreStateInterface = {
   sendEmailError: undefined
 };
 
-export function hydrateAppStoreState(_appStoreState: AppStoreStateInterface): Partial<AppStoreStateInterface> {
+export function cachedAppStoreState(_appStoreState: AppStoreStateInterface): Partial<AppStoreStateInterface> {
   return _.assign(
     {}
   );

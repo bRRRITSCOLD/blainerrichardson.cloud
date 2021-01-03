@@ -15,8 +15,9 @@ export const initialUserStoreState: UserStoreStateInterface = {
   authenticateUserError: undefined
 };
 
-export function hydrateUserStoreState(_userStoreState: UserStoreStateInterface): Partial<UserStoreStateInterface> {
+export function cachedUserStoreState(_userStoreState: UserStoreStateInterface): Partial<UserStoreStateInterface> {
   return _.assign(
-    {}
+    {},
+    { user: _userStoreState.user, jwt: _userStoreState.jwt  }
   );
 }

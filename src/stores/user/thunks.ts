@@ -100,7 +100,7 @@ export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterfac
         userStoreActions.setUser(authenticateUserResponse.user);
 
         // set store's jwt token data
-        userStoreActions.setUser(authenticateUserResponse.userToken.token);
+        userStoreActions.setJwt(authenticateUserResponse.userToken.token);
 
         // indicate that we are sending an user
         userStoreActions.setIsAuthenticatingUser(false);

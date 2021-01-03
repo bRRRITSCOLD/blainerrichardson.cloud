@@ -68,12 +68,12 @@
 {/if}
 
 <BaseLayout>
-  <div slot="main">
+  <div slot="body">
     <div style="height: 100%; padding-top: 100px;" class="d-flex flex-column align-center justify-center">
       <div class="d-flex flex-row justify-center">
         <Circle color="black" width="250px" height="250px">
           {#if $appStore.circleText}
-            <div style="color: #FF6600;" class="text-h3" transition:fade><strong>{_.capitalize($appStore.circleText)}</strong></div>
+            <div style="color: #FF6600;" class="text-h3" transition:fade|local><strong>{_.capitalize($appStore.circleText)}</strong></div>
           {/if}
         </Circle>
       </div>

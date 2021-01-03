@@ -10,12 +10,13 @@
   // props
   export let loginModalActive = false;
   export let isLoggingIn = false;
-
+  let klass = '';
+  export { klass as class };
   // component constants
   const dispatch = createEventDispatcher();
 </script>
 
-<AppBar flat style="width: 100%; background-color: white;">
+<AppBar class="{klass}" flat style="width: 100%; background-color: white;">
   <div style="flex-grow:1" />
   <!-- <Menu style="padding: 0px;" right> -->
   <Menu right>

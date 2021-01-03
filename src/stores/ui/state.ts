@@ -13,7 +13,7 @@ export const initialUiStoreState: UiStoreStateInterface = {
   isResumeModalOpen: false,
 };
 
-export function hydrateUiStoreState(_uiStoreState: UiStoreStateInterface): Partial<UiStoreStateInterface> {
+export function cachedUiStoreState(_uiStoreState: UiStoreStateInterface): Partial<UiStoreStateInterface> {
   return _.assign(
     {}
   );
