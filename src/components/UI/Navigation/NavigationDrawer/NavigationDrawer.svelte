@@ -28,7 +28,6 @@
 <script>
   // node_modules
   import {
-    NavigationDrawer,
     List,
     ListItem,
     Avatar,
@@ -39,6 +38,9 @@
     Overlay,
   } from 'svelte-materialify/src';
   import { createEventDispatcher  } from 'svelte';
+
+  // components
+  import NavBar from './NavBar.svelte';
 
   // file constants
   const dispatch = createEventDispatcher();
@@ -57,5 +59,5 @@
   }
 </script>
 
-<NavigationDrawer absolute {active}>Content</NavigationDrawer>
+<NavBar absolute {active}>Content</NavBar>
 <Overlay {active} absolute on:click={onOverlayClick} index={1} />
