@@ -25,3 +25,37 @@
     }}>Logout</Button></ListItem>
   {/if}
 </Menu> -->
+<script>
+  // node_modules
+  import {
+    NavigationDrawer,
+    List,
+    ListItem,
+    Avatar,
+    Divider,
+    Icon,
+    AppBar,
+    Button,
+    Overlay,
+  } from 'svelte-materialify/src';
+  import { createEventDispatcher  } from 'svelte';
+
+  // file constants
+  const dispatch = createEventDispatcher();
+
+  function mouseenter() {
+    mini = false;
+  }
+  function mouseleave() {
+    mini = true;
+  }
+
+  export let active = false;
+  export let mini = false;
+  function onOverlayClick() {
+    dispatch('onOverlayClick', true);
+  }
+</script>
+
+<NavigationDrawer absolute {active}>Content</NavigationDrawer>
+<Overlay {active} absolute on:click={onOverlayClick} index={1} />

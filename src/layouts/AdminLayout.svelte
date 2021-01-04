@@ -1,7 +1,6 @@
 <script>
   // node_modules
   import {
-    NavigationDrawer,
     List,
     ListItem,
     Avatar,
@@ -17,6 +16,7 @@
   // componenets
   import NavigationBar from '../components/UI/Navigation/NavigationBar/NavigationBar.svelte';
   import NavigationMenu from '../components/UI/Navigation/NavigationMenu/NavigationMenu.svelte';
+  import NavigationDrawer from '../components/UI/Navigation/NavigationDrawer/NavigationDrawer.svelte';
 
   // stores
   import { uiStore } from "../stores/ui";
@@ -37,46 +37,14 @@
   }
 </script>
 
-<!-- <NavBar
-  loginModalActive={$uiStore.isLoginModalOpen}
-  on:onLoginButtonClick={() => {
-    uiStore.openLoginModal();
-  }}
-  on:onLoginModalLoginButtonClick={async (event) => {
-    // create request to api
-    const authenticateUserRequest = {
-      username: event.detail.username,
-      password: event.detail.password
-    };
-    
-    // call store thunk and send email
-    await userStore.authenticateUser(authenticateUserRequest);
-
-    // indicate that the dialog
-    // is not to be open now
-    uiStore.closeLoginModal();
-
-    // reroute user to dashboard
-    // TODO: reroute to dashboard/admin (build Dashboard/Admin page)
-  }}
-  on:onLoginModalCancelButtonClick={() => {
-    uiStore.closeLoginModal();
-  }}
-  isLoggingIn={$userStore.isAuthenticatingUser}
-/> -->
-
-<!-- <AppBar flat style="width: 100%; background-color: white;">
-  <div slot="icon">
-    <Button fab depressed on:click={toggleNavigation}>
+<NavigationBar>
+  <div>
+    <Button fab depressed on:click={() => {
+      uiStore.openAdminNavigationDrawer();
+    }}>
       <Icon class="mdi mdi-menu" />
     </Button>
   </div>
-  <span slot="title"> Click The Menu </span>
-</AppBar>
-<NavDrawer absolute {active}>Content</NavDrawer>
-<Overlay {active} absolute on:click={toggleNavigation} index={1} /> -->
-
-<NavigationBar>
   <div style="flex-grow:1" />
   <NavigationMenu>
     <div slot="activator">
@@ -93,5 +61,11 @@
     }}>Logout</Button></ListItem>
   </NavigationMenu>
 </NavigationBar>
+<NavigationDrawer
+  bind:active={$uiStore.isAdminNavigationDrawerOpen}
+  on:onOverlayClick={() => {
+    uiStore.closeAdminNavigationDrawer();
+  }}
+/>
 
 <slot name="body" />

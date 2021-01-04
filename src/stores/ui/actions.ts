@@ -6,6 +6,7 @@ export interface UiStoreActionsInterface {
   setIsLoginModalOpen: (isLoginModalOpen: boolean) => void;
   setIsEmailModalOpen: (isEmailModalOpen: boolean) => void;
   setIsResumeModalOpen: (isResumeModalOpen: boolean) => void;
+  setIsAdminNavigationDrawerOpen: (isAdminNavigationDrawerOpen: boolean) => void;
 }
 
 export const createUiStoreActions = (uiStore: Writable<UiStoreStateInterface & object>): UiStoreActionsInterface => {
@@ -41,5 +42,15 @@ export const createUiStoreActions = (uiStore: Writable<UiStoreStateInterface & o
         )
       });
     },
+    setIsAdminNavigationDrawerOpen: (isAdminNavigationDrawerOpen: boolean) => {
+      uiStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isAdminNavigationDrawerOpen }
+        )
+      });
+    }
   }
 }

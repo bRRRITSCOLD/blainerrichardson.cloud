@@ -11,6 +11,8 @@ export interface UiStoreThunksInterface {
   closeEmailModal: () => void;
   openResumeModal: () => void;
   closeResumeModal: () => void;
+  openAdminNavigationDrawer:() => void;
+  closeAdminNavigationDrawer:() => void;
 }
 
 export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): UiStoreThunksInterface => {
@@ -33,6 +35,12 @@ export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): Ui
     },
     closeResumeModal: async () => {
       uiStoreActions.setIsResumeModalOpen(false);
+    },
+    openAdminNavigationDrawer: async () => {
+      uiStoreActions.setIsAdminNavigationDrawerOpen(true);
+    },
+    closeAdminNavigationDrawer: async () => {
+      uiStoreActions.setIsAdminNavigationDrawerOpen(false);
     }
   }
 }

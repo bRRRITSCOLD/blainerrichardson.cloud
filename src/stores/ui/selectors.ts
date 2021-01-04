@@ -10,6 +10,7 @@ export const createUiStoreSelectors = (uiStore: Writable<UiStoreStateInterface &
   return derived(uiStore, $uiStore => ({
       isEmailModalOpen: $uiStore.isEmailModalOpen,
       isLoginModalOpen: $uiStore.isLoginModalOpen,
-      isResumeModalOpen: $uiStore.isResumeModalOpen
+      isResumeModalOpen: $uiStore.isResumeModalOpen,
+      isAdminNavigationDrawerOpen: $uiStore.isAdminNavigationDrawerOpen
     }));
 }
