@@ -7,11 +7,16 @@
     Avatar,
     Divider,
     Icon,
+    AppBar,
+    Button,
+    Overlay,
   } from 'svelte-materialify/src';
-import AdminNavBar from '../components/AdminNavBar.svelte';
+  import { push } from 'svelte-spa-router';
+  import { mdiDotsVertical } from '@mdi/js';
 
   // componenets
-  import NavBar from "../components/NavBar.svelte";
+  import NavigationBar from '../components/UI/Navigation/NavigationBar/NavigationBar.svelte';
+  import NavigationMenu from '../components/UI/Navigation/NavigationMenu/NavigationMenu.svelte';
 
   // stores
   import { uiStore } from "../stores/ui";
@@ -26,6 +31,10 @@ import AdminNavBar from '../components/AdminNavBar.svelte';
     mini = true;
   }
 
+  let active = false;
+  function toggleNavigation() {
+    active = !active;
+  }
 </script>
 
 <!-- <NavBar
@@ -56,5 +65,33 @@ import AdminNavBar from '../components/AdminNavBar.svelte';
   isLoggingIn={$userStore.isAuthenticatingUser}
 /> -->
 
-<AdminNavBar/>
-<slot name="main" />
+<!-- <AppBar flat style="width: 100%; background-color: white;">
+  <div slot="icon">
+    <Button fab depressed on:click={toggleNavigation}>
+      <Icon class="mdi mdi-menu" />
+    </Button>
+  </div>
+  <span slot="title"> Click The Menu </span>
+</AppBar>
+<NavDrawer absolute {active}>Content</NavDrawer>
+<Overlay {active} absolute on:click={toggleNavigation} index={1} /> -->
+
+<NavigationBar>
+  <div style="flex-grow:1" />
+  <NavigationMenu>
+    <div slot="activator">
+      <Button fab depressed>
+        <Icon path={mdiDotsVertical} />
+      </Button>
+    </div>
+    <ListItem style="padding: 0px;"><Button on:click={() => {
+      // cleasr and reset all user data
+      userStore.reset();
+
+      // navigate the user to the home page
+      push('/');
+    }}>Logout</Button></ListItem>
+  </NavigationMenu>
+</NavigationBar>
+
+<slot name="body" />

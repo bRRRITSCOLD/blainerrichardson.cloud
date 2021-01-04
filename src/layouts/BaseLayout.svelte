@@ -1,21 +1,22 @@
 <script>
   // node_modules
-  import { AppBar, Button, Icon, Menu, ListItem } from 'svelte-materialify/src';
+  import { Button, Icon, ListItem } from 'svelte-materialify/src';
   import { mdiDotsVertical } from '@mdi/js';
-  import { createEventDispatcher  } from 'svelte';
   import { push } from 'svelte-spa-router';
 
   // components
   import LoginModal from '../components/LoginModal.svelte';
+  import NavigationBar from '../components/UI/Navigation/NavigationBar/NavigationBar.svelte';
+  import NavigationMenu from '../components/UI/Navigation/NavigationMenu/NavigationMenu.svelte';
 
   // stores
   import { uiStore } from '../stores/ui';
   import { userStore } from '../stores/user';
 </script>
 
-<AppBar flat style="width: 100%; background-color: white;">
+<NavigationBar>
   <div style="flex-grow:1" />
-  <Menu right>
+  <NavigationMenu>
     <div slot="activator">
       <Button fab depressed>
         <Icon path={mdiDotsVertical} />
@@ -35,8 +36,8 @@
         push('/');
       }}>Logout</Button></ListItem>
     {/if}
-  </Menu>
-</AppBar>
+  </NavigationMenu>
+</NavigationBar>
 
 <LoginModal
   bind:active={$uiStore.isLoginModalOpen}
