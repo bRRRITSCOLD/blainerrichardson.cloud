@@ -6,6 +6,7 @@
   import MultiSidedTimeline from './MultiSidedTimeline.svelte';
   import { appStore } from '../stores/app';
   import moment from 'moment';
+  import { resumeStore } from '../stores/resume';
 
   // components
 
@@ -18,9 +19,9 @@
   let closeIconColor = 'white';
 
   onMount(() => {
-    console.log('workExperience', JSON.stringify($appStore.workExperience));
-    console.log('schoolExperience', JSON.stringify($appStore.schoolExperience));
-    console.log('certifications', JSON.stringify($appStore.certifications));
+    console.log('workExperience', JSON.stringify($resumeStore.workExperiences));
+    console.log('schoolExperience', JSON.stringify($resumeStore.schoolExperiences));
+    console.log('certifications', JSON.stringify($resumeStore.certifications));
   });
 </script>
 
@@ -44,10 +45,10 @@
     </div>
   </div>
   <div id="content" style="position:absolute; top:50px; bottom:50px; left:0px; right:0px; overflow:auto;"> 
-    {#if $appStore.workExperience.length}
+    {#if $resumeStore.workExperiences.length}
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Work Experience</div>
       <div style="padding-top: 20px;">
-        <MultiSidedTimeline items={$appStore.workExperience} let:item>
+        <MultiSidedTimeline items={$resumeStore.workExperiences} let:item>
           <!-- Card -->
           <div style="padding: 10px;">
             <!-- Header -->
@@ -83,10 +84,10 @@
         </MultiSidedTimeline>
       </div>
     {/if}
-    {#if $appStore.schoolExperience.length}
+    {#if $resumeStore.schoolExperiences.length}
       <div class="text-h4" style="padding-top: 20px; text-align: center;">School Experience</div>
       <div style="padding-top: 20px;">
-        <MultiSidedTimeline items={$appStore.schoolExperience} let:item>
+        <MultiSidedTimeline items={$resumeStore.schoolExperiences} let:item>
           <!-- Card -->
           <div style="padding: 10px;">
             <!-- Header -->
@@ -117,10 +118,10 @@
         </MultiSidedTimeline>
       </div>
     {/if}
-    {#if $appStore.certifications.length}
+    {#if $resumeStore.certifications.length}
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Certifications</div>
       <div style="padding-top: 20px;">
-        <MultiSidedTimeline items={$appStore.certifications} let:item>
+        <MultiSidedTimeline items={$resumeStore.certifications} let:item>
           <!-- Card -->
           <div style="padding: 10px;">
             <!-- Header -->
