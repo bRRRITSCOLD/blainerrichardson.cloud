@@ -1,0 +1,50 @@
+.virtual-table-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.virtual-table-headers {
+  position: absolute;
+  overflow: hidden;
+  max-width: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  /* border-bottom: 2px solid black; */
+}
+
+.virtual-table-header-row {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+}
+
+.virtual-table-row {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+}
+
+.virtual-table-cell {
+  position: absolute;
+  top: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.virtual-table-body {
+  overflow: auto;
+}
+
+.virtual-table-body-contents {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  /* pointer-events: none; */
+  z-index: 3;
+}
+.virtual-table-row:not(:last-child) {
+  /* border-bottom: 1px solid #666; */
+}

@@ -1,17 +1,22 @@
 <script>
   // node_modules
   import {
-    NavigationDrawer,
     List,
     ListItem,
     Avatar,
     Divider,
     Icon,
+    AppBar,
+    Button,
+    Overlay,
   } from 'svelte-materialify/src';
-import AdminNavBar from '../components/AdminNavBar.svelte';
+  import { push } from 'svelte-spa-router';
+  import { mdiDotsVertical } from '@mdi/js';
 
   // componenets
-  import NavBar from "../components/NavBar.svelte";
+  import NavigationBar from '../components/UI/Navigation/NavigationBar/NavigationBar.svelte';
+  import NavigationMenu from '../components/UI/Navigation/NavigationMenu/NavigationMenu.svelte';
+  import NavigationDrawer from '../components/UI/Navigation/NavigationDrawer/NavigationDrawer.svelte';
 
   // stores
   import { uiStore } from "../stores/ui";
@@ -26,35 +31,41 @@ import AdminNavBar from '../components/AdminNavBar.svelte';
     mini = true;
   }
 
+  let active = false;
+  function toggleNavigation() {
+    active = !active;
+  }
 </script>
 
-<!-- <NavBar
-  loginModalActive={$uiStore.isLoginModalOpen}
-  on:onLoginButtonClick={() => {
-    uiStore.openLoginModal();
-  }}
-  on:onLoginModalLoginButtonClick={async (event) => {
-    // create request to api
-    const authenticateUserRequest = {
-      username: event.detail.username,
-      password: event.detail.password
-    };
-    
-    // call store thunk and send email
-    await userStore.authenticateUser(authenticateUserRequest);
+<NavigationBar>
+  <div>
+    <Button fab depressed on:click={() => {
+      uiStore.openAdminNavigationDrawer();
+    }}>
+      <Icon class="mdi mdi-menu" />
+    </Button>
+  </div>
+  <div style="flex-grow:1" />
+  <NavigationMenu>
+    <div slot="activator">
+      <Button fab depressed>
+        <Icon path={mdiDotsVertical} />
+      </Button>
+    </div>
+    <ListItem style="padding: 0px;"><Button on:click={() => {
+      // cleasr and reset all user data
+      userStore.reset();
 
-    // indicate that the dialog
-    // is not to be open now
-    uiStore.closeLoginModal();
-
-    // reroute user to dashboard
-    // TODO: reroute to dashboard/admin (build Dashboard/Admin page)
+      // navigate the user to the home page
+      push('/');
+    }}>Logout</Button></ListItem>
+  </NavigationMenu>
+</NavigationBar>
+<NavigationDrawer
+  bind:active={$uiStore.isAdminNavigationDrawerOpen}
+  on:onOverlayClick={() => {
+    uiStore.closeAdminNavigationDrawer();
   }}
-  on:onLoginModalCancelButtonClick={() => {
-    uiStore.closeLoginModal();
-  }}
-  isLoggingIn={$userStore.isAuthenticatingUser}
-/> -->
+/>
 
-<AdminNavBar/>
-<slot name="main" />
+<slot name="body" />
