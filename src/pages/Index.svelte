@@ -14,23 +14,23 @@
   import ResumeDialog from '../components/ResumeDialog.svelte';
 
   // stores
-  import { appStore } from '../stores/app';
   import { uiStore } from '../stores/ui';
+  import { emailStore } from '../stores/email';
 
-  let iconLinks = $appStore.iconLinks.map((iconLink) => _.assign(
+  let iconLinks = $uiStore.iconLinks.map((iconLink) => _.assign(
     {},
     iconLink,
     { color: 'black' }
   ));
 
   onMount(() => {
-    appStore.startChangingCircleText('Hello');
+    uiStore.startChangingCircleText('Hello');
   })
 </script>
 
 {#if $uiStore.isEmailModalOpen}
   <EmailDialog
-    isEmailing={$appStore.isSendingEmail}
+    bind:isEmailing={$emailStore.isSendingEmail}
     bind:active={$uiStore.isEmailModalOpen}
     on:onCancelButtonClick={() => {
       uiStore.closeEmailModal()
@@ -49,7 +49,7 @@
       } };
       
       // call store thunk and send email
-      await appStore.sendEmail(sendEmailRequest);
+      await emailStore.sendEmail(sendEmailRequest);
 
       // indicate that the dialog
       // is not to be open now
@@ -72,8 +72,8 @@
     <div style="height: 100%; padding-top: 100px;" class="d-flex flex-column align-center justify-center">
       <div class="d-flex flex-row justify-center">
         <Circle color="black" width="250px" height="250px">
-          {#if $appStore.circleText}
-            <div style="color: #FF6600;" class="text-h3" transition:fade|local><strong>{_.capitalize($appStore.circleText)}</strong></div>
+          {#if $uiStore.circleText}
+            <div style="color: #FF6600;" class="text-h3" transition:fade|local><strong>{_.capitalize($uiStore.circleText)}</strong></div>
           {/if}
         </Circle>
       </div>
@@ -84,15 +84,15 @@
           <span
             on:mouseenter={() => {
               link.color = 'gray';
-              appStore.stopChangingCircleText();
-              appStore.setCircleText('');
-              appStore.startChangingCircleText(link.name);
+              uiStore.stopChangingCircleText();
+              uiStore.setCircleText('');
+              uiStore.startChangingCircleText(link.name);
             }}
             on:mouseleave={() => {
               link.color = 'black';
-              appStore.stopChangingCircleText();
-              appStore.setCircleText('');
-              appStore.startChangingCircleText('Hello');
+              uiStore.stopChangingCircleText();
+              uiStore.setCircleText('');
+              uiStore.startChangingCircleText('Hello');
             }}
             on:click={() => {
               if (link.name.toLowerCase() === 'email') {

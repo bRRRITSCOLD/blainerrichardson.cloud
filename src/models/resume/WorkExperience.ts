@@ -1,7 +1,9 @@
 // node_modules
 import * as _ from 'lodash';
+import { v4 as uuid } from 'uuid';
 
 export interface WorkExperienceInterface {
+  workExperienceId: string;
   startDate: string | Date;
   endDate?: string | Date;
   companyName: string;
@@ -18,10 +20,11 @@ export interface WorkExperienceInterface {
 }
 
 export class WorkExperience implements WorkExperienceInterface {
-  public startDate!: string | Date;
+  public workExperienceId: string;
+  public startDate: string | Date;
   public endDate?: string | Date;
-  public companyName!: string;
-  public companyAddress!: {
+  public companyName: string;
+  public companyAddress: {
     addressLine1: string;
     addressLine2?: string;
     city: string;
@@ -37,6 +40,7 @@ export class WorkExperience implements WorkExperienceInterface {
       this,
       workExperience,
       {
+        workExperienceId: _.get(workExperience, 'workExperienceId'),
         startDate: new Date(_.get(workExperience  , 'startDate', new Date)),
         endDate: _.get(workExperience  , 'endDate') ? new Date(_.get(workExperience  , 'endDate')) : undefined,
         companyName: _.get(workExperience, 'companyName'),
