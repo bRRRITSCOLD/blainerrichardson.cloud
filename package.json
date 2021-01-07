@@ -41,6 +41,8 @@
     "sirv-cli": "^1.0.0",
     "svelte-forms-lib": "^1.2.2",
     "svelte-spa-router": "^3.0.5",
+    "svelte-watch-resize": "^1.0.3",
+    "uuid": "^8.3.2",
     "yup": "^0.31.0"
   }
 }
