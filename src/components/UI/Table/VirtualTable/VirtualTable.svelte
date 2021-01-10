@@ -278,6 +278,7 @@ bind:this={wrapper}
             <svelte:component
               this={column.cellComponent}
               {...column}
+              rowWidth={columnWidths[j]}
               {...row}
               on:click={(event) => {
                 dispatch('onVirtualTableRowCellComponentClick', {

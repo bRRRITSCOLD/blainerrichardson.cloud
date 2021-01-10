@@ -12,6 +12,7 @@ export interface ResumeStoreStateInterface {
   workExperiences: WorkExperience[];
   schoolExperiences: SchoolExperience[];
   certifications: Certification[];
+  skills: string[];
 }
 
 export const initialResumeStoreState: ResumeStoreStateInterface = {
@@ -54,6 +55,7 @@ export const initialResumeStoreState: ResumeStoreStateInterface = {
     name: faker.company.companyName(),
     institution: faker.company.companyName()
   })),
+  skills: Array.from({ length: 10 }).map(() => faker.random.word())
 };
 
 export function cachedResumeStoreState(_resumeStoreState: ResumeStoreStateInterface): Partial<ResumeStoreStateInterface> {

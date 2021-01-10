@@ -15,5 +15,6 @@ export const createResumeStoreSelectors = (resumeStore: Writable<ResumeStoreStat
     schoolExperiences: $resumeStore.schoolExperiences,
     workExperiences: $resumeStore.workExperiences,
     certifications: $resumeStore.certifications,
+    skills: $resumeStore.skills,
   }));
 }

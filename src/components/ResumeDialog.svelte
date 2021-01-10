@@ -4,7 +4,6 @@
   import { mdiClose } from '@mdi/js';
   import { createEventDispatcher, onMount  } from 'svelte';
   import MultiSidedTimeline from './MultiSidedTimeline.svelte';
-  import { appStore } from '../stores/app';
   import moment from 'moment';
   import { resumeStore } from '../stores/resume';
 
@@ -140,10 +139,10 @@
         </MultiSidedTimeline>
       </div>
     {/if}
-    {#if $appStore.skills.length}
+    {#if $resumeStore.skills.length}
       <div class="text-h4" style="padding-top: 20px; text-align: center;">Skills</div>
       <div class="d-flex flex-row flex-wrap justify-space-between" style="width: 100%;">
-        {#each $appStore.skills as skill}
+        {#each $resumeStore.skills as skill}
           <div style="padding: 10px;">
             {skill}
           </div>
