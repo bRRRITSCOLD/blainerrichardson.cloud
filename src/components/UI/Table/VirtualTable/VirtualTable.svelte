@@ -177,6 +177,7 @@
 
   .virtual-table-body {
     overflow: auto;
+    overflow-anchor: none;
   }
 
   .virtual-table-body-contents {
