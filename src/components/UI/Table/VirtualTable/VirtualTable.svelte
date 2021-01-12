@@ -12,7 +12,7 @@
   const MIN_COLUMN_SIZE = 30;
 
   // internals
-  let __extraRows = 0; // Number of extra rows to render beyond what is visible in the scrollable area
+  let __extraRows = 10; // Number of extra rows to render beyond what is visible in the scrollable area
   let __affixedColumnIndices = []; // DO NOT MODIFY DIRECTLY. The column indices to affix to the left side of the grid
   let __resizing = false; // DO NOT MODIFY DIRECTLY. Whether or not a column is currently being resized
   let __innerOffsetHeight = 0; // DO NOT MODIFY DIRECTLY. The height of the scrollable area on screen
