@@ -1,25 +1,22 @@
 <script>
-  import {  format } from 'date-fns';
+  // components
+  import VirtualTableRowDateCell from '../../../UI/Table/VirtualTableRowDateCell/VirtualTableRowDateCell.svelte';
   
+  // props
+  export let data;
+  export let dataName;
+  export let width;
+
+  let date;
+  $: date = data && data[dataName]
+    ? data[dataName]
+    : '';
+</script>
+
+<VirtualTableRowDateCell
+  width={width}
+  date={date}
+></VirtualTableRowDateCell>
   
-    export let data;
-    export let dataName;
-  
-    let background = 'white'
-  </script>
-  
-  <div
-    class="text-align-center"
-    style="height: 100%; width: 100%; background: {background}; cursor: pointer;"
-    on:mouseover={() => { background = 'lightgray' }}
-    on:mouseleave={() => { background = 'white' }}
-  >
-    {
-      data && data[dataName]
-        ? format(new Date(data[dataName]), `MMMM',' yyyy`)
-        : ''
-    }
-  </div>
-  
-  <style lang="scss" src="./WorkExperienceAdminTableRowDateCell.scss" >
-  </style>
+<style lang="scss" src="./WorkExperienceAdminTableRowDateCell.scss" >
+</style>
