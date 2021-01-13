@@ -1,31 +1,22 @@
-<script>
-import { addressUtils } from "../../../../lib/utils";
+<script lang="ts">
+  // components
+  import VirtualTableRowAddressCell from "../../../UI/Table/VirtualTableRowAddressCell/VirtualTableRowAddressCell.svelte";
 
-
+  // props
   export let data;
   export let dataName;
+  export let width;
 
-  let background = 'white'
+  let address: any;
+  $: address = data && data[dataName]
+      ? data && data[dataName]
+      : '';
 </script>
 
-<div
-  class="text-align-center"
-  style="height: 100%; width: 100%; background: {background}; cursor: pointer;"
-  on:mouseover={() => { background = 'lightgray' }}
-  on:mouseleave={() => { background = 'white' }}
->
-  {
-    data && data[dataName]
-      ? addressUtils.format({
-          addressLine1: data[dataName].addressLine1,
-          addressLine2: data[dataName].addressLine2,
-          city: data[dataName].city,
-          state: data[dataName].state,
-          zipCode: data[dataName].zipCode
-        })
-      : ''
-  }
-</div>
+<VirtualTableRowAddressCell
+  width={width}
+  address={address}
+></VirtualTableRowAddressCell>
 
 <style lang="scss" src="./WorkExperienceAdminTableRowAddressCell.scss" >
 </style>

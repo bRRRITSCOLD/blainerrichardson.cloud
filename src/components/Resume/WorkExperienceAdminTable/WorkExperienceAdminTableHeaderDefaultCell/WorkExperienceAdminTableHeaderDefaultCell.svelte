@@ -1,10 +1,11 @@
 <script lang="ts">
+   // components
+  import VirtualTableHeaderDefaultCell from "../../../UI/Table/VirtualTableHeaderDefaultCell/VirtualTableHeaderDefaultCell.svelte";
+
   export let column: any;
 </script>
 
-<div class="text-align-center">
-  {column.display}
-</div>
+<VirtualTableHeaderDefaultCell display={column.display}/>
 
 <style lang="scss" src="./WorkExperienceAdminTableHeaderDefaultCell.scss" >
 </style>
