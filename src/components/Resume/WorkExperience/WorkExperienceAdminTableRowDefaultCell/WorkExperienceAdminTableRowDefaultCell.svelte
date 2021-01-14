@@ -4,10 +4,15 @@
   import VirtualTableRowDefaultCell from '../../../UI/Table/VirtualTableRowDefaultCell/VirtualTableRowDefaultCell.svelte'
 
   // props
+  export let data;
+  export let dataName;
   export let width;
-  export let text;
 
   let spanElement;
+  let text: any;
+  $: text = data && data[dataName]
+      ? data && data[dataName]
+      : '';
 </script>
 
 <VirtualTableRowDefaultCell>

@@ -13,10 +13,12 @@
     : '';
 </script>
 
-<VirtualTableRowDateCell
-  width={width}
-  date={date}
-></VirtualTableRowDateCell>
-  
+<div style="text-align: center;">
+  <VirtualTableRowDateCell
+    width={width}
+    date={date}
+  ></VirtualTableRowDateCell>
+</div>
+
 <style lang="scss" src="./WorkExperienceAdminTableRowDateCell.scss" >
 </style>

@@ -35,4 +35,8 @@
 </MaterialApp>
 
 <style>
+  :global(.s-app-bar) {
+      position: relative;
+      z-index: 1;
+  }
 </style>
