@@ -8,7 +8,7 @@ export interface UiStoreStateInterface {
   circleText: string;
   isChangingCircleText: boolean;
   iconLinks: { name: string; path: string; href?: string; }[];
-  isLoginModalOpen: boolean;
+  isLoginDialogOpen: boolean;
   isEmailModalOpen: boolean;
   isResumeModalOpen: boolean;
   isAdminNavigationDrawerOpen: boolean;
@@ -37,7 +37,7 @@ export const initialUiStoreState: UiStoreStateInterface = {
       path: mdiFileDocument
     }
   ],
-  isLoginModalOpen: false,
+  isLoginDialogOpen: false,
   isEmailModalOpen: false,
   isResumeModalOpen: false,
   isAdminNavigationDrawerOpen: false

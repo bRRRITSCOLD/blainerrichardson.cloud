@@ -1,7 +1,7 @@
 <script lang="ts">
   // node_modules
   import { fade } from 'svelte/transition';
-  import Icon from 'svelte-materialify/src/components/Icon';
+  import { Icon } from 'svelte-materialify/src/';
   import { onMount } from 'svelte';
   import * as _ from 'lodash';
   
@@ -9,9 +9,9 @@
   import BaseLayout from '../layouts/BaseLayout.svelte';
 
   // components
-  import Circle from '../components/Circle.svelte';
-  import EmailDialog from '../components/EmailDialog.svelte';
-  import ResumeDialog from '../components/ResumeDialog.svelte';
+  import Circle from '../components/UI/Misc/Circle/Circle.svelte';
+  import EmailDialog from '../components/Email/EmailDialog/EmailDialog.svelte';
+  import ResumeDialog from '../components/Resume/ResumeDialog/ResumeDialog.svelte';
 
   // stores
   import { uiStore } from '../stores/ui';

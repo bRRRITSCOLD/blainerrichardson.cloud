@@ -12,7 +12,7 @@ export const createUiStoreSelectors = (uiStore: Writable<UiStoreStateInterface &
     isChangingCircleText: $uiStore.isChangingCircleText,
     iconLinks: $uiStore.iconLinks,
     isEmailModalOpen: $uiStore.isEmailModalOpen,
-    isLoginModalOpen: $uiStore.isLoginModalOpen,
+    isLoginDialogOpen: $uiStore.isLoginDialogOpen,
     isResumeModalOpen: $uiStore.isResumeModalOpen,
     isAdminNavigationDrawerOpen: $uiStore.isAdminNavigationDrawerOpen
     }));

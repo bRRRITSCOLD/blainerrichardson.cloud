@@ -11,8 +11,8 @@ import type { UiStoreActionsInterface } from "./actions";
 export interface UiStoreThunksInterface {
   startChangingCircleText: (circleText) => void;
   stopChangingCircleText: () => void;
-  openLoginModal: () => void;
-  closeLoginModal: () => void;
+  openLoginDialog: () => void;
+  closeLoginDialog: () => void;
   openEmailModal: () => void;
   closeEmailModal: () => void;
   openResumeModal: () => void;
@@ -93,11 +93,11 @@ export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): Ui
       // the cirle text for the app
       uiStoreActions.setIsChangingCircleText(false);
     },
-    openLoginModal: async () => {
-      uiStoreActions.setIsLoginModalOpen(true);
+    openLoginDialog: async () => {
+      uiStoreActions.setIsLoginDialogOpen(true);
     },
-    closeLoginModal: async () => {
-      uiStoreActions.setIsLoginModalOpen(false);
+    closeLoginDialog: async () => {
+      uiStoreActions.setIsLoginDialogOpen(false);
     },
     openEmailModal: async () => {
       uiStoreActions.setIsEmailModalOpen(true);
