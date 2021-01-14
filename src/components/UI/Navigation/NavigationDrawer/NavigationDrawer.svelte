@@ -13,7 +13,7 @@
   {#if !$userStore.isAuthenticated}
     <ListItem style="padding: 0px;"><Button on:click={() => {
       // dispatch('onLoginButtonClick', true);
-      uiStore.openLoginModal();
+      uiStore.openLoginDialog();
     }}>Login</Button></ListItem>
   {:else}
     <ListItem style="padding: 0px;"><Button on:click={() => {

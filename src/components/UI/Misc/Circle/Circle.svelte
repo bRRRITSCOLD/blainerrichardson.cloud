@@ -8,11 +8,5 @@
   <slot />
 </div>
 
-<style>
-  .circle {
-    border-radius: 50%;
-    display: flex; /* or inline-flex */
-    align-items: center; 
-    justify-content: center;
-  }
+<style src="./Circle.scss">
 </style>

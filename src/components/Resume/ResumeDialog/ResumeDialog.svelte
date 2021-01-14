@@ -1,13 +1,15 @@
 <script lang="ts">
   // node_modules
-  import { Button, Dialog, Card, CardTitle, CardText, CardActions, Icon, Chip } from 'svelte-materialify/src';
+  import { Button, Dialog, Icon } from 'svelte-materialify/src';
   import { mdiClose } from '@mdi/js';
   import { createEventDispatcher, onMount  } from 'svelte';
-  import MultiSidedTimeline from './MultiSidedTimeline.svelte';
   import moment from 'moment';
-  import { resumeStore } from '../stores/resume';
 
   // components
+  import MultiSidedTimeline from '../MultiSidedTimeline.svelte';
+
+  // stores
+  import { resumeStore } from '../../../stores/resume';
 
   // props
   export let active = false;
@@ -159,16 +161,5 @@
   </div>
 </Dialog>
 
-<style lang="scss">
-  @import 'svelte-materialify/src/styles/tools/colors';
-
-.title-bar {
-  background-color: black;
-  color: #FF6600;
-}
-
-.actions-bar {
-  background-color: black;
-  color: #FF6600;
-}
+<style src="./ResumeDilaog.scss">
 </style>

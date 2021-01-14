@@ -5,7 +5,7 @@ import { _ } from '../../lib/utils';
 export interface UiStoreActionsInterface {
   setCircleText: (circleText: string) => void;
   setIsChangingCircleText: (isChangingCircleText: boolean) => void;
-  setIsLoginModalOpen: (isLoginModalOpen: boolean) => void;
+  setIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
   setIsEmailModalOpen: (isEmailModalOpen: boolean) => void;
   setIsResumeModalOpen: (isResumeModalOpen: boolean) => void;
   setIsAdminNavigationDrawerOpen: (isAdminNavigationDrawerOpen: boolean) => void;
@@ -34,13 +34,13 @@ export const createUiStoreActions = (uiStore: Writable<UiStoreStateInterface & o
         )
       });
     },
-    setIsLoginModalOpen: (isLoginModalOpen: boolean) => {
+    setIsLoginDialogOpen: (isLoginDialogOpen: boolean) => {
       uiStore.update(state => {
         // return the new state
         return _.assign(
           {},
           state,
-          { isLoginModalOpen }
+          { isLoginDialogOpen }
         )
       });
     },
