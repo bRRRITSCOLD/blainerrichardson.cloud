@@ -293,9 +293,6 @@ bind:this={wrapper}
                   rowIndex: i
                 });
               }}
-              on:change={(event) => {
-                console.log('{}VirtualTable::svelte component::on change::event=', event);
-              }}
             />
             {:else}
               <div class="cell-default">{row.data[column.dataName] || ''}</div>
