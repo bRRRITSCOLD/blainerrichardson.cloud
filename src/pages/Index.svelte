@@ -28,12 +28,12 @@
   })
 </script>
 
-{#if $uiStore.isEmailModalOpen}
+{#if $uiStore.isEmailDialogOpen}
   <EmailDialog
     bind:isEmailing={$emailStore.isSendingEmail}
-    bind:active={$uiStore.isEmailModalOpen}
+    bind:active={$uiStore.isEmailDialogOpen}
     on:onCancelButtonClick={() => {
-      uiStore.closeEmailModal()
+      uiStore.closeEmailDialog()
     }}
     on:onSendButtonClick={async (event) => {
       // create request to api
@@ -53,16 +53,16 @@
 
       // indicate that the dialog
       // is not to be open now
-      uiStore.closeEmailModal();
+      uiStore.closeEmailDialog();
     }}
   />
 {/if}
 
-{#if $uiStore.isResumeModalOpen}
+{#if $uiStore.isResumeDialogOpen}
   <ResumeDialog
-    bind:active={$uiStore.isResumeModalOpen}
+    bind:active={$uiStore.isResumeDialogOpen}
     on:onCloseIconClick={() => {
-      uiStore.closeResumeModal()
+      uiStore.closeResumeDialog()
     }}
   />
 {/if}
@@ -96,9 +96,9 @@
             }}
             on:click={() => {
               if (link.name.toLowerCase() === 'email') {
-                uiStore.openEmailModal()
+                uiStore.openEmailDialog()
               } else  if (link.name.toLowerCase() === 'resume') {
-                uiStore.openResumeModal()
+                uiStore.openResumeDialog()
               } else if (link.href) {
                 window.location.href = link.href;
               }

@@ -7,6 +7,7 @@
     Button,
     CardActions
   } from 'svelte-materialify/src';
+  import { createEventDispatcher  } from 'svelte';
 
   // components
   import VirtualTable from "../../../UI/Table/VirtualTable/VirtualTable.svelte";
@@ -15,11 +16,16 @@
   import WorkExperienceAdminTableRowAddressCell from "../WorkExperienceAdminTableRowAddressCell/WorkExperienceAdminTableRowAddressCell.svelte";
   import WorkExperienceAdminTableRowDateCell from "../WorkExperienceAdminTableRowDateCell/WorkExperienceAdminTableRowDateCell.svelte";
   import WorkExperienceAdminTableRowActionsCell from '../WorkExperienceAdminTableRowActionsCell/WorkExperienceAdminTableRowActionsCell.svelte';
+  import AddWorkExperienceDialog from '../../AddWorkExperienceDialog/AddWorkExperienceDialog.svelte';
 
   // props
   export let workExperiences = [];
+  export let addWorkExperienceDialogActive = false;
+  export let isAddingWorkExperience = false;
   export let width = 0;
   export let height = 0;
+
+  const dispatch = createEventDispatcher();
 
   let workExperiencesVirtualTableColumns = [];
   $: workExperiencesVirtualTableColumns = [
@@ -96,7 +102,24 @@
     />
   </CardText>
   <CardActions style="height: {workExperiencesVirtualTableActionsHeight}px; width: {width}px;">
-    <Button>Refresh</Button>
-    <Button>Add</Button>
+    <Button on:click={() => {
+      dispatch('onRefreshButtonClick', true);
+    }}>Refresh</Button>
+    <Button on:click={() => {
+      dispatch('onAddButtonClick', true);
+    }}>Add</Button>
   </CardActions>
 </Card>
+
+{#if addWorkExperienceDialogActive}
+  <AddWorkExperienceDialog
+    bind:active={addWorkExperienceDialogActive}
+    bind:isAddingWorkExperience={isAddingWorkExperience}
+    on:submit={(event => {
+      console.log(event);
+    })}
+    on:onCancelButtonClick={() => {
+      dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
+    }}
+  />
+{/if}

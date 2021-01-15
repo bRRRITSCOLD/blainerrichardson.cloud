@@ -6,7 +6,7 @@
   import moment from 'moment';
 
   // components
-  import MultiSidedTimeline from '../MultiSidedTimeline.svelte';
+  import MultiSidedTimeline from '../../UI/Timeline/MultiSidedTimeline/MultiSidedTimeline.svelte';
 
   // stores
   import { resumeStore } from '../../../stores/resume';

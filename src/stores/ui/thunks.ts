@@ -13,10 +13,12 @@ export interface UiStoreThunksInterface {
   stopChangingCircleText: () => void;
   openLoginDialog: () => void;
   closeLoginDialog: () => void;
-  openEmailModal: () => void;
-  closeEmailModal: () => void;
-  openResumeModal: () => void;
-  closeResumeModal: () => void;
+  openEmailDialog: () => void;
+  closeEmailDialog: () => void;
+  openResumeDialog: () => void;
+  closeResumeDialog: () => void;
+  openAddWorkExperienceDialog: () => void;
+  closeAddWorkExperienceDialog: () => void;
   openAdminNavigationDrawer:() => void;
   closeAdminNavigationDrawer:() => void;
 }
@@ -99,17 +101,23 @@ export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): Ui
     closeLoginDialog: async () => {
       uiStoreActions.setIsLoginDialogOpen(false);
     },
-    openEmailModal: async () => {
-      uiStoreActions.setIsEmailModalOpen(true);
+    openEmailDialog: async () => {
+      uiStoreActions.setIsEmailDialogOpen(true);
     },
-    closeEmailModal: async () => {
-      uiStoreActions.setIsEmailModalOpen(false);
+    closeEmailDialog: async () => {
+      uiStoreActions.setIsEmailDialogOpen(false);
     },
-    openResumeModal: async () => {
-      uiStoreActions.setIsResumeModalOpen(true);
+    openResumeDialog: async () => {
+      uiStoreActions.setIsResumeDialogOpen(true);
     },
-    closeResumeModal: async () => {
-      uiStoreActions.setIsResumeModalOpen(false);
+    closeResumeDialog: async () => {
+      uiStoreActions.setIsResumeDialogOpen(false);
+    },
+    openAddWorkExperienceDialog: async () => {
+      uiStoreActions.setIsAddWorkExperienceDialogOpen(true);
+    },
+    closeAddWorkExperienceDialog: async () => {
+      uiStoreActions.setIsAddWorkExperienceDialogOpen(false);
     },
     openAdminNavigationDrawer: async () => {
       uiStoreActions.setIsAdminNavigationDrawerOpen(true);

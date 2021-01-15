@@ -10,29 +10,38 @@ import { Certification, SchoolExperience, WorkExperience } from '../../models/re
 
 export interface ResumeStoreStateInterface {
   workExperiences: WorkExperience[];
+  isSearchingWorkExperiences: boolean;
+  searchWorkExperiencesError: any;
+  isPuttingWorkExperiences: boolean;
+  putWorkExperiencesError: any;
   schoolExperiences: SchoolExperience[];
   certifications: Certification[];
   skills: string[];
 }
 
 export const initialResumeStoreState: ResumeStoreStateInterface = {
-  workExperiences: Array.from({ length: 10 }).map(() => new WorkExperience({
-    workExperienceId: uuid(),
-    startDate: faker.date.past(),
-    endDate: faker.date.past(),
-    companyName: faker.company.companyName(),
-    companyAddress: {
-      addressLine1: faker.address.streetAddress(),
-      city: faker.address.city(),
-      state: faker.address.state(),
-      zipCode: faker.address.zipCode()
-    },
-    position: faker.name.jobTitle(),
-    duties: Array.from({ length: _.sample([4, 5, 6]) })
-      .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4]))),
-    accomplishments: Array.from({ length: _.sample([4, 5, 6]) })
-      .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4])))
-  })),
+  isSearchingWorkExperiences: false,
+  searchWorkExperiencesError: undefined,
+  isPuttingWorkExperiences: false,
+  putWorkExperiencesError: undefined,
+  workExperiences: [],
+  // workExperiences: Array.from({ length: 10 }).map(() => new WorkExperience({
+  //   workExperienceId: uuid(),
+  //   startDate: faker.date.past(),
+  //   endDate: faker.date.past(),
+  //   companyName: faker.company.companyName(),
+  //   companyAddress: {
+  //     addressLine1: faker.address.streetAddress(),
+  //     city: faker.address.city(),
+  //     state: faker.address.state(),
+  //     zipCode: faker.address.zipCode()
+  //   },
+  //   position: faker.name.jobTitle(),
+  //   duties: Array.from({ length: _.sample([4, 5, 6]) })
+  //     .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4]))),
+  //   accomplishments: Array.from({ length: _.sample([4, 5, 6]) })
+  //     .map(() => faker.lorem.paragraph(_.sample([1, 2, 3, 4])))
+  // })),
   schoolExperiences: Array.from({ length: 10 }).map(() => new SchoolExperience({
     schoolExperienceId: uuid(),
     startDate: faker.date.past(),
