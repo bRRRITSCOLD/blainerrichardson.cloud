@@ -11,9 +11,10 @@ export const createUiStoreSelectors = (uiStore: Writable<UiStoreStateInterface &
     circleText: $uiStore.circleText,
     isChangingCircleText: $uiStore.isChangingCircleText,
     iconLinks: $uiStore.iconLinks,
-    isEmailModalOpen: $uiStore.isEmailModalOpen,
+    isEmailDialogOpen: $uiStore.isEmailDialogOpen,
     isLoginDialogOpen: $uiStore.isLoginDialogOpen,
-    isResumeModalOpen: $uiStore.isResumeModalOpen,
+    isResumeDialogOpen: $uiStore.isResumeDialogOpen,
+    isAddWorkExperienceDialogOpen: $uiStore.isAddWorkExperienceDialogOpen,
     isAdminNavigationDrawerOpen: $uiStore.isAdminNavigationDrawerOpen
     }));
 }

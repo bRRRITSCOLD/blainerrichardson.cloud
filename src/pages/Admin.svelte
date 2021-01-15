@@ -2,49 +2,38 @@
   // layout
   import AdminLayout from "../layouts/AdminLayout.svelte";
   import { watchResize } from "svelte-watch-resize";
+  import { onMount } from "svelte";
 
   // components
-  import WorkExperienceAdminTableRowDefaultCell from "../components/Resume/WorkExperience/WorkExperienceAdminTableRowDefaultCell/WorkExperienceAdminTableRowDefaultCell.svelte";
-  import WorkExperienceAdminTableHeaderDefaultCell from "../components/Resume/WorkExperience/WorkExperienceAdminTableHeaderDefaultCell/WorkExperienceAdminTableHeaderDefaultCell.svelte";
-  import WorkExperienceAdminTableRowAddressCell from "../components/Resume/WorkExperience/WorkExperienceAdminTableRowAddressCell/WorkExperienceAdminTableRowAddressCell.svelte";
-  import VirtualTable from "../components/UI/Table/VirtualTable/VirtualTable.svelte";
+  import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkExperienceAdminTable/WorkExperienceAdminTable.svelte";
+
+  // stores
   import { resumeStore } from "../stores/resume";
-  import WorkExperienceAdminTableRowDateCell from "../components/Resume/WorkExperience/WorkExperienceAdminTableRowDateCell/WorkExperienceAdminTableRowDateCell.svelte";
-import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkExperienceAdminTable/WorkExperienceAdminTable.svelte";
+import { uiStore } from "../stores/ui";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
 
-  let schoolExperiencesVirtualTableWidth = 0;
-  let schoolExperiencesVirtualTableColumns = [];
-  $: schoolExperiencesVirtualTableColumns = [
-    {
-      display: 'School Name',  // What will be displayed as the column header
-      dataName: 'schoolName',  // The key of a row to get the column's data from
-      width: schoolExperiencesVirtualTableWidth,
-      cellComponent: WorkExperienceAdminTableRowDefaultCell,
-      headerComponent: WorkExperienceAdminTableHeaderDefaultCell
-    }
-  ];
+  onMount(async () => {
+    await Promise.all([
+      resumeStore.searchWorkExperiences({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
+      })
+    ]);
 
-  let certificationsVirtualTableWidth = 0;
-  let certificationsVirtualTableColumns = [];
-  $: certificationsVirtualTableColumns = [
-    {
-      display: 'Institution',  // What will be displayed as the column header
-      dataName: 'institution',  // The key of a row to get the column's data from
-      width: certificationsVirtualTableWidth,
-      cellComponent: WorkExperienceAdminTableRowDefaultCell,
-      headerComponent: WorkExperienceAdminTableHeaderDefaultCell
-    }
-  ];
+    console.log($resumeStore.workExperiences)
+  })
 </script>
 
 <AdminLayout>
   <div slot="body">
     <div class="d-flex flex-row justify-space-around">
       <div
-        style="height: 300px; min-height: 200px; width: 80%; padding-top: 10px;"
+        style="height: 500px; min-height: 500px; width: 80%; padding-top: 10px;"
         use:watchResize={(node) => {
           workExperiencesVirtualTableWidth = node.offsetWidth;
           workExperiencesVirtualTableHeight = node.offsetHeight;
@@ -54,11 +43,19 @@ import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkEx
           height={workExperiencesVirtualTableHeight}
           width={workExperiencesVirtualTableWidth}
           workExperiences={$resumeStore.workExperiences}
+          addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
+          isAddingWorkExperience={$resumeStore.isPuttingWorkExperiences}
+          on:onAddButtonClick={async (event) => {
+            uiStore.openAddWorkExperienceDialog();
+          }}
+          on:onAddWorkExperienceDialogCloseButtonClick={async (event) => {
+            uiStore.closeAddWorkExperienceDialog();
+          }}
         />
       </div>
     </div>
 
-    <div class="d-flex flex-row justify-space-around">
+    <!-- <div class="d-flex flex-row justify-space-around">
       <div
         style="height: 300px; min-height: 200px; width: 80%; padding-top: 10px;"
         use:watchResize={(node) => {
@@ -86,7 +83,7 @@ import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkEx
           columns={certificationsVirtualTableColumns}
         />
       </div>
-    </div>
+    </div> -->
   </div>
   <!-- <VirtualTable
     rowHeight={50}

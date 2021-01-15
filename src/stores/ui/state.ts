@@ -9,8 +9,9 @@ export interface UiStoreStateInterface {
   isChangingCircleText: boolean;
   iconLinks: { name: string; path: string; href?: string; }[];
   isLoginDialogOpen: boolean;
-  isEmailModalOpen: boolean;
-  isResumeModalOpen: boolean;
+  isEmailDialogOpen: boolean;
+  isResumeDialogOpen: boolean;
+  isAddWorkExperienceDialogOpen: boolean;
   isAdminNavigationDrawerOpen: boolean;
 }
 
@@ -38,8 +39,9 @@ export const initialUiStoreState: UiStoreStateInterface = {
     }
   ],
   isLoginDialogOpen: false,
-  isEmailModalOpen: false,
-  isResumeModalOpen: false,
+  isEmailDialogOpen: false,
+  isResumeDialogOpen: false,
+  isAddWorkExperienceDialogOpen: false,
   isAdminNavigationDrawerOpen: false
 };
 

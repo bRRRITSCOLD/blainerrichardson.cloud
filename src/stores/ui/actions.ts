@@ -6,8 +6,9 @@ export interface UiStoreActionsInterface {
   setCircleText: (circleText: string) => void;
   setIsChangingCircleText: (isChangingCircleText: boolean) => void;
   setIsLoginDialogOpen: (isLoginDialogOpen: boolean) => void;
-  setIsEmailModalOpen: (isEmailModalOpen: boolean) => void;
-  setIsResumeModalOpen: (isResumeModalOpen: boolean) => void;
+  setIsEmailDialogOpen: (isEmailDialogOpen: boolean) => void;
+  setIsResumeDialogOpen: (isResumeDialogOpen: boolean) => void;
+  setIsAddWorkExperienceDialogOpen: (isAddWorkExperienceDialogOpen: boolean) => void;
   setIsAdminNavigationDrawerOpen: (isAdminNavigationDrawerOpen: boolean) => void;
 }
 
@@ -44,23 +45,33 @@ export const createUiStoreActions = (uiStore: Writable<UiStoreStateInterface & o
         )
       });
     },
-    setIsEmailModalOpen: (isEmailModalOpen: boolean) => {
+    setIsEmailDialogOpen: (isEmailDialogOpen: boolean) => {
       uiStore.update(state => {
         // return the new state
         return _.assign(
           {},
           state,
-          { isEmailModalOpen }
+          { isEmailDialogOpen }
         )
       });
     },
-    setIsResumeModalOpen: (isResumeModalOpen: boolean) => {
+    setIsResumeDialogOpen: (isResumeDialogOpen: boolean) => {
       uiStore.update(state => {
         // return the new state
         return _.assign(
           {},
           state,
-          { isResumeModalOpen }
+          { isResumeDialogOpen }
+        )
+      });
+    },
+    setIsAddWorkExperienceDialogOpen: (isAddWorkExperienceDialogOpen: boolean) => {
+      uiStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isAddWorkExperienceDialogOpen }
         )
       });
     },

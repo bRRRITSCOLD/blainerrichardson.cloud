@@ -8,6 +8,10 @@ export interface ResumeStoreActionsInterface {
   putSchoolExperience: (schoolExperience: SchoolExperience, putSchoolExperienceOptions: { upsert?: boolean }) => void;
   deleteSchoolExperience: (schoolExperience: SchoolExperience) => void;
   setWorkExperiences: (workExperiences: WorkExperience[]) => void;
+  setIsSearchingWorkExperiences: (isSearchingWorkExperiences: boolean) => void;
+  setSearchWorkExperiencesError: (searchWorkExperiencesError: any) => void;
+  setIsPuttingWorkExperiences: (isPuttingWorkExperiences: boolean) => void;
+  setPuthWorkExperiencesError: (putWorkExperiencesError: any) => void;
   setCertifications: (certifications: Certification[]) => void;
 }
 
@@ -75,6 +79,46 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
           {},
           state,
           { workExperiences }
+        )
+      });
+    },
+    setIsSearchingWorkExperiences: (isSearchingWorkExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isSearchingWorkExperiences }
+        )
+      });
+    },
+    setSearchWorkExperiencesError: (searchWorkExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { searchWorkExperiencesError }
+        )
+      });
+    },
+    setIsPuttingWorkExperiences: (isPuttingWorkExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isPuttingWorkExperiences }
+        )
+      });
+    },
+    setPuthWorkExperiencesError: (putWorkExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { putWorkExperiencesError }
         )
       });
     },

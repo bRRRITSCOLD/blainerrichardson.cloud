@@ -1,4 +1,3 @@
-import { _ } from './lodash';
-
+export { promiseUtils } from './promise';
 export { addressUtils } from './address'
-export { _ }
+export { _ } from './lodash';
