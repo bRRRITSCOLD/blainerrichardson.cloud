@@ -7,6 +7,7 @@ export interface UserStoreActionsInterface {
   setJwt: (jwt: string) => void;
   setIsAuthenticatingUser: (isAuthenticatingUser: boolean) => void;
   setAuthenticateUserError: (authenticateUserError: any) => void;
+  setIsPollingRefreshUserToken: (isPollingRefreshUserToken: boolean) => void;
 }
 
 export const createUserStoreActions = (userStore: Writable<UserStoreStateInterface & object>): UserStoreActionsInterface => {
@@ -52,5 +53,15 @@ export const createUserStoreActions = (userStore: Writable<UserStoreStateInterfa
         )
       });
     },
+    setIsPollingRefreshUserToken: (isPollingRefreshUserToken: boolean) => {
+      userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isPollingRefreshUserToken }
+        )
+      });
+    }
   }
 }

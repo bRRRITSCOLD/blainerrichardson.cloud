@@ -7,21 +7,23 @@
   import VirtualTableRowDefaultCell from '../../../UI/Table/VirtualTableRowDefaultCell/VirtualTableRowDefaultCell.svelte';
 
   // props
+  export let data;
   export let handlers;
 </script>
 
 <div style="text-align: center;">
   <VirtualTableRowDefaultCell>
     <span on:click={() => {
-      if (handlers && handlers.onTrashCanIconLink) {
-        handlers.onTrashCanIconLink(true);
+      if (handlers && handlers.onTrashCanIconLinkClick) {
+        console.log('data=', data);
+        handlers.onTrashCanIconLinkClick(data);
       }
     }}>
       <Icon path={mdiTrashCan} />
     </span>
     <span on:click={() => {
-      if (handlers && handlers.onPenIconLink) {
-        handlers.onPenIconLink(true);
+      if (handlers && handlers.onPenIconLinkClick) {
+        handlers.onPenIconLinkClick(data);
       }
     }}>
       <Icon path={mdiPen} />

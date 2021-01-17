@@ -10,8 +10,9 @@ import type { ResumeStoreActionsInterface } from "./actions";
 import * as resumeServices from '../../services/resume';
 
 export interface ResumeStoreThunksInterface {
-  searchWorkExperiences: (searchWorkExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void
-  putWorkExperiences: (putWorkExperiencesRequest: { workExperiences: WorkExperienceInterface[]; }) => void;
+  searchWorkExperiences: (searchWorkExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
+  putWorkExperiences: (putWorkExperiencesRequest: { jwt: string; workExperiences: WorkExperienceInterface[]; }) => void;
+  deleteWorkExperiences: (deleteWorkExperiencesRequest: { jwt: string; workExperienceIds: string[]; }) => void;
 }
 
 export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsInterface): ResumeStoreThunksInterface => {
@@ -50,13 +51,15 @@ export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsIn
         return;
       }
     },
-    putWorkExperiences: async (putWorkExperiencesRequest: { workExperiences: WorkExperienceInterface[]; }) => {
+    putWorkExperiences: async (putWorkExperiencesRequest: { jwt: string; workExperiences: WorkExperienceInterface[]; }) => {
       try {
         // deconstruct for ease
         const {
+          jwt,
           workExperiences
         } = putWorkExperiencesRequest;
 
+        console.log('putWorkExperiencesRequest', putWorkExperiencesRequest);
         // indicate we are loading and reset any old errors
         resumeStoreActions.setIsPuttingWorkExperiences(true);
         resumeStoreActions.setPuthWorkExperiencesError(undefined);
@@ -65,7 +68,7 @@ export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsIn
         const [
           putWorkExperiencesResponse
         ] = await promiseUtils.allSettled([
-          resumeServices.putWorkExperiences({ workExperiences })
+          resumeServices.putWorkExperiences({ jwt, workExperiences })
         ]);
         
         // if our call failed handle appropriately else move on
@@ -74,7 +77,51 @@ export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsIn
         }
   
         // store data and indicate we are no longer loading
-        resumeStoreActions.setWorkExperiences(putWorkExperiencesResponse.data.workExperiences);
+        for (const workExperience of putWorkExperiencesResponse.data.workExperiences) {
+          resumeStoreActions.putWorkExperience(workExperience, { upsert: true });
+        }
+        resumeStoreActions.setIsPuttingWorkExperiences(false);
+  
+        // return explicitly
+        return;
+      } catch (err) {
+        // store error and indicate we are no longer loading
+        resumeStoreActions.setPuthWorkExperiencesError(err);
+        resumeStoreActions.setIsPuttingWorkExperiences(false);
+
+        // return explicitly
+        return;
+      }
+    },
+    deleteWorkExperiences: async (deleteWorkExperiencesRequest: { jwt: string; workExperienceIds: string[]; }) => {
+      try {
+        // deconstruct for ease
+        const {
+          jwt,
+          workExperienceIds
+        } = deleteWorkExperiencesRequest;
+
+        console.log('deleteWorkExperiencesRequest', deleteWorkExperiencesRequest);
+        // indicate we are loading and reset any old errors
+        resumeStoreActions.setIsPuttingWorkExperiences(true);
+        resumeStoreActions.setPuthWorkExperiencesError(undefined);
+  
+        // attempt to search system
+        const [
+          deletetWorkExperiencesResponse
+        ] = await promiseUtils.allSettled([
+          resumeServices.deleteWorkExperiences({ jwt, workExperienceIds })
+        ]);
+        
+        // if our call failed handle appropriately else move on
+        if (deletetWorkExperiencesResponse.status === 'rejected') {
+          throw deletetWorkExperiencesResponse.reason;
+        }
+  
+        // store data and indicate we are no longer loading
+        for (const workExperienceId of deletetWorkExperiencesResponse.data.workExperienceIds) {
+          resumeStoreActions.deleteWorkExperience(workExperienceId);
+        }
         resumeStoreActions.setIsPuttingWorkExperiences(false);
   
         // return explicitly

@@ -6,13 +6,15 @@ export interface UserStoreStateInterface {
   jwt: string;
   isAuthenticatingUser: boolean;
   authenticateUserError: any;
+  isPollingRefreshUserToken: boolean;
 }
 
 export const initialUserStoreState: UserStoreStateInterface = {
   user: undefined,
   jwt: '',
   isAuthenticatingUser: false,
-  authenticateUserError: undefined
+  authenticateUserError: undefined,
+  isPollingRefreshUserToken: false
 };
 
 export function cachedUserStoreState(_userStoreState: UserStoreStateInterface): Partial<UserStoreStateInterface> {

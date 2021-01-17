@@ -15,7 +15,7 @@
     initialValues: {
       startDate: '',
       endDate: '',
-      comapnyName: '',
+      companyName: '',
       companyAddress: {
         addressLine1: '',
         addressLine2: '',
@@ -66,12 +66,27 @@
         .string()
         .label('Position')
         .required(),
+      accomplishments: yup
+        .array()
+        .of(yup.string())
+        .label('Accomplisments')
+        .required()
     }),
     onSubmit: values => {
-      console.log(values);
       dispatch('onSubmitButtonClick', values);
     }
   });
+
+  
+  const add = () => {
+    $form.accomplishments = $form.accomplishments.concat('');
+    $errors.accomplishments = $errors.accomplishments.concat('');
+  };
+
+  const remove = i => () => {
+    $form.accomplishments = $form.accomplishments.filter((u, j) => j !== i);
+    $errors.accomplishments = $errors.accomplishments.filter((u, j) => j !== i);
+  };
 </script>
 
 <Dialog bind:active>
@@ -112,7 +127,7 @@
             {#if $errors.companyName}
               <small transition:slide|local style="color: red;">{$errors.companyName}</small>
             {/if}
-            <Textarea
+            <TextField
               id="companyName"
               name="companyName"
               bind:value={$form.companyName}
@@ -120,7 +135,79 @@
               style="padding-top: 10px;"
             >
               Company Name
-            </Textarea>
+            </TextField>
+            {#if $errors.companyAddress.addressLine1}
+              <small transition:slide|local style="color: red;">{$errors.companyAddress.addressLine1}</small>
+            {/if}
+            <TextField
+              id="companyAddress.addressLine1"
+              name="companyAddress.addressLine1"
+              bind:value={$form.companyAddress.addressLine1}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              Address Line 1
+            </TextField>
+            {#if $errors.companyAddress.addressLine2}
+              <small transition:slide|local style="color: red;">{$errors.companyAddress.addressLine2}</small>
+            {/if}
+            <TextField
+              id="companyAddress.addressLine2"
+              name="companyAddress.addressLine2"
+              bind:value={$form.companyAddress.addressLine2}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              Address Line 2
+            </TextField>
+            {#if $errors.companyAddress.city}
+              <small transition:slide|local style="color: red;">{$errors.companyAddress.city}</small>
+            {/if}
+            <TextField
+              id="companyAddress.city"
+              name="companyAddress.city"
+              bind:value={$form.companyAddress.city}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              City
+            </TextField>
+            {#if $errors.companyAddress.state}
+              <small transition:slide|local style="color: red;">{$errors.companyAddress.state}</small>
+            {/if}
+            <TextField
+              id="companyAddress.state"
+              name="companyAddress.state"
+              bind:value={$form.companyAddress.state}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              State
+            </TextField>
+            {#if $errors.companyAddress.zipCode}
+              <small transition:slide|local style="color: red;">{$errors.companyAddress.zipCode}</small>
+            {/if}
+            <TextField
+              id="companyAddress.zipCode"
+              name="companyAddress.zipCode"
+              bind:value={$form.companyAddress.zipCode}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              Zip Code
+            </TextField>
+            {#if $errors.position}
+              <small transition:slide|local style="color: red;">{$errors.position}</small>
+            {/if}
+            <TextField
+              id="position"
+              name="position"
+              bind:value={$form.position}
+              on:change={handleChange}
+              style="padding-top: 10px;"
+            >
+              Position
+            </TextField>
           </div>
         </div>
       </CardText>

@@ -9,7 +9,9 @@
 
   // stores
   import { resumeStore } from "../stores/resume";
-import { uiStore } from "../stores/ui";
+  import { uiStore } from "../stores/ui";
+import { userStore } from "../stores/user";
+import { putWorkExperiences } from "../services/resume";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
@@ -48,8 +50,19 @@ import { uiStore } from "../stores/ui";
           on:onAddButtonClick={async (event) => {
             uiStore.openAddWorkExperienceDialog();
           }}
+          on:onAddWorkExperienceDialogSubmitButtonClick={async (event) => {
+            console.log(`onAddWorkExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
+            await resumeStore.putWorkExperiences({ jwt: $userStore.jwt, workExperiences: [event.detail] });
+            if (!$resumeStore.putWorkExperiencesError) {
+              uiStore.closeAddWorkExperienceDialog();
+            }
+          }}
           on:onAddWorkExperienceDialogCloseButtonClick={async (event) => {
             uiStore.closeAddWorkExperienceDialog();
+          }}
+          on:onTableRowActionsCellTrashCanIconClick={async (event) => {
+            console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt)
+            await resumeStore.deleteWorkExperiences({ jwt: $userStore.jwt, workExperienceIds: [event.detail.workExperienceId] });
           }}
         />
       </div>

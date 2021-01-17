@@ -9,6 +9,7 @@ const apiUrl = `http://127.0.0.1:3000/graphql`;
 
 
 export interface PutWorkExperiencesRequestInterface {
+  jwt: string;
   workExperiences: WorkExperienceInterface[];
 }
 
@@ -20,6 +21,7 @@ export async function putWorkExperiences(putWorkExperiencesRequest: PutWorkExper
   try {
     // deconstruct for ease
     const {
+      jwt,
       workExperiences
     } = putWorkExperiencesRequest;
 
@@ -32,7 +34,10 @@ export async function putWorkExperiences(putWorkExperiencesRequest: PutWorkExper
     const httpRequest = {
       method: 'POST',
       url: apiUrl,
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        authorization: jwt
+      },
       data: {
         query: `mutation putWorkExperiences($data: PutWorkExperiencesInputType!) {
           putWorkExperiences(data: $data) {
@@ -69,7 +74,7 @@ export async function putWorkExperiences(putWorkExperiencesRequest: PutWorkExper
     if (httpResponse.status !== 200) {
       throw _.assign(
         {},
-        httpResponse.data,
+        httpResponse,
         { statusCode: httpResponse.status }
       )
     }
@@ -85,7 +90,7 @@ export async function putWorkExperiences(putWorkExperiencesRequest: PutWorkExper
     // return explicitly for end user to handle
     return putWorkExperiencesResponse;
   } catch (err) {
-    console.log(`err.message`, err.message);
+    console.log(`err.message`, err);
     console.log(`err`, err);
     throw err;
   }
