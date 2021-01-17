@@ -23,6 +23,7 @@ function createUserStore() {
 
   // cache and uncache
   _userStore.subscribe(value => {
+    console.log('userStore.subscribe', value);
     sessionStorage.setItem(USER_STORE_KEY, JSON.stringify(cachedUserStoreState(value)));
   });
 

@@ -40,9 +40,9 @@ export class WorkExperience implements WorkExperienceInterface {
       this,
       workExperience,
       {
-        workExperienceId: _.get(workExperience, 'workExperienceId'),
-        startDate: new Date(_.get(workExperience  , 'startDate', new Date)),
-        endDate: _.get(workExperience  , 'endDate') ? new Date(_.get(workExperience  , 'endDate')) : undefined,
+        workExperienceId: _.get(workExperience, 'workExperienceId', uuid()),
+        startDate: new Date(_.get(workExperience  , 'startDate', new Date())),
+        endDate: _.get(workExperience  , 'endDate') ? new Date(_.get(workExperience  , 'endDate')) : 'Present',
         companyName: _.get(workExperience, 'companyName'),
         companyAddress: _.get(workExperience, 'companyAddress'),
         position: _.get(workExperience, 'position'),

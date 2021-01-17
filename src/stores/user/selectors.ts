@@ -11,13 +11,14 @@ export interface UserStoreSelectorsInterface extends UserStoreStateInterface {
   isAuthenticated: boolean;
 }
 
-export const createUserStoreSelectors = (uiStore: Writable<UserStoreStateInterface & object>): Readable<UserStoreSelectorsInterface> => {
+export const createUserStoreSelectors = (userStore: Writable<UserStoreStateInterface & object>): Readable<UserStoreSelectorsInterface> => {
 
-  return derived(uiStore, $uiStore => ({
-      user: $uiStore.user,
-      jwt: $uiStore.jwt,
-      isAuthenticatingUser: $uiStore.isAuthenticatingUser,
-      authenticateUserError: $uiStore.authenticateUserError,
-      isAuthenticated: _.isString($uiStore.jwt) && $uiStore.jwt.length > 0
+  return derived(userStore, $userStore => ({
+      user: $userStore.user,
+      jwt: $userStore.jwt,
+      isAuthenticatingUser: $userStore.isAuthenticatingUser,
+      authenticateUserError: $userStore.authenticateUserError,
+      isAuthenticated: _.isString($userStore.jwt) && $userStore.jwt.length > 0,
+      isPollingRefreshUserToken: $userStore.isPollingRefreshUserToken
     }));
 }

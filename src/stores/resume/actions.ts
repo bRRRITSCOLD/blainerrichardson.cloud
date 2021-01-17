@@ -2,12 +2,17 @@ import type { Writable } from "svelte/store";
 import type { ResumeStoreStateInterface } from "./state";
 import { _ } from '../../lib/utils';
 import { Certification, SchoolExperience, SchoolExperienceInterface, WorkExperience } from "../../models/resume";
+import { mdiGestureSwipeLeft } from "@mdi/js";
 
 export interface ResumeStoreActionsInterface {
   setSchoolExperiences: (schoolExperiences: SchoolExperience[]) => void;
   putSchoolExperience: (schoolExperience: SchoolExperience, putSchoolExperienceOptions: { upsert?: boolean }) => void;
   deleteSchoolExperience: (schoolExperience: SchoolExperience) => void;
   setWorkExperiences: (workExperiences: WorkExperience[]) => void;
+  putWorkExperience: (workExperience: WorkExperience, putWorkExperienceOptions: { upsert?: boolean }) => void;
+  deleteWorkExperience: (workExperienceId: string) => void;
+  setIsDeletingWorkExperiences: (isDeletingWorkExperiences: boolean) => void;
+  setDeleteWorkExperiencesError: (deletehWorkExperiencesError: any) => void;
   setIsSearchingWorkExperiences: (isSearchingWorkExperiences: boolean) => void;
   setSearchWorkExperiencesError: (searchWorkExperiencesError: any) => void;
   setIsPuttingWorkExperiences: (isPuttingWorkExperiences: boolean) => void;
@@ -79,6 +84,70 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
           {},
           state,
           { workExperiences }
+        )
+      });
+    },
+    putWorkExperience: (workExperience: WorkExperience, putWorkExperienceOptions: { upsert?: boolean }) => {
+      resumeStore.update(state => {
+        // create a copy of the current state property
+        const workExperiences = state.workExperiences.slice();
+
+        // see if item exists by id
+        const workExperienceIndex = _.findIndex(state.workExperiences, { workExperienceId: workExperience.workExperienceId })
+  
+        // if it does exit then replace it and
+        // if it does not exist then create a new entry
+        if (workExperienceIndex > -1) {
+          workExperiences[workExperienceIndex] = new WorkExperience(workExperience);
+        } else if (putWorkExperienceOptions.upsert) {
+          workExperiences.push(new WorkExperience(workExperience));
+        }
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { workExperiences }
+        )
+      });
+    },
+    deleteWorkExperience: (workExperienceId: string) => {
+      resumeStore.update(state => {
+        // create a copy of the current state property
+        const workExperiences = state.workExperiences.slice();
+
+        // see if item exists by id
+        const workExperienceIndex = _.findIndex(state.workExperiences, { workExperienceId })
+  
+        // remove the instance if found
+        if (workExperienceIndex > -1) {
+          workExperiences.splice(workExperienceIndex, 1)
+        }
+
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { workExperiences }
+        )
+      });
+    },
+    setIsDeletingWorkExperiences: (isDeletingWorkExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isDeletingWorkExperiences }
+        )
+      });
+    },
+    setDeleteWorkExperiencesError: (deleteWorkExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { deleteWorkExperiencesError }
         )
       });
     },

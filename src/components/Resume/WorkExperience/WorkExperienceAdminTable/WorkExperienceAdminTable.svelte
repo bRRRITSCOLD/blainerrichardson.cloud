@@ -36,11 +36,13 @@
       cellComponent: WorkExperienceAdminTableRowActionsCell,
       headerComponent: WorkExperienceAdminTableHeaderDefaultCell,
       handlers: {
-        onTrashCanIconLink(_value: any) {
-          console.log('onTrashCanIconLink');
+        onTrashCanIconLinkClick(data: any) {
+          console.log('onTrashCanIconLink', data);
+          dispatch('onTableRowActionsCellTrashCanIconClick', data);
         },
-        onPenIconLink(_value: any) {
-          console.log('onPenIconLink');
+        onPenIconLinkClick(data: any) {
+          console.log('onPenIconLink', data);
+          dispatch('onTableRowActionsCellPenIconClick', data);
         }
       }
     },
@@ -115,8 +117,8 @@
   <AddWorkExperienceDialog
     bind:active={addWorkExperienceDialogActive}
     bind:isAddingWorkExperience={isAddingWorkExperience}
-    on:submit={(event => {
-      console.log(event);
+    on:onSubmitButtonClick={(event => {
+      dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
     })}
     on:onCancelButtonClick={() => {
       dispatch('onAddWorkExperienceDialogCloseButtonClick', true);

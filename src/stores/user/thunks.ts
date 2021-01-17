@@ -1,85 +1,103 @@
-import { _ } from '../../lib/utils';
-import type { UserStoreActionsInterface } from "./actions";
+// node_modules
+import { from, interval, Observable, of, Subject } from 'rxjs';
+import { catchError, concatMap, map, takeUntil, tap } from 'rxjs/operators';
 
+// libraries
+import { _ } from '../../lib/utils';
+
+// services
 import * as userService from '../../services/user';
+
+// store specific
+import type { UserStoreActionsInterface } from "./actions";
 
 export interface UserStoreThunksInterface {
   // startChangingCircleText: (circleText) => void;
   // stopChangingCircleText: () => void;
   authenticateUser: (authenticateUserRequest: { username: string; password: string }) => void;
+  startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: { jwt: string; }) => void;
+  stopPollingRefreshUserToken: () => void;
 }
 
 export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterface): UserStoreThunksInterface => {
-  // let changeCircleTextUnsubscribe$: Subject<undefined>;
-  // let changeCircleText$: Observable<any>;
+  let refreshUserJWTUnsubscribe$: Subject<undefined>;
+  let refreshUserJWT$: Observable<any>;
+  // create the internal version of out
+  // state polling
+  const pollRefreshUserToken = (pollRefreshUserTokenRequest: {
+    jwt: string;
+  }) => {
+    // create the unsubscribe for
+    // our silent refresh user jwt
+    // functionality
+    refreshUserJWTUnsubscribe$ = new Subject();
+    // start to silently refresh a
+    // user's jwt every 10 mins
+    refreshUserJWT$ = interval(600000).pipe(
+      takeUntil(refreshUserJWTUnsubscribe$),
+      concatMap((_: any) => from(userService.refreshUserToken({
+        jwt: pollRefreshUserTokenRequest.jwt
+      })).pipe(
+        takeUntil(refreshUserJWTUnsubscribe$),
+        map((refreshUserJWTResponse: { user: string; userToken: string }) => ({
+          user: refreshUserJWTResponse.user,
+          userToken: refreshUserJWTResponse.userToken,
+        })),
+        tap((response: { user: string; userToken: string }) => response),
+        catchError(() => of('EMPTY')),
+      )),
+    );
+  };
 
-  // const startChangingCircleText = (circleText: string) => {
-  //   // create unsubscribe so that
-  //   // we may cancel/stop when needed
-  //   changeCircleTextUnsubscribe$ = new Subject();
-  //   // start the change of circle text
-  //   changeCircleText$ = of(circleText).pipe(
-  //     delay(300),
-  //     takeUntil(changeCircleTextUnsubscribe$),
-  //     tap((newCircleText: string) => newCircleText)
-  //   );
-  // };
+  const handlePollRefreshUserToken = (response) => {
+    // set jwt
+    userStoreActions.setJwt(response.userToken.token);
 
-  // const stopChangingCircleText = () => {
-  //   // unsubscribe to the changing
-  //   // circle text observable
-  //   if (changeCircleTextUnsubscribe$) {
-  //     changeCircleTextUnsubscribe$.next();
-  //   }
-  // };
+    // now unsubscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWTUnsubscribe$) {
+      refreshUserJWTUnsubscribe$.next();
+    }
+
+    // start new supscription
+    startPollRefreshUserToken({ jwt: response.userToken.token });
+  };
+
+  const startPollRefreshUserToken = (startPollRefreshUserTokenRequest: { jwt: string }) => {
+    // deconstruct for ease
+    const { jwt } = startPollRefreshUserTokenRequest;
+
+    // indicate that we are now silently
+    // polling to refresh our user token
+    userStoreActions.setIsPollingRefreshUserToken(true);
+
+    // start polling
+    pollRefreshUserToken({
+      jwt
+    });
+
+    // now subscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWT$) {
+      // eslint-disable-next-line prefer-arrow-callback
+      refreshUserJWT$.subscribe(handlePollRefreshUserToken);
+    }
+  };
+
+  const stopPollRefreshUserToken = () => {
+    console.log('userStoreThunks - stopPollingRefreshUserToken');
+    // now unsubscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWTUnsubscribe$) {
+      refreshUserJWTUnsubscribe$.next();
+    }
+
+    // set/indicate that we are done polling to refresh
+    // a user's jwt silently without them knowing
+    userStoreActions.setIsPollingRefreshUserToken(false);
+  };
 
   return {
-    // startChangingCircleText: (circleText: string) => {
-    //   // indicate that we are changing
-    //   // or have started changing the
-    //   // cirle text for the user
-    //   userStoreActions.setIsChangingCircleText(true);
-    //   // create observable and start subscription
-    //   startChangingCircleText(circleText);
-    //   // now subscribe to the subscription
-    //   // and set a handler
-    //   if (changeCircleText$) {
-    //     changeCircleText$.subscribe({
-    //       next: (newCircleText: string) => {
-    //         // set the user's circle text
-    //         // with the new circle text
-    //         userStoreActions.setCircleText(newCircleText);
-    //         // unsubscribe to the changing
-    //         // circle text observable
-    //         stopChangingCircleText();
-    //         // indicate that we are not changing
-    //         // the cirle text for the user
-    //         userStoreActions.setIsChangingCircleText(false);
-    //       },
-    //       error: (error: string) => {
-    //         // log error for conext
-    //         console.log('change circle text error ', error);
-    //         // set the user's circle text
-    //         // with the new circle text
-    //         userStoreActions.setCircleText(circleText);
-    //         // unsubscribe to the changing
-    //         // circle text observable
-    //         stopChangingCircleText();
-    //         // indicate that we are not changing
-    //         // the cirle text for the user
-    //         userStoreActions.setIsChangingCircleText(false);
-    //       }
-    //     });
-    //   }
-    // },
-    // stopChangingCircleText: () => {
-    //   // unsubscribe to the changing
-    //   // circle text observable
-    //   stopChangingCircleText();
-    //   // indicate that we are not changing
-    //   // the cirle text for the user
-    //   userStoreActions.setIsChangingCircleText(false);
-    // },
     authenticateUser: async (authenticateUserRequest) => {
       try {
         // deconstruct for ease
@@ -120,6 +138,15 @@ export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterfac
         // thow error explicitly
         throw err;
       }
+    },
+    startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: { jwt: string }) => {
+      // deconstruct for ease
+      const { jwt } = startPollingRefreshUserTokenRequest;
+      
+      startPollRefreshUserToken({ jwt });
+    },
+    stopPollingRefreshUserToken: () => {
+      stopPollRefreshUserToken();
     }
   }
 }
