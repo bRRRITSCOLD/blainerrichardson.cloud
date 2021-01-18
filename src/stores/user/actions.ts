@@ -7,6 +7,8 @@ export interface UserStoreActionsInterface {
   setJwt: (jwt: string) => void;
   setIsAuthenticatingUser: (isAuthenticatingUser: boolean) => void;
   setAuthenticateUserError: (authenticateUserError: any) => void;
+  setIsRefreshingUserToken: (isRefreshingUserToken: boolean) => void;
+  setRefreshUserTokenError: (refreshUserTokenError: any) => void;
   setIsPollingRefreshUserToken: (isPollingRefreshUserToken: boolean) => void;
 }
 
@@ -50,6 +52,26 @@ export const createUserStoreActions = (userStore: Writable<UserStoreStateInterfa
           {},
           state,
           { authenticateUserError }
+        )
+      });
+    },
+    setIsRefreshingUserToken: (isRefreshingUserToken: boolean) => {
+      userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isRefreshingUserToken }
+        )
+      });
+    },
+    setRefreshUserTokenError: (refreshUserTokenError: any) => {
+      userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { refreshUserTokenError }
         )
       });
     },

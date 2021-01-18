@@ -1,13 +1,14 @@
 <script lang="ts">
-import { onDestroy } from 'svelte';
-
   // node_modules
+  import { onDestroy, onMount } from 'svelte';
   import { MaterialApp } from 'svelte-materialify/src'
   import Router, { replace } from 'svelte-spa-router';
 
+  // stores
+  import { userStore } from './stores/user';
+
   // routes
   import { routes, routeNames } from './routes';
-import { userStore } from './stores/user';
 
   // Handles the "conditionsFailed" event dispatched by the router when a component can't be loaded because one of its pre-condition failed
   function conditionsFailed(event) {
@@ -21,10 +22,8 @@ import { userStore } from './stores/user';
           break;
         }
       }
-      // // Perform any action, for example replacing the current route
-      // if (event.detail.userData.foo == 'bar') {
-      //     replace('/hello/world')
-      // }
+
+      return;
   }
 
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
@@ -32,14 +31,29 @@ import { userStore } from './stores/user';
       console.log('routeLoaded event', event.detail)
   }
 
+  onMount(async () => {
+    if ($userStore.isPollingRefreshUserToken) {
+      console.log('onMount Running stop polling refresh token before refresh token');
+      userStore.stopPollingRefreshUserToken();
+    }
 
-    // start polling if we are
-    // logged in/have jwt
-  $: if ($userStore.isAuthenticated && !$userStore.isPollingRefreshUserToken) {
-    console.log('App.svelte - polling jwt');
+    console.log('onMount Running refresh token');
+    await userStore.refreshUserToken({ jwt: $userStore.jwt });
+  });
+
+  // start polling if we are
+  // logged in/have jwt
+  $: if ($userStore.isAuthenticated && !$userStore.isPollingRefreshUserToken && !$userStore.isRefreshingUserToken && !$userStore.refreshUserTokenError) {
+    console.log('reactive $userStore.isAuthenticated && !$userStore.isPollingRefreshUserToken && !$userStore.isRefreshingUserToken running');
     userStore.startPollingRefreshUserToken({
       jwt: $userStore.jwt,
     });
+  }
+
+  $: if ($userStore.refreshUserTokenError) {
+    console.log('reactive $userStore.refreshUserTokenError');
+    userStore.stopPollingRefreshUserToken();
+    replace('/');
   }
 
   onDestroy(() => {

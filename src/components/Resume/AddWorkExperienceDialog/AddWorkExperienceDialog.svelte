@@ -8,25 +8,26 @@
 
   export let active = false;
   export let isAddingWorkExperience = true;
+  export let initialForm = {
+    startDate: '',
+    endDate: '',
+    companyName: '',
+    companyAddress: {
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      zipCode: ''
+    },
+    position: '',
+    duties: [],
+    accomplishments: []
+  };
 
   const dispatch = createEventDispatcher();
 
   const { form, errors, state, handleChange, handleSubmit } = createForm({
-    initialValues: {
-      startDate: '',
-      endDate: '',
-      companyName: '',
-      companyAddress: {
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        state: '',
-        zipCode: ''
-      },
-      position: '',
-      duties: [],
-      accomplishments: []
-    },
+    initialValues: initialForm,
     validationSchema: yup.object().shape({
       startDate: yup
         .string()
