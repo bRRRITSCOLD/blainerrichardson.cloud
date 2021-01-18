@@ -19,6 +19,8 @@ export const createUserStoreSelectors = (userStore: Writable<UserStoreStateInter
       isAuthenticatingUser: $userStore.isAuthenticatingUser,
       authenticateUserError: $userStore.authenticateUserError,
       isAuthenticated: _.isString($userStore.jwt) && $userStore.jwt.length > 0,
-      isPollingRefreshUserToken: $userStore.isPollingRefreshUserToken
+      isPollingRefreshUserToken: $userStore.isPollingRefreshUserToken,
+      isRefreshingUserToken: $userStore.isRefreshingUserToken,
+      refreshUserTokenError: $userStore.refreshUserTokenError,
     }));
 }

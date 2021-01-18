@@ -11,100 +11,31 @@ import * as userService from '../../services/user';
 // store specific
 import type { UserStoreActionsInterface } from "./actions";
 
+export interface AuthenticatUserRequestInterface { username: string; password: string }
+
+export interface RefreshUserTokenRequestInterface { jwt: string }
+
+export interface StartPollingRefreshUserTokenRequestInterface { jwt: string }
+
 export interface UserStoreThunksInterface {
   // startChangingCircleText: (circleText) => void;
   // stopChangingCircleText: () => void;
-  authenticateUser: (authenticateUserRequest: { username: string; password: string }) => void;
-  startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: { jwt: string; }) => void;
+  authenticateUser: (authenticateUserRequest: AuthenticatUserRequestInterface) => Promise<void>;
+  refreshUserToken: (refreshUserTokenRequest: RefreshUserTokenRequestInterface) => Promise<void>;
+  startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: StartPollingRefreshUserTokenRequestInterface) => void;
   stopPollingRefreshUserToken: () => void;
 }
 
 export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterface): UserStoreThunksInterface => {
-  let refreshUserJWTUnsubscribe$: Subject<undefined>;
-  let refreshUserJWT$: Observable<any>;
-  // create the internal version of out
-  // state polling
-  const pollRefreshUserToken = (pollRefreshUserTokenRequest: {
-    jwt: string;
-  }) => {
-    // create the unsubscribe for
-    // our silent refresh user jwt
-    // functionality
-    refreshUserJWTUnsubscribe$ = new Subject();
-    // start to silently refresh a
-    // user's jwt every 10 mins
-    refreshUserJWT$ = interval(600000).pipe(
-      takeUntil(refreshUserJWTUnsubscribe$),
-      concatMap((_: any) => from(userService.refreshUserToken({
-        jwt: pollRefreshUserTokenRequest.jwt
-      })).pipe(
-        takeUntil(refreshUserJWTUnsubscribe$),
-        map((refreshUserJWTResponse: { user: string; userToken: string }) => ({
-          user: refreshUserJWTResponse.user,
-          userToken: refreshUserJWTResponse.userToken,
-        })),
-        tap((response: { user: string; userToken: string }) => response),
-        catchError(() => of('EMPTY')),
-      )),
-    );
-  };
-
-  const handlePollRefreshUserToken = (response) => {
-    // set jwt
-    userStoreActions.setJwt(response.userToken.token);
-
-    // now unsubscribe to the response of the
-    // call to refresh the user jwt every x seconds
-    if (refreshUserJWTUnsubscribe$) {
-      refreshUserJWTUnsubscribe$.next();
-    }
-
-    // start new supscription
-    startPollRefreshUserToken({ jwt: response.userToken.token });
-  };
-
-  const startPollRefreshUserToken = (startPollRefreshUserTokenRequest: { jwt: string }) => {
-    // deconstruct for ease
-    const { jwt } = startPollRefreshUserTokenRequest;
-
-    // indicate that we are now silently
-    // polling to refresh our user token
-    userStoreActions.setIsPollingRefreshUserToken(true);
-
-    // start polling
-    pollRefreshUserToken({
-      jwt
-    });
-
-    // now subscribe to the response of the
-    // call to refresh the user jwt every x seconds
-    if (refreshUserJWT$) {
-      // eslint-disable-next-line prefer-arrow-callback
-      refreshUserJWT$.subscribe(handlePollRefreshUserToken);
-    }
-  };
-
-  const stopPollRefreshUserToken = () => {
-    console.log('userStoreThunks - stopPollingRefreshUserToken');
-    // now unsubscribe to the response of the
-    // call to refresh the user jwt every x seconds
-    if (refreshUserJWTUnsubscribe$) {
-      refreshUserJWTUnsubscribe$.next();
-    }
-
-    // set/indicate that we are done polling to refresh
-    // a user's jwt silently without them knowing
-    userStoreActions.setIsPollingRefreshUserToken(false);
-  };
-
-  return {
-    authenticateUser: async (authenticateUserRequest) => {
+  const userStoreThunks = {
+    authenticateUser: async (authenticateUserRequest: AuthenticatUserRequestInterface) => {
       try {
         // deconstruct for ease
         const { username, password } = authenticateUserRequest;
 
-        // indicate we do not have an error
+        // indicate we do not have errors
         userStoreActions.setAuthenticateUserError(undefined);
+        userStoreActions.setRefreshUserTokenError(undefined);
 
         // indicate that we are sending an user
         userStoreActions.setIsAuthenticatingUser(true);
@@ -134,19 +65,148 @@ export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterfac
 
         // indicate that we are sending an user
         userStoreActions.setIsAuthenticatingUser(false);
-
-        // thow error explicitly
-        throw err;
       }
     },
-    startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: { jwt: string }) => {
-      // deconstruct for ease
-      const { jwt } = startPollingRefreshUserTokenRequest;
-      
-      startPollRefreshUserToken({ jwt });
-    },
-    stopPollingRefreshUserToken: () => {
-      stopPollRefreshUserToken();
+    refreshUserToken: async (refreshUserTokenRequest: RefreshUserTokenRequestInterface) => {
+      try {
+        // deconstruct for ease
+        const { jwt } = refreshUserTokenRequest;
+
+        // indicate we do not have an error
+        userStoreActions.setRefreshUserTokenError(undefined);
+
+        // indicate that we are sending an user
+        userStoreActions.setIsRefreshingUserToken(true);
+
+        const authenticateUserResponse = await userService.refreshUserToken({ jwt });
+
+        // set store's jwt token data
+        userStoreActions.setJwt(authenticateUserResponse.userToken.token);
+
+        // indicate that we are sending an user
+        userStoreActions.setIsRefreshingUserToken(false);
+
+        // return explictly to make sure
+        // the closure closes
+        return;
+      } catch (err) {
+        console.log(`refreshUserTokenError`, err);
+
+        // indicate we have an error
+        userStoreActions.setRefreshUserTokenError(err);
+
+        // reset jwt to empty to indicaate we are not authenticated
+        userStoreActions.setJwt('');
+
+        // indicate that we are sending an user
+        userStoreActions.setIsRefreshingUserToken(false);
+      }
     }
-  }
+  } as UserStoreThunksInterface;
+
+  let refreshUserJWTUnsubscribe$: Subject<undefined>;
+  let refreshUserJWT$: Observable<any>;
+
+  // create the internal version of out
+  // state polling
+  const pollRefreshUserToken = (pollRefreshUserTokenRequest: {
+    jwt: string;
+  }) => {
+    // create the unsubscribe for
+    // our silent refresh user jwt
+    // functionality
+    refreshUserJWTUnsubscribe$ = new Subject();
+    // start to silently refresh a
+    // user's jwt every 10 mins
+    refreshUserJWT$ = interval(60000).pipe(
+      takeUntil(refreshUserJWTUnsubscribe$),
+      concatMap((_: any) => {
+        // indicate we do not have an error
+        userStoreActions.setRefreshUserTokenError(undefined);
+
+        // indicate that we are sending an user
+        userStoreActions.setIsRefreshingUserToken(true);
+
+        return from(userService.refreshUserToken({
+          jwt: pollRefreshUserTokenRequest.jwt
+        })).pipe(
+          takeUntil(refreshUserJWTUnsubscribe$),
+          map((refreshUserJWTResponse: { user: string; userToken: any }) => ({
+            user: refreshUserJWTResponse.user,
+            userToken: refreshUserJWTResponse.userToken,
+          })),
+          tap((response: { user: string; userToken: any }) => response),
+          catchError((err) => {
+            // indicate we have an error
+            userStoreActions.setRefreshUserTokenError(err);
+
+            // reset jwt to empty to indicate we are not authenticated
+            userStoreActions.setJwt('');
+
+            // indicate that we are sending an user
+            userStoreActions.setIsRefreshingUserToken(false);
+    
+            // stop polling
+            userStoreThunks.stopPollingRefreshUserToken();
+
+            return of('EMPTY');
+          }),
+      )}),
+    );
+  };
+
+  userStoreThunks.startPollingRefreshUserToken = (startPollingRefreshUserTokenRequest: StartPollingRefreshUserTokenRequestInterface) => {
+    // deconstruct for ease
+    const { jwt } = startPollingRefreshUserTokenRequest;
+
+    // indicate that we are now silently
+    // polling to refresh our user token
+    userStoreActions.setIsPollingRefreshUserToken(true);
+
+    // start polling
+    pollRefreshUserToken({
+      jwt
+    });
+
+    // now subscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWT$) {
+      // eslint-disable-next-line prefer-arrow-callback
+      refreshUserJWT$.subscribe(handlePollRefreshUserToken);
+    }
+  };
+
+  const handlePollRefreshUserToken = (response) => {
+    // set store's jwt token data
+    userStoreActions.setJwt(response.userToken.token);
+
+    // indicate that we are sending an user
+    userStoreActions.setIsRefreshingUserToken(false);
+
+    // now unsubscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWTUnsubscribe$) {
+      refreshUserJWTUnsubscribe$.next();
+    }
+
+    // start new supscription
+    userStoreThunks.startPollingRefreshUserToken({ jwt: response.userToken.token });
+  };
+
+  userStoreThunks.stopPollingRefreshUserToken = () => {
+    console.log('userStoreThunks - stopPollingRefreshUserToken');
+    // now unsubscribe to the response of the
+    // call to refresh the user jwt every x seconds
+    if (refreshUserJWTUnsubscribe$) {
+      refreshUserJWTUnsubscribe$.next();
+    }
+    console.log('made it past unsubscribe');
+    // set/indicate that we are done polling to refresh
+    // a user's jwt silently without them knowing
+    userStoreActions.setIsPollingRefreshUserToken(false);
+
+    console.log('made it past setIsPollingRefreshUserToken');
+  };
+  
+  return userStoreThunks;
 }

@@ -7,6 +7,8 @@ export interface UserStoreStateInterface {
   isAuthenticatingUser: boolean;
   authenticateUserError: any;
   isPollingRefreshUserToken: boolean;
+  isRefreshingUserToken: boolean;
+  refreshUserTokenError: undefined;
 }
 
 export const initialUserStoreState: UserStoreStateInterface = {
@@ -14,6 +16,8 @@ export const initialUserStoreState: UserStoreStateInterface = {
   jwt: '',
   isAuthenticatingUser: false,
   authenticateUserError: undefined,
+  isRefreshingUserToken: false,
+  refreshUserTokenError: undefined,
   isPollingRefreshUserToken: false
 };
 
