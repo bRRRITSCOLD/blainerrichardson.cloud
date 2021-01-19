@@ -118,7 +118,7 @@ export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterfac
     refreshUserJWTUnsubscribe$ = new Subject();
     // start to silently refresh a
     // user's jwt every 10 mins
-    refreshUserJWT$ = interval(60000).pipe(
+    refreshUserJWT$ = interval(840000).pipe(
       takeUntil(refreshUserJWTUnsubscribe$),
       concatMap((_: any) => {
         // indicate we do not have an error

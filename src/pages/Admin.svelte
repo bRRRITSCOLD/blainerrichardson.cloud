@@ -15,6 +15,7 @@ import { putWorkExperiences } from "../services/resume";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
+  let currentEditingWorkExperience = undefined;
 
   onMount(async () => {
     await Promise.all([
@@ -28,7 +29,10 @@ import { putWorkExperiences } from "../services/resume";
     ]);
 
     console.log($resumeStore.workExperiences)
-  })
+  });
+
+  $: console.log('$uiStore.isAddWorkExperienceDialogOpen=', $uiStore.isAddWorkExperienceDialogOpen);
+
 </script>
 
 <AdminLayout>
@@ -47,6 +51,7 @@ import { putWorkExperiences } from "../services/resume";
           workExperiences={$resumeStore.workExperiences}
           addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
           isAddingWorkExperience={$resumeStore.isPuttingWorkExperiences}
+          currentEditingWorkExperience={currentEditingWorkExperience}
           on:onAddButtonClick={async (event) => {
             uiStore.openAddWorkExperienceDialog();
           }}
@@ -55,14 +60,25 @@ import { putWorkExperiences } from "../services/resume";
             await resumeStore.putWorkExperiences({ jwt: $userStore.jwt, workExperiences: [event.detail] });
             if (!$resumeStore.putWorkExperiencesError) {
               uiStore.closeAddWorkExperienceDialog();
+              currentEditingWorkExperience = undefined;
             }
           }}
           on:onAddWorkExperienceDialogCloseButtonClick={async (event) => {
             uiStore.closeAddWorkExperienceDialog();
           }}
+          on:onAddWorkExperienceDialogOverlayClick={() => {
+            currentEditingWorkExperience = undefined;
+          }}
           on:onTableRowActionsCellTrashCanIconClick={async (event) => {
-            console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt)
+            console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
             await resumeStore.deleteWorkExperiences({ jwt: $userStore.jwt, workExperienceIds: [event.detail.workExperienceId] });
+            currentEditingWorkExperience = undefined;
+            uiStore.closeAddWorkExperienceDialog();
+          }}
+          on:onTableRowActionsCellPenIconClick={async (event) => {
+            console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
+            currentEditingWorkExperience = event.detail;
+            uiStore.openAddWorkExperienceDialog();
           }}
         />
       </div>

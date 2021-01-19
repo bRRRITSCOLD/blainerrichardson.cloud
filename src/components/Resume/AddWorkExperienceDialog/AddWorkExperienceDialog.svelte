@@ -1,7 +1,9 @@
 <script lang="ts">
   // node_modules
 	import { slide } from 'svelte/transition';
-  import { Button, TextField, Textarea, Dialog, Card, CardTitle, CardText, CardActions } from 'svelte-materialify/src';
+  import { Button, TextField, Textarea, Card, CardTitle, CardText, CardActions } from 'svelte-materialify/src';
+  import Dialog from '../../UI/Dialog/Dialog.svelte';
+
   import { createEventDispatcher  } from 'svelte';
   import { createForm } from "svelte-forms-lib";
   import * as yup from "yup";
@@ -90,7 +92,7 @@
   };
 </script>
 
-<Dialog bind:active>
+<Dialog bind:active on:onOverlayClick>
   <Card>
     <form on:submit={handleSubmit}>
       <CardTitle>

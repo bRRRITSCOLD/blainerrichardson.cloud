@@ -7,7 +7,7 @@
     Button,
     CardActions
   } from 'svelte-materialify/src';
-  import { createEventDispatcher  } from 'svelte';
+  import { createEventDispatcher, onDestroy  } from 'svelte';
 
   // components
   import VirtualTable from "../../../UI/Table/VirtualTable/VirtualTable.svelte";
@@ -22,6 +22,7 @@
   export let workExperiences = [];
   export let addWorkExperienceDialogActive = false;
   export let isAddingWorkExperience = false;
+  export let currentEditingWorkExperience = undefined;
   export let width = 0;
   export let height = 0;
 
@@ -89,7 +90,6 @@
   $: workExperiencesVirtualTableActionsHeight = 50;
   let workExperiencesVirtualTableHeight;
   $: workExperiencesVirtualTableHeight = height - (workExperiencesVirtualTableTitleHeight + workExperiencesVirtualTableActionsHeight);
-
 </script>
 
 <Card style="z-index: 0;">
@@ -114,14 +114,31 @@
 </Card>
 
 {#if addWorkExperienceDialogActive}
-  <AddWorkExperienceDialog
+  {#if currentEditingWorkExperience}
+    <AddWorkExperienceDialog
     bind:active={addWorkExperienceDialogActive}
     bind:isAddingWorkExperience={isAddingWorkExperience}
+    bind:initialForm={currentEditingWorkExperience}
+    on:onOverlayClick={() => {
+      dispatch('onAddWorkExperienceDialogOverlayClick', true);
+    }}
     on:onSubmitButtonClick={(event => {
       dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
     })}
     on:onCancelButtonClick={() => {
       dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
     }}
-  />
+    />
+  {:else}
+    <AddWorkExperienceDialog
+      bind:active={addWorkExperienceDialogActive}
+      bind:isAddingWorkExperience={isAddingWorkExperience}
+      on:onSubmitButtonClick={(event => {
+        dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
+      })}
+      on:onCancelButtonClick={() => {
+        dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
+      }}
+    />
+  {/if}
 {/if}
