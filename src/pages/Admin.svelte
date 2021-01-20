@@ -10,8 +10,7 @@
   // stores
   import { resumeStore } from "../stores/resume";
   import { uiStore } from "../stores/ui";
-import { userStore } from "../stores/user";
-import { putWorkExperiences } from "../services/resume";
+  import { userStore } from "../stores/user";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
@@ -39,48 +38,50 @@ import { putWorkExperiences } from "../services/resume";
   <div slot="body">
     <div class="d-flex flex-row justify-space-around">
       <div
-        style="height: 500px; min-height: 500px; width: 80%; padding-top: 10px;"
+        style="min-height: 500px; width: 80%; padding-top: 10px;"
         use:watchResize={(node) => {
           workExperiencesVirtualTableWidth = node.offsetWidth;
           workExperiencesVirtualTableHeight = node.offsetHeight;
         }}
       >
-        <WorkExperienceAdminTable
-          height={workExperiencesVirtualTableHeight}
-          width={workExperiencesVirtualTableWidth}
-          workExperiences={$resumeStore.workExperiences}
-          addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
-          isAddingWorkExperience={$resumeStore.isPuttingWorkExperiences}
-          currentEditingWorkExperience={currentEditingWorkExperience}
-          on:onAddButtonClick={async (event) => {
-            uiStore.openAddWorkExperienceDialog();
-          }}
-          on:onAddWorkExperienceDialogSubmitButtonClick={async (event) => {
-            console.log(`onAddWorkExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
-            await resumeStore.putWorkExperiences({ jwt: $userStore.jwt, workExperiences: [event.detail] });
-            if (!$resumeStore.putWorkExperiencesError) {
+        {#if workExperiencesVirtualTableWidth > 0 && workExperiencesVirtualTableHeight > 0}
+          <WorkExperienceAdminTable
+            height={workExperiencesVirtualTableHeight}
+            width={workExperiencesVirtualTableWidth}
+            workExperiences={$resumeStore.workExperiences}
+            addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
+            isAddingWorkExperience={$resumeStore.isPuttingWorkExperiences}
+            currentEditingWorkExperience={currentEditingWorkExperience}
+            on:onAddButtonClick={async (event) => {
+              uiStore.openAddWorkExperienceDialog();
+            }}
+            on:onAddWorkExperienceDialogSubmitButtonClick={async (event) => {
+              console.log(`onAddWorkExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
+              await resumeStore.putWorkExperiences({ jwt: $userStore.jwt, workExperiences: [event.detail] });
+              if (!$resumeStore.putWorkExperiencesError) {
+                uiStore.closeAddWorkExperienceDialog();
+                currentEditingWorkExperience = undefined;
+              }
+            }}
+            on:onAddWorkExperienceDialogCloseButtonClick={async (event) => {
               uiStore.closeAddWorkExperienceDialog();
+            }}
+            on:onAddWorkExperienceDialogOverlayClick={() => {
               currentEditingWorkExperience = undefined;
-            }
-          }}
-          on:onAddWorkExperienceDialogCloseButtonClick={async (event) => {
-            uiStore.closeAddWorkExperienceDialog();
-          }}
-          on:onAddWorkExperienceDialogOverlayClick={() => {
-            currentEditingWorkExperience = undefined;
-          }}
-          on:onTableRowActionsCellTrashCanIconClick={async (event) => {
-            console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
-            await resumeStore.deleteWorkExperiences({ jwt: $userStore.jwt, workExperienceIds: [event.detail.workExperienceId] });
-            currentEditingWorkExperience = undefined;
-            uiStore.closeAddWorkExperienceDialog();
-          }}
-          on:onTableRowActionsCellPenIconClick={async (event) => {
-            console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
-            currentEditingWorkExperience = event.detail;
-            uiStore.openAddWorkExperienceDialog();
-          }}
-        />
+            }}
+            on:onTableRowActionsCellTrashCanIconClick={async (event) => {
+              console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
+              await resumeStore.deleteWorkExperiences({ jwt: $userStore.jwt, workExperienceIds: [event.detail.workExperienceId] });
+              currentEditingWorkExperience = undefined;
+              uiStore.closeAddWorkExperienceDialog();
+            }}
+            on:onTableRowActionsCellPenIconClick={async (event) => {
+              console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
+              currentEditingWorkExperience = event.detail;
+              uiStore.openAddWorkExperienceDialog();
+            }}
+          />
+        {/if}
       </div>
     </div>
 
