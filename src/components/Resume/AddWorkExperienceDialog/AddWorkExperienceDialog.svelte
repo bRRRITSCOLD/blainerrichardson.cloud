@@ -2,6 +2,11 @@
   // node_modules
 	import { slide } from 'svelte/transition';
   import { Button, TextField, Textarea, Card, CardTitle, CardText, CardActions } from 'svelte-materialify/src';
+  import ExpansionPanels, {
+    ExpansionPanel,
+  } from 'svelte-materialify/src/components/ExpansionPanels';
+
+  // components
   import Dialog from '../../UI/Dialog/Dialog.svelte';
 
   import { createEventDispatcher  } from 'svelte';
@@ -71,22 +76,23 @@
         .required(),
       accomplishments: yup
         .array()
-        .of(yup.string())
+        .of(yup.string().required())
         .label('Accomplisments')
         .required()
     }),
     onSubmit: values => {
-      dispatch('onSubmitButtonClick', values);
+      alert(JSON.stringify(values));
+      // dispatch('onSubmitButtonClick', values);
     }
   });
 
   
-  const add = () => {
+  const addAccomplishment = () => {
     $form.accomplishments = $form.accomplishments.concat('');
     $errors.accomplishments = $errors.accomplishments.concat('');
   };
 
-  const remove = i => () => {
+  const removeAccomplishment = i => () => {
     $form.accomplishments = $form.accomplishments.filter((u, j) => j !== i);
     $errors.accomplishments = $errors.accomplishments.filter((u, j) => j !== i);
   };
@@ -211,6 +217,30 @@
             >
               Position
             </TextField>
+            <div class="d-flex flex-row">
+              <label>Accomplishments</label>
+              <Button class="primary-color" on:click={addAccomplishment}>
+                +
+              </Button>
+            </div>
+            {#each $form.accomplishments as accomplishment, j}
+              <div class="d-flex flex-row">
+                <div style="width: 80%;">
+                  {#if $errors.accomplishments[j]}
+                    <small transition:slide|local style="color: red;">{$errors.accomplishments[j]}</small>
+                  {/if}
+                  <Textarea
+                    id="{j}"
+                    name="accomplishments[{j}]"
+                    on:change={handleChange}
+                    on:blur={handleChange}
+                    bind:value={$form.accomplishments[j]}
+                  />
+                </div>
+
+                <Button type="button" on:click={removeAccomplishment(j)}>-</Button>
+              </div>
+            {/each}
           </div>
         </div>
       </CardText>
@@ -242,3 +272,115 @@
     </form>
   </Card>
 </Dialog>
+<!-- 
+
+
+<script>
+  import { createForm } from "svelte-forms-lib";
+  import * as yup from "yup";
+
+  const {
+    form,
+    errors,
+    state,
+    handleChange,
+    handleSubmit,
+    handleReset
+  } = createForm({
+    initialValues: {
+      users: [
+        {
+          name: "",
+          email: ""
+        }
+      ]
+    },
+    validationSchema: yup.object().shape({
+      users: yup.array().of(
+        yup.object().shape({
+          name: yup.string().required(),
+          email: yup
+            .string()
+            .email()
+            .required()
+        })
+      )
+    }),
+    onSubmit: values => {
+      alert(JSON.stringify(values));
+    }
+  });
+
+  const add = () => {
+    $form.users = $form.users.concat({ name: "", email: "" });
+    $errors.users = $errors.users.concat({ name: "", email: "" });
+  };
+
+  const remove = i => () => {
+    $form.users = $form.users.filter((u, j) => j !== i);
+    $errors.users = $errors.users.filter((u, j) => j !== i);
+  };
+</script>
+
+<style>
+  .error {
+    display: block;
+    color: red;
+  }
+  .form-group {
+    display: flex;
+    align-items: baseline;
+  }
+  .button-group {
+    display: flex;
+  }
+  button ~ button {
+    margin-left: 15px;
+  }
+</style>
+
+<form>
+  <h1>Add users</h1>
+
+  {#each $form.users as user, j}
+    <div class="form-group">
+      <div>
+        <input
+          name={`users[${j}].name`}
+          placeholder="name"
+          on:change={handleChange}
+          on:blur={handleChange}
+          bind:value={$form.users[j].name}
+        />
+        {#if $errors.users[j].name}
+          <small class="error">{$errors.users[j].name}</small>
+        {/if}
+      </div>
+
+      <div>
+        <input
+          placeholder="email"
+          name={`users[${j}].email`}
+          on:change={handleChange}
+          on:blur={handleChange}
+          bind:value={$form.users[j].email}
+        />
+        {#if $errors.users[j].email}
+          <small class="error">{$errors.users[j].email}</small>
+        {/if}
+      </div>
+
+      {#if j === $form.users.length - 1}
+        <button type="button" on:click={add}>+</button>
+      {/if}
+      {#if $form.users.length !== 1}
+        <button type="button" on:click={remove(j)}>-</button>
+      {/if}
+    </div>
+  {/each}
+
+  <div class="button-group">
+    <button type="button" on:click={handleSubmit}>submit</button>
+    <button type="button" on:click={handleReset}>reset</button>
+  </div>
+</form> -->
