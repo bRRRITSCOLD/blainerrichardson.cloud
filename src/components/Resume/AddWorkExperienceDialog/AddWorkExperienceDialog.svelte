@@ -9,32 +9,49 @@
   // components
   import Dialog from '../../UI/Dialog/Dialog.svelte';
 
-  import { createEventDispatcher  } from 'svelte';
-  import { createForm } from "svelte-forms-lib";
+  import { createEventDispatcher, onMount  } from 'svelte';
+  // import { createForm } from "svelte-forms-lib";
   import * as yup from "yup";
+  import { _ } from '../../../lib/utils';
+  import { createForm } from '../../../lib/form';
 
   export let active = false;
   export let isAddingWorkExperience = true;
-  export let initialForm = {
-    startDate: '',
-    endDate: '',
-    companyName: '',
-    companyAddress: {
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zipCode: ''
-    },
-    position: '',
-    duties: [],
-    accomplishments: []
-  };
+  export let initialForm = undefined;
 
+  let currentAccomplishment;
+  let currentAccomplishmentError;
+  $: if (_.isString(currentAccomplishment)) {
+    if (currentAccomplishment.length > 0) {
+      currentAccomplishmentError = undefined;
+    }
+  }
+
+  let currentDuty;
+  let currentDutyError;
+  $: if (_.isString(currentDuty)) {
+    if (currentDuty.length > 0) {
+      currentDutyError = undefined;
+    }
+  }
   const dispatch = createEventDispatcher();
 
-  const { form, errors, state, handleChange, handleSubmit } = createForm({
-    initialValues: initialForm,
+  const { form, errors, state, handleChange, handleSubmit, updateInitialValues, setForm } = createForm({
+    initialValues: {
+      startDate: '',
+      endDate: '',
+      companyName: '',
+      companyAddress: {
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        zipCode: ''
+      },
+      position: '',
+      duties: [],
+      accomplishments: []
+    },
     validationSchema: yup.object().shape({
       startDate: yup
         .string()
@@ -76,26 +93,58 @@
         .required(),
       accomplishments: yup
         .array()
-        .of(yup.string().required())
+        .of(yup.string().label('Accomplishment').required())
+        .label('Accomplisments')
+        .required(),
+      duties: yup
+        .array()
+        .of(yup.string().label('Duty').required())
         .label('Accomplisments')
         .required()
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values));
-      // dispatch('onSubmitButtonClick', values);
+      dispatch('onSubmitButtonClick', values);
     }
   });
 
-  
   const addAccomplishment = () => {
-    $form.accomplishments = $form.accomplishments.concat('');
+    if (!_.isString(currentAccomplishment) || (_.isString(currentAccomplishment) && currentAccomplishment.length === 0)) {
+      currentAccomplishmentError = 'Accomplishment is required.'
+      return;
+    }
+    $form.accomplishments = $form.accomplishments.concat(currentAccomplishment);
     $errors.accomplishments = $errors.accomplishments.concat('');
+    currentAccomplishment = '';
+    currentAccomplishmentError = '';
   };
 
   const removeAccomplishment = i => () => {
     $form.accomplishments = $form.accomplishments.filter((u, j) => j !== i);
     $errors.accomplishments = $errors.accomplishments.filter((u, j) => j !== i);
   };
+
+  const addDuty = () => {
+    if (!_.isString(currentDuty) || (_.isString(currentDuty) && currentDuty.length === 0)) {
+      currentDutyError = 'Duty is required.'
+      return;
+    }
+    $form.duties = $form.duties.concat(currentDuty);
+    $errors.duties = $errors.duties.concat('');
+    currentDuty = '';
+    currentDutyError = '';
+  };
+
+  const removeDuty = i => () => {
+    $form.duties = $form.duties.filter((u, j) => j !== i);
+    $errors.duties = $errors.duties.filter((u, j) => j !== i);
+  };
+
+  onMount(() => {
+    if (initialForm) {
+      setForm(initialForm);
+    };
+    console.log('initialForm=', initialForm);
+  })
 </script>
 
 <Dialog bind:active on:onOverlayClick>
@@ -217,8 +266,16 @@
             >
               Position
             </TextField>
+            {#if currentAccomplishmentError}
+              <small transition:slide|local style="color: red;">{currentAccomplishmentError}</small>
+            {/if}
             <div class="d-flex flex-row">
-              <label>Accomplishments</label>
+              <TextField
+                bind:value={currentAccomplishment}
+                style="padding-top: 10px;"
+              >
+                Acomplishment
+              </TextField>
               <Button class="primary-color" on:click={addAccomplishment}>
                 +
               </Button>
@@ -227,18 +284,39 @@
               <div class="d-flex flex-row">
                 <div style="width: 80%;">
                   {#if $errors.accomplishments[j]}
-                    <small transition:slide|local style="color: red;">{$errors.accomplishments[j]}</small>
+                    <small transition:slide|local style="color: red;">{JSON.stringify($errors.accomplishments[j])}</small>
                   {/if}
-                  <Textarea
-                    id="{j}"
-                    name="accomplishments[{j}]"
-                    on:change={handleChange}
-                    on:blur={handleChange}
-                    bind:value={$form.accomplishments[j]}
-                  />
+                  {$form.accomplishments[j]}
                 </div>
 
                 <Button type="button" on:click={removeAccomplishment(j)}>-</Button>
+              </div>
+            {/each}
+
+            {#if currentDutyError}
+              <small transition:slide|local style="color: red;">{currentDutyError}</small>
+            {/if}
+            <div class="d-flex flex-row">
+              <TextField
+                bind:value={currentDuty}
+                style="padding-top: 10px;"
+              >
+                Duty
+              </TextField>
+              <Button class="primary-color" on:click={addDuty}>
+                +
+              </Button>
+            </div>
+            {#each $form.duties as duty, j}
+              <div class="d-flex flex-row">
+                <div style="width: 80%;">
+                  {#if $errors.duties[j]}
+                    <small transition:slide|local style="color: red;">{JSON.stringify($errors.duties[j])}</small>
+                  {/if}
+                  {$form.duties[j]}
+                </div>
+
+                <Button type="button" on:click={removeDuty(j)}>-</Button>
               </div>
             {/each}
           </div>

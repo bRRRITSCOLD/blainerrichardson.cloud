@@ -36,9 +36,9 @@
 
 <AdminLayout>
   <div slot="body">
-    <div class="d-flex flex-row justify-space-around">
+    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px;">
       <div
-        style="min-height: 500px; width: 80%; padding-top: 10px;"
+        style="height: 500px; min-height: 500px; width: 80%;"
         use:watchResize={(node) => {
           workExperiencesVirtualTableWidth = node.offsetWidth;
           workExperiencesVirtualTableHeight = node.offsetHeight;

@@ -7,7 +7,7 @@
     Button,
     CardActions
   } from 'svelte-materialify/src';
-  import { createEventDispatcher, onDestroy, onMount  } from 'svelte';
+  import { createEventDispatcher, onDestroy  } from 'svelte';
 
   // components
   import VirtualTable from "../../../UI/Table/VirtualTable/VirtualTable.svelte";
@@ -23,7 +23,8 @@
   export let addWorkExperienceDialogActive = false;
   export let isAddingWorkExperience = false;
   export let currentEditingWorkExperience = undefined;
-  export let width = 400;
+  export let width = 0;
+  export let height = 0;
 
   const dispatch = createEventDispatcher();
 
@@ -83,28 +84,19 @@
     },
   ];
 
-  export let workExperiencesVirtualTableTitleHeight = 50;
-  export let workExperiencesVirtualTableActionsHeight = 50;
-  export let workExperiencesVirtualTableBodyHeight = 400;
-
-  let render = false;
-
-  onMount(() => {
-    render = true;
-  })
+  let workExperiencesVirtualTableTitleHeight;
+  $: workExperiencesVirtualTableTitleHeight = 50;
+  let workExperiencesVirtualTableActionsHeight;
+  $: workExperiencesVirtualTableActionsHeight = 50;
+  let workExperiencesVirtualTableHeight;
+  $: workExperiencesVirtualTableHeight = height - (workExperiencesVirtualTableTitleHeight + workExperiencesVirtualTableActionsHeight);
 </script>
 
-
 <Card style="z-index: 0;">
-  <slot name="title">
-    <CardTitle style="height: {workExperiencesVirtualTableTitleHeight}px; width: {width}px;">
-      Work Experiences
-    </CardTitle>
-  </slot>
-  <!-- <CardTitle style="height: {workExperiencesVirtualTableTitleHeight}px; width: {width}px;">
+  <CardTitle style="height: {workExperiencesVirtualTableTitleHeight}px; width: {width}px;">
     Work Experiences
-  </CardTitle> -->
-  <CardText style="height: {workExperiencesVirtualTableBodyHeight}px; width: {width}px; padding-right: 0px; padding-left: 0px;">
+  </CardTitle>
+  <CardText style="height: {workExperiencesVirtualTableHeight}px; width: {width}px; padding-right: 0px; padding-left: 0px;">
     <VirtualTable
       rowHeight={50}
       rows={workExperiences}
