@@ -24,5 +24,5 @@
   {/each}
 </div>
 
-<style src="./MultSidedTimeline.scss">
+<style src="./MultiSidedTimeline.scss">
 </style>
