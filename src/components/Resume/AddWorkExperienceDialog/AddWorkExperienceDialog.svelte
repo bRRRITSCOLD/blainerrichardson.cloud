@@ -2,19 +2,17 @@
   // node_modules
 	import { slide } from 'svelte/transition';
   import { Button, TextField, Textarea, Card, CardTitle, CardText, CardActions } from 'svelte-materialify/src';
-  import ExpansionPanels, {
-    ExpansionPanel,
-  } from 'svelte-materialify/src/components/ExpansionPanels';
+  import { createEventDispatcher, onMount  } from 'svelte';
+  import * as yup from "yup";
+
+  // libraries
+  import { _ } from '../../../lib/utils';
+  import { createForm } from '../../../lib/form';
 
   // components
   import Dialog from '../../UI/Dialog/Dialog.svelte';
 
-  import { createEventDispatcher, onMount  } from 'svelte';
-  // import { createForm } from "svelte-forms-lib";
-  import * as yup from "yup";
-  import { _ } from '../../../lib/utils';
-  import { createForm } from '../../../lib/form';
-
+  // props
   export let active = false;
   export let isAddingWorkExperience = true;
   export let initialForm = undefined;
@@ -107,7 +105,7 @@
     }
   });
 
-  const addAccomplishment = () => {
+  function addAccomplishment() {
     if (!_.isString(currentAccomplishment) || (_.isString(currentAccomplishment) && currentAccomplishment.length === 0)) {
       currentAccomplishmentError = 'Accomplishment is required.'
       return;
@@ -118,12 +116,14 @@
     currentAccomplishmentError = '';
   };
 
-  const removeAccomplishment = i => () => {
-    $form.accomplishments = $form.accomplishments.filter((u, j) => j !== i);
-    $errors.accomplishments = $errors.accomplishments.filter((u, j) => j !== i);
-  };
+  function removeAccomplishment(i) {
+    return function () {
+      $form.accomplishments = $form.accomplishments.filter((u, j) => j !== i);
+      $errors.accomplishments = $errors.accomplishments.filter((u, j) => j !== i);
+    };
+  } 
 
-  const addDuty = () => {
+  function addDuty() {
     if (!_.isString(currentDuty) || (_.isString(currentDuty) && currentDuty.length === 0)) {
       currentDutyError = 'Duty is required.'
       return;
@@ -134,16 +134,17 @@
     currentDutyError = '';
   };
 
-  const removeDuty = i => () => {
-    $form.duties = $form.duties.filter((u, j) => j !== i);
-    $errors.duties = $errors.duties.filter((u, j) => j !== i);
-  };
+  function removeDuty(i) {
+    return function() {
+      $form.duties = $form.duties.filter((u, j) => j !== i);
+      $errors.duties = $errors.duties.filter((u, j) => j !== i);
+    }
+  }
 
   onMount(() => {
     if (initialForm) {
       setForm(initialForm);
     };
-    console.log('initialForm=', initialForm);
   })
 </script>
 

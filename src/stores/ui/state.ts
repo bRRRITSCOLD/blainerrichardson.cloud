@@ -7,17 +7,21 @@ import { _ } from '../../lib/utils';
 export interface UiStoreStateInterface {
   circleText: string;
   isChangingCircleText: boolean;
+
   iconLinks: { name: string; path: string; href?: string; }[];
+
   isLoginDialogOpen: boolean;
   isEmailDialogOpen: boolean;
   isResumeDialogOpen: boolean;
   isAddWorkExperienceDialogOpen: boolean;
+  isAddSchoolExperienceDialogOpen: boolean;
   isAdminNavigationDrawerOpen: boolean;
 }
 
 export const initialUiStoreState: UiStoreStateInterface = {
   circleText: '',
   isChangingCircleText: false,
+
   iconLinks: [
     {
       name: 'linkedin',
@@ -38,10 +42,12 @@ export const initialUiStoreState: UiStoreStateInterface = {
       path: mdiFileDocument
     }
   ],
+
   isLoginDialogOpen: false,
   isEmailDialogOpen: false,
   isResumeDialogOpen: false,
   isAddWorkExperienceDialogOpen: false,
+  isAddSchoolExperienceDialogOpen: false,
   isAdminNavigationDrawerOpen: false
 };
 

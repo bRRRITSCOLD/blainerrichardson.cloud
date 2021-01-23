@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // layout
   import AdminLayout from "../layouts/AdminLayout.svelte";
   import { watchResize } from "svelte-watch-resize";
@@ -11,14 +11,26 @@
   import { resumeStore } from "../stores/resume";
   import { uiStore } from "../stores/ui";
   import { userStore } from "../stores/user";
+import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/SchoolExperienceAdminTable/SchoolExperienceAdminTable.svelte";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
   let currentEditingWorkExperience = undefined;
 
+  let schoolExperiencesVirtualTableWidth = 0;
+  let schoolExperiencesVirtualTableHeight = 0;
+  let currentEditingSchoolExperience = undefined;
+
   onMount(async () => {
     await Promise.all([
       resumeStore.searchWorkExperiences({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
+      }),
+      resumeStore.searchSchoolExperiences({
         searchCriteria: {},
         searchOptions: {
           pageSize: Number.MAX_SAFE_INTEGER,
@@ -79,6 +91,55 @@
               console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
               currentEditingWorkExperience = event.detail;
               uiStore.openAddWorkExperienceDialog();
+            }}
+          />
+        {/if}
+      </div>
+    </div>
+
+    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px;">
+      <div
+        style="height: 500px; min-height: 500px; width: 80%;"
+        use:watchResize={(node) => {
+          schoolExperiencesVirtualTableWidth = node.offsetWidth;
+          schoolExperiencesVirtualTableHeight = node.offsetHeight;
+        }}
+      >
+        {#if schoolExperiencesVirtualTableWidth > 0 && schoolExperiencesVirtualTableHeight > 0}
+          <SchoolExperienceAdminTable 
+            height={schoolExperiencesVirtualTableHeight}
+            width={schoolExperiencesVirtualTableWidth}
+            schoolExperiences={$resumeStore.schoolExperiences}
+            addSchoolExperienceDialogActive={$uiStore.isAddSchoolExperienceDialogOpen}
+            isAddingSchoolExperience={$resumeStore.isPuttingSchoolExperiences}
+            currentEditingSchoolExperience={currentEditingSchoolExperience}
+            on:onAddButtonClick={async (event) => {
+              uiStore.openAddSchoolExperienceDialog();
+            }}
+            on:onAddSchoolExperienceDialogSubmitButtonClick={async (event) => {
+              console.log(`onAddSchoolExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
+              await resumeStore.putSchoolExperiences({ jwt: $userStore.jwt, schoolExperiences: [event.detail] });
+              if (!$resumeStore.putSchoolExperiencesError) {
+                uiStore.closeAddSchoolExperienceDialog();
+                currentEditingSchoolExperience = undefined;
+              }
+            }}
+            on:onAddSchoolExperienceDialogCloseButtonClick={async (event) => {
+              uiStore.closeAddSchoolExperienceDialog();
+            }}
+            on:onAddSchoolExperienceDialogOverlayClick={() => {
+              currentEditingSchoolExperience = undefined;
+            }}
+            on:onTableRowActionsCellTrashCanIconClick={async (event) => {
+              console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
+              await resumeStore.deleteSchoolExperiences({ jwt: $userStore.jwt, schoolExperienceIds: [event.detail.workExperienceId] });
+              currentEditingSchoolExperience = undefined;
+              uiStore.closeAddSchoolExperienceDialog();
+            }}
+            on:onTableRowActionsCellPenIconClick={async (event) => {
+              console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
+              currentEditingSchoolExperience = event.detail;
+              uiStore.openAddSchoolExperienceDialog();
             }}
           />
         {/if}

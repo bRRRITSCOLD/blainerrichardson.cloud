@@ -11,14 +11,22 @@ import type { UiStoreActionsInterface } from "./actions";
 export interface UiStoreThunksInterface {
   startChangingCircleText: (circleText) => void;
   stopChangingCircleText: () => void;
+
   openLoginDialog: () => void;
   closeLoginDialog: () => void;
+
   openEmailDialog: () => void;
   closeEmailDialog: () => void;
+
   openResumeDialog: () => void;
   closeResumeDialog: () => void;
+
   openAddWorkExperienceDialog: () => void;
   closeAddWorkExperienceDialog: () => void;
+
+  openAddSchoolExperienceDialog: () => void;
+  closeAddSchoolExperienceDialog: () => void;
+
   openAdminNavigationDrawer:() => void;
   closeAdminNavigationDrawer:() => void;
 }
@@ -95,30 +103,42 @@ export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): Ui
       // the cirle text for the app
       uiStoreActions.setIsChangingCircleText(false);
     },
+
     openLoginDialog: async () => {
       uiStoreActions.setIsLoginDialogOpen(true);
     },
     closeLoginDialog: async () => {
       uiStoreActions.setIsLoginDialogOpen(false);
     },
+
     openEmailDialog: async () => {
       uiStoreActions.setIsEmailDialogOpen(true);
     },
     closeEmailDialog: async () => {
       uiStoreActions.setIsEmailDialogOpen(false);
     },
+
     openResumeDialog: async () => {
       uiStoreActions.setIsResumeDialogOpen(true);
     },
     closeResumeDialog: async () => {
       uiStoreActions.setIsResumeDialogOpen(false);
     },
+
     openAddWorkExperienceDialog: async () => {
       uiStoreActions.setIsAddWorkExperienceDialogOpen(true);
     },
     closeAddWorkExperienceDialog: async () => {
       uiStoreActions.setIsAddWorkExperienceDialogOpen(false);
     },
+
+    openAddSchoolExperienceDialog: async () => {
+      uiStoreActions.setIsAddSchoolExperienceDialogOpen(true);
+    },
+    closeAddSchoolExperienceDialog: async () => {
+      uiStoreActions.setIsAddSchoolExperienceDialogOpen(false);
+    },
+  
     openAdminNavigationDrawer: async () => {
       uiStoreActions.setIsAdminNavigationDrawerOpen(true);
     },
