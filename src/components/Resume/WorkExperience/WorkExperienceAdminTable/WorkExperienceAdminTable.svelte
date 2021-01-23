@@ -7,7 +7,7 @@
     Button,
     CardActions
   } from 'svelte-materialify/src';
-  import { createEventDispatcher, onDestroy  } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   // components
   import VirtualTable from "../../../UI/Table/VirtualTable/VirtualTable.svelte";
@@ -28,6 +28,42 @@
 
   const dispatch = createEventDispatcher();
 
+  function onRefreshButtonClick() {
+    dispatch('onRefreshButtonClick', true);
+  }
+
+  function onAddButtonClick() {
+    dispatch('onAddButtonClick', true);
+  }
+
+  function onAddWorkExperienceDialogOverlayClick() {
+    dispatch('onAddWorkExperienceDialogOverlayClick', true);
+  }
+
+
+  function onAddWorkExperienceDialogSubmitButtonClick(event) {
+    dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
+  }
+
+
+  function onAddWorkExperienceDialogCloseButtonClick() {
+    dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
+  }
+
+  function onTableRowActionsCellTrashCanIconClick(data) {
+    dispatch('onTableRowActionsCellTrashCanIconClick', data);
+  } 
+
+  function onTableRowActionsCellPenIconClick(data) {
+    dispatch('onTableRowActionsCellPenIconClick', data);
+  }
+
+  let workExperiencesVirtualTableTitleHeight;
+  $: workExperiencesVirtualTableTitleHeight = 50;
+  let workExperiencesVirtualTableActionsHeight;
+  $: workExperiencesVirtualTableActionsHeight = 50;
+  let workExperiencesVirtualTableHeight;
+  $: workExperiencesVirtualTableHeight = height - (workExperiencesVirtualTableTitleHeight + workExperiencesVirtualTableActionsHeight);
   let workExperiencesVirtualTableColumns = [];
   $: workExperiencesVirtualTableColumns = [
     {
@@ -38,12 +74,10 @@
       headerComponent: WorkExperienceAdminTableHeaderDefaultCell,
       handlers: {
         onTrashCanIconLinkClick(data: any) {
-          console.log('onTrashCanIconLink', data);
-          dispatch('onTableRowActionsCellTrashCanIconClick', data);
+          onTableRowActionsCellTrashCanIconClick(data);
         },
         onPenIconLinkClick(data: any) {
-          console.log('onPenIconLink', data);
-          dispatch('onTableRowActionsCellPenIconClick', data);
+          onTableRowActionsCellPenIconClick(data);
         }
       }
     },
@@ -83,13 +117,6 @@
       headerComponent: WorkExperienceAdminTableHeaderDefaultCell
     },
   ];
-
-  let workExperiencesVirtualTableTitleHeight;
-  $: workExperiencesVirtualTableTitleHeight = 50;
-  let workExperiencesVirtualTableActionsHeight;
-  $: workExperiencesVirtualTableActionsHeight = 50;
-  let workExperiencesVirtualTableHeight;
-  $: workExperiencesVirtualTableHeight = height - (workExperiencesVirtualTableTitleHeight + workExperiencesVirtualTableActionsHeight);
 </script>
 
 <Card style="z-index: 0;">
@@ -104,12 +131,8 @@
     />
   </CardText>
   <CardActions style="height: {workExperiencesVirtualTableActionsHeight}px; width: {width}px;">
-    <Button on:click={() => {
-      dispatch('onRefreshButtonClick', true);
-    }}>Refresh</Button>
-    <Button on:click={() => {
-      dispatch('onAddButtonClick', true);
-    }}>Add</Button>
+    <Button on:click={onRefreshButtonClick}>Refresh</Button>
+    <Button on:click={onAddButtonClick}>Add</Button>
   </CardActions>
 </Card>
 
@@ -119,26 +142,16 @@
     bind:active={addWorkExperienceDialogActive}
     bind:isAddingWorkExperience={isAddingWorkExperience}
     bind:initialForm={currentEditingWorkExperience}
-    on:onOverlayClick={() => {
-      dispatch('onAddWorkExperienceDialogOverlayClick', true);
-    }}
-    on:onSubmitButtonClick={(event => {
-      dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
-    })}
-    on:onCancelButtonClick={() => {
-      dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
-    }}
+    on:onOverlayClick={onAddWorkExperienceDialogOverlayClick}
+    on:onSubmitButtonClick={onAddWorkExperienceDialogSubmitButtonClick}
+    on:onCancelButtonClick={onAddWorkExperienceDialogCloseButtonClick}
     />
   {:else}
     <AddWorkExperienceDialog
       bind:active={addWorkExperienceDialogActive}
       bind:isAddingWorkExperience={isAddingWorkExperience}
-      on:onSubmitButtonClick={(event => {
-        dispatch('onAddWorkExperienceDialogSubmitButtonClick', event.detail);
-      })}
-      on:onCancelButtonClick={() => {
-        dispatch('onAddWorkExperienceDialogCloseButtonClick', true);
-      }}
+      on:onSubmitButtonClick={onAddWorkExperienceDialogSubmitButtonClick}
+      on:onCancelButtonClick={onAddWorkExperienceDialogCloseButtonClick}
     />
   {/if}
 {/if}

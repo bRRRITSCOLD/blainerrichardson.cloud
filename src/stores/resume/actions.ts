@@ -7,7 +7,14 @@ import { mdiGestureSwipeLeft } from "@mdi/js";
 export interface ResumeStoreActionsInterface {
   setSchoolExperiences: (schoolExperiences: SchoolExperience[]) => void;
   putSchoolExperience: (schoolExperience: SchoolExperience, putSchoolExperienceOptions: { upsert?: boolean }) => void;
-  deleteSchoolExperience: (schoolExperience: SchoolExperience) => void;
+  deleteSchoolExperience: (schoolExperienceId: string) => void;
+  setIsDeletingSchoolExperiences: (isDeletingSchoolExperiences: boolean) => void;
+  setDeleteSchoolExperiencesError: (deletehSchoolExperiencesError: any) => void;
+  setIsSearchingSchoolExperiences: (isSearchingSchoolExperiences: boolean) => void;
+  setSearchSchoolExperiencesError: (searchSchoolExperiencesError: any) => void;
+  setIsPuttingSchoolExperiences: (isPuttingSchoolExperiences: boolean) => void;
+  setPutSchoolExperiencesError: (putSchoolExperiencesError: any) => void;
+
   setWorkExperiences: (workExperiences: WorkExperience[]) => void;
   putWorkExperience: (workExperience: WorkExperience, putWorkExperienceOptions: { upsert?: boolean }) => void;
   deleteWorkExperience: (workExperienceId: string) => void;
@@ -16,7 +23,8 @@ export interface ResumeStoreActionsInterface {
   setIsSearchingWorkExperiences: (isSearchingWorkExperiences: boolean) => void;
   setSearchWorkExperiencesError: (searchWorkExperiencesError: any) => void;
   setIsPuttingWorkExperiences: (isPuttingWorkExperiences: boolean) => void;
-  setPuthWorkExperiencesError: (putWorkExperiencesError: any) => void;
+  setPutWorkExperiencesError: (putWorkExperiencesError: any) => void;
+
   setCertifications: (certifications: Certification[]) => void;
 }
 
@@ -56,13 +64,13 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
         )
       });
     },
-    deleteSchoolExperience: (schoolExperience: SchoolExperience) => {
+    deleteSchoolExperience: (schoolExperienceId: string) => {
       resumeStore.update(state => {
         // create a copy of the current state property
         const schoolExperiences = state.schoolExperiences.slice();
 
         // see if item exists by id
-        const schoolExperienceIndex = _.findIndex(schoolExperiences, { schoolExperienceId: schoolExperience.schoolExperienceId })
+        const schoolExperienceIndex = _.findIndex(state.schoolExperiences, { schoolExperienceId })
   
         // remove the instance if found
         if (schoolExperienceIndex > -1) {
@@ -77,6 +85,67 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
         )
       });
     },
+    setIsDeletingSchoolExperiences: (isDeletingSchoolExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isDeletingSchoolExperiences }
+        )
+      });
+    },
+    setDeleteSchoolExperiencesError: (deletehSchoolExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { deletehSchoolExperiencesError }
+        )
+      });
+    },
+    setIsSearchingSchoolExperiences: (isSearchingSchoolExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isSearchingSchoolExperiences }
+        )
+      });
+    },
+    setSearchSchoolExperiencesError: (searchSchoolExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { searchSchoolExperiencesError }
+        )
+      });
+    },
+    setIsPuttingSchoolExperiences: (isPuttingSchoolExperiences: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isPuttingSchoolExperiences }
+        )
+      });
+    },
+    setPutSchoolExperiencesError: (putSchoolExperiencesError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { putSchoolExperiencesError }
+        )
+      });
+    },
+  
     setWorkExperiences: (workExperiences: WorkExperience[]) => {
       resumeStore.update(state => {
         // return the new state
@@ -181,7 +250,7 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
         )
       });
     },
-    setPuthWorkExperiencesError: (putWorkExperiencesError: any) => {
+    setPutWorkExperiencesError: (putWorkExperiencesError: any) => {
       resumeStore.update(state => {
         // return the new state
         return _.assign(
@@ -191,6 +260,7 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
         )
       });
     },
+  
     setCertifications: (certifications: Certification[]) => {
       resumeStore.update(state => {
         // return the new state

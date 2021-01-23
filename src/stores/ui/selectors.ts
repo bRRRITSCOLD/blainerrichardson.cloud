@@ -10,11 +10,14 @@ export const createUiStoreSelectors = (uiStore: Writable<UiStoreStateInterface &
   return derived(uiStore, $uiStore => ({
     circleText: $uiStore.circleText,
     isChangingCircleText: $uiStore.isChangingCircleText,
+  
     iconLinks: $uiStore.iconLinks,
+  
     isEmailDialogOpen: $uiStore.isEmailDialogOpen,
     isLoginDialogOpen: $uiStore.isLoginDialogOpen,
     isResumeDialogOpen: $uiStore.isResumeDialogOpen,
     isAddWorkExperienceDialogOpen: $uiStore.isAddWorkExperienceDialogOpen,
+    isAddSchoolExperienceDialogOpen: $uiStore.isAddSchoolExperienceDialogOpen,
     isAdminNavigationDrawerOpen: $uiStore.isAdminNavigationDrawerOpen
     }));
 }
