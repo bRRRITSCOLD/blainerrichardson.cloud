@@ -18,6 +18,7 @@ export const createUiStoreSelectors = (uiStore: Writable<UiStoreStateInterface &
     isResumeDialogOpen: $uiStore.isResumeDialogOpen,
     isAddWorkExperienceDialogOpen: $uiStore.isAddWorkExperienceDialogOpen,
     isAddSchoolExperienceDialogOpen: $uiStore.isAddSchoolExperienceDialogOpen,
+    isAddCertificationDialogOpen: $uiStore.isAddCertificationDialogOpen,
     isAdminNavigationDrawerOpen: $uiStore.isAdminNavigationDrawerOpen
     }));
 }

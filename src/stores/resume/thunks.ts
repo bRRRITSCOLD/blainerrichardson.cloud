@@ -1,7 +1,7 @@
 // libraries
 import { promiseUtils, _ } from '../../lib/utils';
 import type { AnyObject } from '../../models/common';
-import type { SchoolExperienceInterface, WorkExperienceInterface } from '../../models/resume';
+import type { SchoolExperienceInterface, WorkExperienceInterface, CertificationInterface } from '../../models/resume';
 
 // store specific
 import type { ResumeStoreActionsInterface } from "./actions";
@@ -17,6 +17,10 @@ export interface ResumeStoreThunksInterface {
   searchSchoolExperiences: (searchSchoolExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
   putSchoolExperiences: (putSchoolExperiencesRequest: { jwt: string; schoolExperiences: SchoolExperienceInterface[]; }) => void;
   deleteSchoolExperiences: (deleteSchoolExperiencesRequest: { jwt: string; schoolExperienceIds: string[]; }) => void;
+
+  searchCertifications: (searchCertificationsRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
+  putCertifications: (putCertificationsRequest: { jwt: string; certifications: CertificationInterface[]; }) => void;
+  deleteCertifications: (deleteCertificationsRequest: { jwt: string; certificationIds: string[]; }) => void;
 }
 
 export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsInterface): ResumeStoreThunksInterface => {
@@ -250,8 +254,128 @@ export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsIn
         return;
       } catch (err) {
         // store error and indicate we are no longer loading
+        console.log('deleteSchoolExperiencesErr', err);
         resumeStoreActions.setPutSchoolExperiencesError(err);
         resumeStoreActions.setIsPuttingSchoolExperiences(false);
+
+        // return explicitly
+        return;
+      }
+    },
+
+    searchCertifications: async (_searchCertificationsRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => {
+      try {
+        // indicate we are loading and reset any old errors
+        resumeStoreActions.setIsSearchingCertifications(true);
+        resumeStoreActions.setSearchCertificationsError(undefined);
+  
+        // attempt to search system
+        const [
+          searchCertificationsResponse
+        ] = await promiseUtils.allSettled([
+          resumeServices.searchCertifications()
+        ]);
+        
+        // if our call failed handle appropriately else move on
+        if (searchCertificationsResponse.status === 'rejected') {
+          throw searchCertificationsResponse.reason;
+        }
+  
+        // store data and indicate we are no longer loading
+        resumeStoreActions.setCertifications(searchCertificationsResponse.data.certifications);
+        resumeStoreActions.setIsSearchingCertifications(false);
+  
+        // return explicitly
+        return;
+      } catch (err) {
+        // store error and indicate we are no longer loading
+        resumeStoreActions.setSearchCertificationsError(err);
+        resumeStoreActions.setIsSearchingCertifications(false);
+
+        // return explicitly
+        return;
+      }
+    },
+    putCertifications: async (putCertificationsRequest: { jwt: string; certifications: CertificationInterface[]; }) => {
+      try {
+        // deconstruct for ease
+        const {
+          jwt,
+          certifications
+        } = putCertificationsRequest;
+
+        console.log('putCertificationsRequest', putCertificationsRequest);
+        // indicate we are loading and reset any old errors
+        resumeStoreActions.setIsPuttingCertifications(true);
+        resumeStoreActions.setPutCertificationsError(undefined);
+  
+        // attempt to search system
+        const [
+          putCertificationsResponse
+        ] = await promiseUtils.allSettled([
+          resumeServices.putCertifications({ jwt, certifications })
+        ]);
+        
+        // if our call failed handle appropriately else move on
+        if (putCertificationsResponse.status === 'rejected') {
+          throw putCertificationsResponse.reason;
+        }
+  
+        // store data and indicate we are no longer loading
+        for (const certification of putCertificationsResponse.data.certifications) {
+          resumeStoreActions.putCertification(certification, { upsert: true });
+        }
+        resumeStoreActions.setIsPuttingCertifications(false);
+  
+        // return explicitly
+        return;
+      } catch (err) {
+        // store error and indicate we are no longer loading
+        resumeStoreActions.setPutCertificationsError(err);
+        resumeStoreActions.setIsPuttingCertifications(false);
+
+        // return explicitly
+        return;
+      }
+    },
+    deleteCertifications: async (deleteCertificationsRequest: { jwt: string; certificationIds: string[]; }) => {
+      try {
+        // deconstruct for ease
+        const {
+          jwt,
+          certificationIds
+        } = deleteCertificationsRequest;
+
+        console.log('deleteCertificationsRequest', deleteCertificationsRequest);
+        // indicate we are loading and reset any old errors
+        resumeStoreActions.setIsPuttingCertifications(true);
+        resumeStoreActions.setPutCertificationsError(undefined);
+  
+        // attempt to search system
+        const [
+          deletetCertificationsResponse
+        ] = await promiseUtils.allSettled([
+          resumeServices.deleteCertifications({ jwt, certificationIds })
+        ]);
+        
+        // if our call failed handle appropriately else move on
+        if (deletetCertificationsResponse.status === 'rejected') {
+          throw deletetCertificationsResponse.reason;
+        }
+  
+        // store data and indicate we are no longer loading
+        for (const certificationId of deletetCertificationsResponse.data.certificationIds) {
+          resumeStoreActions.deleteCertification(certificationId);
+        }
+        resumeStoreActions.setIsPuttingCertifications(false);
+  
+        // return explicitly
+        return;
+      } catch (err) {
+        // store error and indicate we are no longer loading
+        console.log('deleteCertificationsErr', err);
+        resumeStoreActions.setPutCertificationsError(err);
+        resumeStoreActions.setIsPuttingCertifications(false);
 
         // return explicitly
         return;

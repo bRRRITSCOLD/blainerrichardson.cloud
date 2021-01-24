@@ -6,11 +6,11 @@
   import { createEventDispatcher, onMount  } from 'svelte';
 
   // components
-  import Dialog from '../../UI/Dialog/Dialog.svelte';
+  import Dialog from '../../../UI/Dialog/Dialog.svelte';
 
   // libraries
-  import { _ } from '../../../lib/utils';
-  import { createForm } from '../../../lib/form';
+  import { _ } from '../../../../lib/utils';
+  import { createForm } from '../../../../lib/form';
 
   export let active = false;
   export let isAddingSchoolExperience = true;

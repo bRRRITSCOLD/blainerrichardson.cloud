@@ -11,6 +11,7 @@ export interface UiStoreActionsInterface {
   setIsResumeDialogOpen: (isResumeDialogOpen: boolean) => void;
   setIsAddWorkExperienceDialogOpen: (isAddWorkExperienceDialogOpen: boolean) => void;
   setIsAddSchoolExperienceDialogOpen: (isAddSchoolExperienceDialogOpen: boolean) => void;
+  setIsAddCertificationDialogOpen: (isAddCertificationDialogOpen: boolean) => void;
   setIsAdminNavigationDrawerOpen: (isAdminNavigationDrawerOpen: boolean) => void;
 }
 
@@ -85,6 +86,16 @@ export const createUiStoreActions = (uiStore: Writable<UiStoreStateInterface & o
           {},
           state,
           { isAddSchoolExperienceDialogOpen }
+        )
+      });
+    },
+    setIsAddCertificationDialogOpen: (isAddCertificationDialogOpen: boolean) => {
+      uiStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isAddCertificationDialogOpen }
         )
       });
     },

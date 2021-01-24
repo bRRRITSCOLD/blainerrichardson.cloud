@@ -6,12 +6,13 @@
 
   // components
   import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkExperienceAdminTable/WorkExperienceAdminTable.svelte";
+  import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/SchoolExperienceAdminTable/SchoolExperienceAdminTable.svelte";
+  import CertificationsAdminTable from "../components/Resume/Certifications/CertificationsAdminTable/CertificationsAdminTable.svelte";
 
   // stores
   import { resumeStore } from "../stores/resume";
   import { uiStore } from "../stores/ui";
   import { userStore } from "../stores/user";
-import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/SchoolExperienceAdminTable/SchoolExperienceAdminTable.svelte";
 
   let workExperiencesVirtualTableWidth = 0;
   let workExperiencesVirtualTableHeight = 0;
@@ -20,6 +21,10 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
   let schoolExperiencesVirtualTableWidth = 0;
   let schoolExperiencesVirtualTableHeight = 0;
   let currentEditingSchoolExperience = undefined;
+
+  let certificationsVirtualTableWidth = 0;
+  let certificationsVirtualTableHeight = 0;
+  let currentEditingCertification = undefined;
 
   onMount(async () => {
     await Promise.all([
@@ -36,19 +41,23 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
           pageSize: Number.MAX_SAFE_INTEGER,
           pageNumber: 1
         }
+      }),
+      resumeStore.searchCertifications({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
       })
     ]);
 
     console.log($resumeStore.workExperiences)
   });
-
-  $: console.log('$uiStore.isAddWorkExperienceDialogOpen=', $uiStore.isAddWorkExperienceDialogOpen);
-
 </script>
 
 <AdminLayout>
   <div slot="body">
-    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px;">
+    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px; padding-bottom: 10px;">
       <div
         style="height: 500px; min-height: 500px; width: 80%;"
         use:watchResize={(node) => {
@@ -68,8 +77,8 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
               uiStore.openAddWorkExperienceDialog();
             }}
             on:onAddWorkExperienceDialogSubmitButtonClick={async (event) => {
-              console.log(`onAddWorkExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
               await resumeStore.putWorkExperiences({ jwt: $userStore.jwt, workExperiences: [event.detail] });
+
               if (!$resumeStore.putWorkExperiencesError) {
                 uiStore.closeAddWorkExperienceDialog();
                 currentEditingWorkExperience = undefined;
@@ -82,13 +91,11 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
               currentEditingWorkExperience = undefined;
             }}
             on:onTableRowActionsCellTrashCanIconClick={async (event) => {
-              console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
               await resumeStore.deleteWorkExperiences({ jwt: $userStore.jwt, workExperienceIds: [event.detail.workExperienceId] });
               currentEditingWorkExperience = undefined;
               uiStore.closeAddWorkExperienceDialog();
             }}
             on:onTableRowActionsCellPenIconClick={async (event) => {
-              console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
               currentEditingWorkExperience = event.detail;
               uiStore.openAddWorkExperienceDialog();
             }}
@@ -97,7 +104,7 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
       </div>
     </div>
 
-    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px;">
+    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px; padding-bottom: 10px;">
       <div
         style="height: 500px; min-height: 500px; width: 80%;"
         use:watchResize={(node) => {
@@ -117,8 +124,8 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
               uiStore.openAddSchoolExperienceDialog();
             }}
             on:onAddSchoolExperienceDialogSubmitButtonClick={async (event) => {
-              console.log(`onAddSchoolExperienceDialogSubmitButtonClick - jwt=`,$userStore.jwt)
               await resumeStore.putSchoolExperiences({ jwt: $userStore.jwt, schoolExperiences: [event.detail] });
+
               if (!$resumeStore.putSchoolExperiencesError) {
                 uiStore.closeAddSchoolExperienceDialog();
                 currentEditingSchoolExperience = undefined;
@@ -131,13 +138,11 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
               currentEditingSchoolExperience = undefined;
             }}
             on:onTableRowActionsCellTrashCanIconClick={async (event) => {
-              console.log(`onTableRowActionsCellTrashCanIconClick = jwt=`,$userStore.jwt);
-              await resumeStore.deleteSchoolExperiences({ jwt: $userStore.jwt, schoolExperienceIds: [event.detail.workExperienceId] });
+              await resumeStore.deleteSchoolExperiences({ jwt: $userStore.jwt, schoolExperienceIds: [event.detail.schoolExperienceId] });
               currentEditingSchoolExperience = undefined;
               uiStore.closeAddSchoolExperienceDialog();
             }}
             on:onTableRowActionsCellPenIconClick={async (event) => {
-              console.log(`onTableRowActionsCellPenIconClick = jwt=`,$userStore.jwt)
               currentEditingSchoolExperience = event.detail;
               uiStore.openAddSchoolExperienceDialog();
             }}
@@ -146,47 +151,51 @@ import SchoolExperienceAdminTable from "../components/Resume/SchoolExperience/Sc
       </div>
     </div>
 
-    <!-- <div class="d-flex flex-row justify-space-around">
+    <div class="d-flex flex-row justify-space-around" style="padding-top: 10px; padding-bottom: 10px;">
       <div
-        style="height: 300px; min-height: 200px; width: 80%; padding-top: 10px;"
+        style="height: 500px; min-height: 500px; width: 80%;"
         use:watchResize={(node) => {
-          schoolExperiencesVirtualTableWidth = node.clientWidth;
+          certificationsVirtualTableWidth = node.offsetWidth;
+          certificationsVirtualTableHeight = node.offsetHeight;
         }}
       >
-        <VirtualTable
-          rowHeight={50}
-          rows={$resumeStore.schoolExperiences}
-          columns={schoolExperiencesVirtualTableColumns}
-        />
+        {#if certificationsVirtualTableWidth > 0 && certificationsVirtualTableHeight > 0}
+          <CertificationsAdminTable
+            height={certificationsVirtualTableHeight}
+            width={certificationsVirtualTableWidth}
+            certifications={$resumeStore.certifications}
+            addCertificationDialogActive={$uiStore.isAddCertificationDialogOpen}
+            isAddingCertification={$resumeStore.isPuttingCertifications}
+            currentEditingCertification={currentEditingCertification}
+            on:onAddButtonClick={async (event) => {
+              uiStore.openAddCertificationDialog();
+            }}
+            on:onAddCertificationDialogSubmitButtonClick={async (event) => {
+              await resumeStore.putCertifications({ jwt: $userStore.jwt, certifications: [event.detail] });
+
+              if (!$resumeStore.putCertificationsError) {
+                uiStore.closeAddCertificationDialog();
+                currentEditingCertification = undefined;
+              }
+            }}
+            on:onAddCertificationDialogCloseButtonClick={async (event) => {
+              uiStore.closeAddCertificationDialog();
+            }}
+            on:onAddCertificationDialogOverlayClick={() => {
+              currentEditingCertification = undefined;
+            }}
+            on:onTableRowActionsCellTrashCanIconClick={async (event) => {
+              await resumeStore.deleteCertifications({ jwt: $userStore.jwt, certificationIds: [event.detail.certificationId] });
+              currentEditingCertification = undefined;
+              uiStore.closeAddCertificationDialog();
+            }}
+            on:onTableRowActionsCellPenIconClick={async (event) => {
+              currentEditingCertification = event.detail;
+              uiStore.openAddCertificationDialog();
+            }}
+          />
+        {/if}
       </div>
     </div>
-
-    <div class="d-flex flex-row justify-space-around">
-      <div
-        style="height: 300px; min-height: 200px; width: 80%; padding-top: 10px;"
-        use:watchResize={(node) => {
-          certificationsVirtualTableWidth = node.clientWidth;
-        }}
-      >
-        <VirtualTable
-          rowHeight={50}
-          rows={$resumeStore.certifications}
-          columns={certificationsVirtualTableColumns}
-        />
-      </div>
-    </div> -->
   </div>
-  <!-- <VirtualTable
-    rowHeight={50}
-    rows={logGroupFiles} 
-    columns={virtualTableColumns}
-    on:onVirtualTableRowCellClick={(event) => {
-      if (event.detail.columnIndex === 0) {
-        dispatch('onTableRowSelectedCellClick', { rowIndex: event.detail.rowIndex });
-      }
-    }}
-  /> -->
 </AdminLayout>
-<!-- <div>
-  lol
-</div> -->

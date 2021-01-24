@@ -16,7 +16,7 @@
   import WorkExperienceAdminTableRowAddressCell from "../WorkExperienceAdminTableRowAddressCell/WorkExperienceAdminTableRowAddressCell.svelte";
   import WorkExperienceAdminTableRowDateCell from "../WorkExperienceAdminTableRowDateCell/WorkExperienceAdminTableRowDateCell.svelte";
   import WorkExperienceAdminTableRowActionsCell from '../WorkExperienceAdminTableRowActionsCell/WorkExperienceAdminTableRowActionsCell.svelte';
-  import AddWorkExperienceDialog from '../../AddWorkExperienceDialog/AddWorkExperienceDialog.svelte';
+  import AddWorkExperienceDialog from '../AddWorkExperienceDialog/AddWorkExperienceDialog.svelte';
 
   // props
   export let workExperiences = [];

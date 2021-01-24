@@ -6,11 +6,11 @@
   import * as yup from "yup";
 
   // libraries
-  import { _ } from '../../../lib/utils';
-  import { createForm } from '../../../lib/form';
+  import { _ } from '../../../../lib/utils';
+  import { createForm } from '../../../../lib/form';
 
   // components
-  import Dialog from '../../UI/Dialog/Dialog.svelte';
+  import Dialog from '../../../UI/Dialog/Dialog.svelte';
 
   // props
   export let active = false;
