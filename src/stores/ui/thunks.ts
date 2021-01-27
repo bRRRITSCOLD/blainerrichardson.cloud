@@ -27,6 +27,9 @@ export interface UiStoreThunksInterface {
   openAddSchoolExperienceDialog: () => void;
   closeAddSchoolExperienceDialog: () => void;
 
+  openAddCertificationDialog: () => void;
+  closeAddCertificationDialog: () => void;
+
   openAdminNavigationDrawer:() => void;
   closeAdminNavigationDrawer:() => void;
 }
@@ -139,6 +142,13 @@ export const createUiStoreThunks = (uiStoreActions: UiStoreActionsInterface): Ui
       uiStoreActions.setIsAddSchoolExperienceDialogOpen(false);
     },
   
+    openAddCertificationDialog: async () => {
+      uiStoreActions.setIsAddCertificationDialogOpen(true);
+    },
+    closeAddCertificationDialog: async () => {
+      uiStoreActions.setIsAddCertificationDialogOpen(false);
+    },
+
     openAdminNavigationDrawer: async () => {
       uiStoreActions.setIsAdminNavigationDrawerOpen(true);
     },

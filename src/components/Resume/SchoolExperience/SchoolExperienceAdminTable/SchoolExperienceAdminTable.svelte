@@ -16,7 +16,7 @@
   import SchoolExperienceAdminTableRowAddressCell from "../SchoolExperienceAdminTableRowAddressCell/SchoolExperienceAdminTableRowAddressCell.svelte";
   import SchoolExperienceAdminTableRowDateCell from "../SchoolExperienceAdminTableRowDateCell/SchoolExperienceAdminTableRowDateCell.svelte";
   import SchoolExperienceAdminTableRowActionsCell from '../SchoolExperienceAdminTableRowActionsCell/SchoolExperienceAdminTableRowActionsCell.svelte';
-  import AddSchoolExperienceDialog from '../../AddSchoolExperienceDialog/AddSchoolExperienceDialog.svelte';
+  import AddSchoolExperienceDialog from '../AddSchoolExperienceDialog/AddSchoolExperienceDialog.svelte';
 
   // props
   export let schoolExperiences = [];
@@ -119,7 +119,7 @@
 
 <Card style="z-index: 0;">
   <CardTitle style="height: {schoolExperiencesVirtualTableTitleHeight}px; width: {width}px;">
-    Work Experiences
+    School Experiences
   </CardTitle>
   <CardText style="height: {schoolExperiencesVirtualTableHeight}px; width: {width}px; padding-right: 0px; padding-left: 0px;">
     <VirtualTable

@@ -15,6 +15,7 @@ export interface UiStoreStateInterface {
   isResumeDialogOpen: boolean;
   isAddWorkExperienceDialogOpen: boolean;
   isAddSchoolExperienceDialogOpen: boolean;
+  isAddCertificationDialogOpen: boolean;
   isAdminNavigationDrawerOpen: boolean;
 }
 
@@ -48,6 +49,7 @@ export const initialUiStoreState: UiStoreStateInterface = {
   isResumeDialogOpen: false,
   isAddWorkExperienceDialogOpen: false,
   isAddSchoolExperienceDialogOpen: false,
+  isAddCertificationDialogOpen: false,
   isAdminNavigationDrawerOpen: false
 };
 

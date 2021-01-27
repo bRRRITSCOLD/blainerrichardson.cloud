@@ -26,6 +26,14 @@ export interface ResumeStoreActionsInterface {
   setPutWorkExperiencesError: (putWorkExperiencesError: any) => void;
 
   setCertifications: (certifications: Certification[]) => void;
+  putCertification: (workExperience: Certification, putCertificationOptions: { upsert?: boolean }) => void;
+  deleteCertification: (workExperienceId: string) => void;
+  setIsDeletingCertifications: (isDeletingCertifications: boolean) => void;
+  setDeleteCertificationsError: (deletehCertificationsError: any) => void;
+  setIsSearchingCertifications: (isSearchingCertifications: boolean) => void;
+  setSearchCertificationsError: (searchCertificationsError: any) => void;
+  setIsPuttingCertifications: (isPuttingCertifications: boolean) => void;
+  setPutCertificationsError: (putCertificationsError: any) => void;
 }
 
 export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateInterface & object>): ResumeStoreActionsInterface => {
@@ -270,6 +278,110 @@ export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateI
           { certifications }
         )
       });
-    }
+    },
+    putCertification: (certification: Certification, putCertificationOptions: { upsert?: boolean }) => {
+      resumeStore.update(state => {
+        // create a copy of the current state property
+        const certifications = state.certifications.slice();
+
+        // see if item exists by id
+        const certificationIndex = _.findIndex(state.certifications, { certificationId: certification.certificationId })
+  
+        // if it does exit then replace it and
+        // if it does not exist then create a new entry
+        if (certificationIndex > -1) {
+          certifications[certificationIndex] = new Certification(certification);
+        } else if (putCertificationOptions.upsert) {
+          certifications.push(new Certification(certification));
+        }
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { certifications }
+        )
+      });
+    },
+    deleteCertification: (certificationId: string) => {
+      resumeStore.update(state => {
+        // create a copy of the current state property
+        const certifications = state.certifications.slice();
+
+        // see if item exists by id
+        const certificationIndex = _.findIndex(state.certifications, { certificationId })
+  
+        // remove the instance if found
+        if (certificationIndex > -1) {
+          certifications.splice(certificationIndex, 1)
+        }
+
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { certifications }
+        )
+      });
+    },
+    setIsDeletingCertifications: (isDeletingCertifications: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isDeletingCertifications }
+        )
+      });
+    },
+    setDeleteCertificationsError: (deleteCertificationsError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { deleteCertificationsError }
+        )
+      });
+    },
+    setIsSearchingCertifications: (isSearchingCertifications: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isSearchingCertifications }
+        )
+      });
+    },
+    setSearchCertificationsError: (searchCertificationsError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { searchCertificationsError }
+        )
+      });
+    },
+    setIsPuttingCertifications: (isPuttingCertifications: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isPuttingCertifications }
+        )
+      });
+    },
+    setPutCertificationsError: (putCertificationsError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { putCertificationsError }
+        )
+      });
+    },
   }
 }

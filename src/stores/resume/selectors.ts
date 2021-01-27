@@ -28,6 +28,10 @@ export const createResumeStoreSelectors = (resumeStore: Writable<ResumeStoreStat
 
     // certifications specific
     certifications: $resumeStore.certifications,
+    isSearchingCertifications: $resumeStore.isSearchingCertifications,
+    searchCertificationsError: $resumeStore.searchCertificationsError,
+    isPuttingCertifications: $resumeStore.isPuttingCertifications,
+    putCertificationsError: $resumeStore.putCertificationsError,
 
     // skills specific
     skills: $resumeStore.skills,
