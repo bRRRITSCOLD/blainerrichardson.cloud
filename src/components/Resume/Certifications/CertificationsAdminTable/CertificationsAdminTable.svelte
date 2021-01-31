@@ -104,13 +104,13 @@
       display: 'Name',  // What will be displayed as the column header
       dataName: 'name',  // The key of a row to get the column's data from
       width: width * .50,
-      cellComponent: CertificationsAdminTableRowAddressCell,
+      cellComponent: CertificationsAdminTableRowDefaultCell,
       headerComponent: CertificationsAdminTableHeaderDefaultCell
     }
   ];
 </script>
 
-<Card style="z-index: 0;">
+<!-- <Card style="z-index: 0;">
   <CardTitle style="height: {certificationsVirtualTableTitleHeight}px; width: {width}px;">
     Certifications
   </CardTitle>
@@ -125,7 +125,19 @@
     <Button on:click={onRefreshButtonClick}>Refresh</Button>
     <Button on:click={onAddButtonClick}>Add</Button>
   </CardActions>
-</Card>
+</Card> -->
+
+<div style="height: {certificationsVirtualTableHeight}px; width: {width}px; padding-right: 0px; padding-left: 0px;">
+  <VirtualTable
+    rowHeight={50}
+    rows={certifications}
+    columns={certificationsVirtualTableColumns}
+  />
+</div>
+<div style="height: {certificationsVirtualTableActionsHeight}px; width: {width}px;">
+  <Button on:click={onRefreshButtonClick}>Refresh</Button>
+  <Button on:click={onAddButtonClick}>Add</Button>
+</div>
 
 {#if addCertificationDialogActive}
   {#if currentEditingCertification}
