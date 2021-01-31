@@ -118,7 +118,7 @@
     },
   ];
 </script>
-
+<!-- 
 <Card style="z-index: 0;">
   <CardTitle style="height: {workExperiencesVirtualTableTitleHeight}px; width: {width}px;">
     Work Experiences
@@ -134,7 +134,19 @@
     <Button on:click={onRefreshButtonClick}>Refresh</Button>
     <Button on:click={onAddButtonClick}>Add</Button>
   </CardActions>
-</Card>
+</Card> -->
+
+<div style="height: {workExperiencesVirtualTableHeight}px; width: {width}px; padding-right: 0px; padding-left: 0px;">
+  <VirtualTable
+    rowHeight={50}
+    rows={workExperiences}
+    columns={workExperiencesVirtualTableColumns}
+  />
+</div>
+<div style="height: {workExperiencesVirtualTableActionsHeight}px; width: {width}px;">
+  <Button on:click={onRefreshButtonClick}>Refresh</Button>
+  <Button on:click={onAddButtonClick}>Add</Button>
+</div>
 
 {#if addWorkExperienceDialogActive}
   {#if currentEditingWorkExperience}
