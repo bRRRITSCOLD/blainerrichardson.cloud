@@ -38,7 +38,9 @@
       userStore.stopPollingRefreshUserToken();
     }
 
-    await userStore.refreshUserToken({ jwt: $userStore.jwt });
+    if (!$userStore.isRefreshingUserToken) {
+      await userStore.refreshUserToken({ jwt: $userStore.jwt });
+    }
   });
 
   // start polling if we are

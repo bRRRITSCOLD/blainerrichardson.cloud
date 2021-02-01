@@ -24,6 +24,6 @@ export const initialUserStoreState: UserStoreStateInterface = {
 export function cachedUserStoreState(_userStoreState: UserStoreStateInterface): Partial<UserStoreStateInterface> {
   return _.assign(
     {},
-    { user: _userStoreState.user, jwt: _userStoreState.jwt  }
+    { user: _userStoreState.user, jwt: _userStoreState.jwt, isRefreshingUserToken: _userStoreState.isRefreshingUserToken  }
   );
 }
