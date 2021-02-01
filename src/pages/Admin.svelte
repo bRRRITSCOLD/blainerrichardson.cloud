@@ -154,7 +154,7 @@
             height={workExperiencesVirtualTableHeight}
 
             workExperiences={$resumeStore.workExperiences}
-            addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
+            bind:addWorkExperienceDialogActive={$uiStore.isAddWorkExperienceDialogOpen}
             isAddingWorkExperience={$resumeStore.isPuttingWorkExperiences}
             currentEditingWorkExperience={currentEditingWorkExperience}
             on:onWorkExperiencesTableAddWorkExperienceDialogOverlayClick={() => {
