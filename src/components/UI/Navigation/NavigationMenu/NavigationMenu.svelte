@@ -1,9 +1,11 @@
 <script>
   // node_modules
   import { Menu } from 'svelte-materialify/src';
+
+  export let right = true;
 </script>
 
-<Menu right>
+<Menu right={right}>
   <div slot="activator">
     <slot name="activator" />
   </div>
@@ -30,6 +32,6 @@
     userStore.reset();
 
     // navigate the user to the home page
-    push('/');
+    push('/home');
   }}>Logout</Button></ListItem>
 {/if} -->

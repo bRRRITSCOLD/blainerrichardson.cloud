@@ -35,6 +35,13 @@
   function toggleNavigation() {
     active = !active;
   }
+
+  let links;
+  $: links = [
+    {
+
+    }
+  ].filter((item) => item !== undefined);
 </script>
 
 <NavigationBar>
@@ -57,7 +64,7 @@
       userStore.reset();
 
       // navigate the user to the home page
-      push('/');
+      push('/home');
     }}>Logout</Button></ListItem>
   </NavigationMenu>
 </NavigationBar>

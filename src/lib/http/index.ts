@@ -45,17 +45,23 @@ function getJwt(): string {
 
 // Function that will be called to refresh authorization
 const refreshAuthLogic = async failedRequest => {
+  console.log('refreshAuthLogic, starting');
   let wasRefreshingUserToken = false;
 
   while (getIsRefreshingUserToken()) {
+    console.log('refreshAuthLogic, while getIsRefreshingUserToken');
     wasRefreshingUserToken = true;
   }
+
+  console.log('refreshAuthLogic, stopPollingRefreshUserToken');
 
   userStore.stopPollingRefreshUserToken();
 
   if (wasRefreshingUserToken) {
-    throw new Error('Failed to refresh');
+    console.log('refreshAuthLogic, wasRefreshingUserToken');
+    return Promise.resolve();
   } else if (!wasRefreshingUserToken) {
+    console.log('refreshAuthLogic, !wasRefreshingUserToken');
     await userStore.refreshUserToken({
       jwt: getJwt()
     });
@@ -64,6 +70,8 @@ const refreshAuthLogic = async failedRequest => {
   userStore.startPollingRefreshUserToken({ jwt: getJwt() });
 
   failedRequest.response.config.headers['auhtorization'] = getJwt();
+
+  console.log('refreshAuthLogic, finished');
   return Promise.resolve();
 };
  
