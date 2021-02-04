@@ -21,7 +21,7 @@
       userStore.reset();
 
       // navigate the user to the home page
-      push('/');
+      push('/home');
     }}>Logout</Button></ListItem>
   {/if}
 </Menu> -->

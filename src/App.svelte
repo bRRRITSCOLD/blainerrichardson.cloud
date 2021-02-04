@@ -15,11 +15,11 @@
       // console.error('conditionsFailed event', event.detail);
       // console.error('routeNames', routeNames);
 
-      if ($location !== '/') {
+      if ($location !== '/home') {
         // based on the route that failed handle appropriately
         switch (event.detail.route) {
           default: {
-              replace('/');
+              replace('/home');
             break;
           }
         }
@@ -30,14 +30,21 @@
 
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
   function routeLoaded(_event) {
-      // console.log('routeLoaded event', event.detail)
+    if ($location === '/') {
+      replace('/home');
+    }
   }
 
   onMount(async () => {
+    console.log('onMount', $location )
+    if ($location === '/') {
+      replace('/home');
+    }
+  
     if ($userStore.isPollingRefreshUserToken) {
       userStore.stopPollingRefreshUserToken();
     }
-
+    console.log('App, isRefreshingUserToken', $userStore.isRefreshingUserToken)
     if (!$userStore.isRefreshingUserToken) {
       await userStore.refreshUserToken({ jwt: $userStore.jwt });
     }
@@ -53,8 +60,8 @@
 
   $: if ($userStore.refreshUserTokenError) {
     userStore.stopPollingRefreshUserToken();
-    if ($location !== '/') {
-      replace('/');
+    if ($location !== '/home') {
+      replace('/home');
     }
   }
 
@@ -71,5 +78,9 @@
   :global(.s-app-bar) {
       position: relative;
       z-index: 1;
+  }
+  
+  :global(.active) {
+    color: red;
   }
 </style>

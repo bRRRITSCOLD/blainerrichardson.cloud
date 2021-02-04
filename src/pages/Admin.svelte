@@ -10,7 +10,7 @@
   } from 'svelte-materialify/src';
 
   // layout
-  import AdminLayout from "../layouts/AdminLayout.svelte";
+  import BaseLayout from "../layouts/BaseLayout.svelte";
 
   // components
   import WorkExperienceAdminTable from "../components/Resume/WorkExperience/WorkExperienceAdminTable/WorkExperienceAdminTable.svelte";
@@ -83,7 +83,7 @@
   });
 </script>
 
-<AdminLayout>
+<BaseLayout>
   <div slot="body">
     <div class="d-flex flex-row justify-space-around" style="padding-top: 10px; padding-bottom: 10px;">
       <div
@@ -418,4 +418,4 @@
       </div>
     </div> -->
   </div>
-</AdminLayout>
+</BaseLayout>

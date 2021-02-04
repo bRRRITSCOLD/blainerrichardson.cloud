@@ -4,8 +4,8 @@ import { wrap } from 'svelte-spa-router/wrap';
 import { userStore } from './stores/user';
 
 export const routeNames = {
-  all: '*',
-  home: '/',
+  // all: '*',
+  home: '/home',
   admin: '/admin'
 }
 
@@ -37,7 +37,7 @@ export const routes = {
     [routeNames.home]: wrap({
       asyncComponent: () => import('./pages/Index.svelte'),
     }),
-    [routeNames.all]: wrap({
-      asyncComponent: () => import('./pages/Index.svelte'),
-    }),
+    // [routeNames.all]: wrap({
+    //   asyncComponent: () => import('./pages/Index.svelte'),
+    // }),
 } as RouteDefinition

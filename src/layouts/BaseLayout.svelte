@@ -3,6 +3,7 @@
   import { Button, Icon, ListItem } from 'svelte-materialify/src';
   import { mdiDotsVertical } from '@mdi/js';
   import { push } from 'svelte-spa-router';
+  import active from 'svelte-spa-router/active';
 
   // components
   import LoginDialog from '../components/User/LoginDialog/LoginDialog.svelte';
@@ -22,23 +23,38 @@
         <Icon path={mdiDotsVertical} />
       </Button>
     </div>
+
     {#if !$userStore.isAuthenticated}
-      <ListItem style="padding: 0px;"><Button on:click={() => {
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <ListItem style="padding: 0px;"><a on:click={() => {
         // dispatch('onLoginButtonClick', true);
         uiStore.openLoginDialog();
-      }}>Login</Button></ListItem>
+      }}>Login</a></ListItem>
     {:else}
-      <ListItem style="padding: 0px;"><Button on:click={() => {
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <ListItem style="padding: 0px;"><a use:active={{ path: '/home' }} on:click={() => {
+        push('/home');
+      }}>Home</a></ListItem>
+
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <ListItem style="padding: 0px;"><a on:click={() => {
+        push('/admin');
+      }}>Admin</a></ListItem>
+
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <ListItem style="padding: 0px;"><a on:click={() => {
         // cleasr and reset all user data
         userStore.reset();
 
         // navigate the user to the home page
-        push('/');
-      }}>Logout</Button></ListItem>
+        push('/home');
+      }}>Logout</a></ListItem>
     {/if}
   </NavigationMenu>
 </NavigationBar>
-
+<!-- <a href="/hello/user" use:link use:active={{path: '/hello/*', className: 'active', inactiveClassName: 'inactive'}}>Say hi!</a>
+<a href="/hello/user" use:link use:active={'/hello/*'}>Say hi with a default className!</a>
+<a href="/hello/user" use:link use:active>Say hi with all default options!</a> -->
 {#if $uiStore.isLoginDialogOpen}
   <LoginDialog
     bind:active={$uiStore.isLoginDialogOpen}
