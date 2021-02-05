@@ -80,7 +80,7 @@
       z-index: 1;
   }
   
-  :global(.active) {
+  :global(.theme--light a.active) {
     color: red;
   }
 </style>

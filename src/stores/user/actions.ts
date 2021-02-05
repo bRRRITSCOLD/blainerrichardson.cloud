@@ -5,10 +5,16 @@ import { _ } from '../../lib/utils';
 export interface UserStoreActionsInterface {
   setUser: (user: any) => void;
   setJwt: (jwt: string) => void;
+
   setIsAuthenticatingUser: (isAuthenticatingUser: boolean) => void;
   setAuthenticateUserError: (authenticateUserError: any) => void;
+
+  setIsUnauthenticatingUser: (isUnauthenticatingUser: boolean) => void;
+  setUnauthenticateUserError: (unauthenticateUserError: any) => void;
+
   setIsRefreshingUserToken: (isRefreshingUserToken: boolean) => void;
   setRefreshUserTokenError: (refreshUserTokenError: any) => void;
+
   setIsPollingRefreshUserToken: (isPollingRefreshUserToken: boolean) => void;
 }
 
@@ -35,6 +41,7 @@ export const createUserStoreActions = (userStore: Writable<UserStoreStateInterfa
         )
       });
     },
+
     setIsAuthenticatingUser: (isAuthenticatingUser: boolean) => {
       userStore.update(state => {
         // return the new state
@@ -55,6 +62,28 @@ export const createUserStoreActions = (userStore: Writable<UserStoreStateInterfa
         )
       });
     },
+
+    setIsUnauthenticatingUser: (isUnauthenticatingUser: boolean) => {
+      userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isUnauthenticatingUser }
+        )
+      });
+    },
+    setUnauthenticateUserError: (unauthenticateUserError: any) => {
+      userStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { unauthenticateUserError }
+        )
+      });
+    },
+  
     setIsRefreshingUserToken: (isRefreshingUserToken: boolean) => {
       userStore.update(state => {
         // return the new state
@@ -75,6 +104,7 @@ export const createUserStoreActions = (userStore: Writable<UserStoreStateInterfa
         )
       });
     },
+
     setIsPollingRefreshUserToken: (isPollingRefreshUserToken: boolean) => {
       userStore.update(state => {
         // return the new state

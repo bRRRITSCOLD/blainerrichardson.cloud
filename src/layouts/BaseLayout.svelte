@@ -24,31 +24,43 @@
       </Button>
     </div>
 
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <span on:click={() => {
+      push('/home');
+    }}>
+      <ListItem style="padding: 0px;"><a use:active={{ path: '/home' }}>Home</a></ListItem>
+    </span>
+
     {#if !$userStore.isAuthenticated}
       <!-- svelte-ignore a11y-missing-attribute -->
-      <ListItem style="padding: 0px;"><a on:click={() => {
+      <span on:click={() => {
         // dispatch('onLoginButtonClick', true);
         uiStore.openLoginDialog();
-      }}>Login</a></ListItem>
+      }}>
+        <ListItem style="padding: 0px;"><a>Login</a></ListItem>
+      </span>
     {:else}
-      <!-- svelte-ignore a11y-missing-attribute -->
-      <ListItem style="padding: 0px;"><a use:active={{ path: '/home' }} on:click={() => {
-        push('/home');
-      }}>Home</a></ListItem>
 
       <!-- svelte-ignore a11y-missing-attribute -->
-      <ListItem style="padding: 0px;"><a on:click={() => {
+      <span on:click={() => {
         push('/admin');
-      }}>Admin</a></ListItem>
+      }}>
+        <ListItem style="padding: 0px;"><a use:active={{ path: '/admin' }}>Admin</a></ListItem>
+      </span>
 
       <!-- svelte-ignore a11y-missing-attribute -->
-      <ListItem style="padding: 0px;"><a on:click={() => {
+      <span on:click={async () => {
         // cleasr and reset all user data
         userStore.reset();
 
+        // logout/unauthenticate a user
+        await userStore.unauthenticateUser();
+
         // navigate the user to the home page
         push('/home');
-      }}>Logout</a></ListItem>
+      }}>
+        <ListItem style="padding: 0px;"><a>Logout</a></ListItem>
+      </span>
     {/if}
   </NavigationMenu>
 </NavigationBar>
