@@ -28,7 +28,7 @@
     <span on:click={() => {
       push('/home');
     }}>
-      <ListItem style="padding: 0px;"><a use:active={{ path: '/home' }}>Home</a></ListItem>
+      <ListItem style="padding: 10px;"><a use:active={{ path: '/home' }}>Home</a></ListItem>
     </span>
 
     {#if !$userStore.isAuthenticated}
@@ -37,7 +37,7 @@
         // dispatch('onLoginButtonClick', true);
         uiStore.openLoginDialog();
       }}>
-        <ListItem style="padding: 0px;"><a>Login</a></ListItem>
+        <ListItem style="padding: 10px;"><a>Login</a></ListItem>
       </span>
     {:else}
 
@@ -45,7 +45,7 @@
       <span on:click={() => {
         push('/admin');
       }}>
-        <ListItem style="padding: 0px;"><a use:active={{ path: '/admin' }}>Admin</a></ListItem>
+        <ListItem style="padding: 10px;"><a use:active={{ path: '/admin' }}>Admin</a></ListItem>
       </span>
 
       <!-- svelte-ignore a11y-missing-attribute -->
@@ -59,7 +59,7 @@
         // navigate the user to the home page
         push('/home');
       }}>
-        <ListItem style="padding: 0px;"><a>Logout</a></ListItem>
+        <ListItem style="padding: 10px;"><a>Logout</a></ListItem>
       </span>
     {/if}
   </NavigationMenu>
