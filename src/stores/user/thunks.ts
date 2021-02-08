@@ -21,6 +21,7 @@ export interface UserStoreThunksInterface {
   // startChangingCircleText: (circleText) => void;
   // stopChangingCircleText: () => void;
   authenticateUser: (authenticateUserRequest: AuthenticatUserRequestInterface) => Promise<void>;
+  unauthenticateUser: () => Promise<void>;
   refreshUserToken: (refreshUserTokenRequest: RefreshUserTokenRequestInterface) => Promise<void>;
   startPollingRefreshUserToken: (startPollingRefreshUserTokenRequest: StartPollingRefreshUserTokenRequestInterface) => void;
   stopPollingRefreshUserToken: () => void;
@@ -65,6 +66,32 @@ export const createUserStoreThunks = (userStoreActions: UserStoreActionsInterfac
 
         // indicate that we are sending an user
         userStoreActions.setIsAuthenticatingUser(false);
+      }
+    },
+    unauthenticateUser: async () => {
+      try {
+        // indicate we do not have errors
+        userStoreActions.setUnauthenticateUserError(undefined);
+
+        // indicate that we are unauthenticating an user
+        userStoreActions.setIsUnauthenticatingUser(true);
+
+        await userService.unauthenticateUser();
+
+        // indicate that we are sending an user
+        userStoreActions.setIsUnauthenticatingUser(false);
+
+        // return explictly to make sure
+        // the closure closes
+        return;
+      } catch (err) {
+        console.log(`isUnauthenticatingUser`, err);
+
+        // indicate we have an error
+        userStoreActions.setUnauthenticateUserError(err);
+
+        // indicate that we are sending an user
+        userStoreActions.setIsUnauthenticatingUser(false);
       }
     },
     refreshUserToken: async (refreshUserTokenRequest: RefreshUserTokenRequestInterface) => {

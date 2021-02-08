@@ -16,6 +16,7 @@
   // stores
   import { uiStore } from '../stores/ui';
   import { emailStore } from '../stores/email';
+import { resumeStore } from '../stores/resume';
 
   let iconLinks = $uiStore.iconLinks.map((iconLink) => _.assign(
     {},
@@ -23,8 +24,32 @@
     { color: 'black' }
   ));
 
-  onMount(() => {
+  onMount(async () => {
     uiStore.startChangingCircleText('Hello');
+
+    await Promise.all([
+      resumeStore.searchWorkExperiences({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
+      }),
+      resumeStore.searchSchoolExperiences({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
+      }),
+      resumeStore.searchCertifications({
+        searchCriteria: {},
+        searchOptions: {
+          pageSize: Number.MAX_SAFE_INTEGER,
+          pageNumber: 1
+        }
+      })
+    ]);
   })
 </script>
 

@@ -4,20 +4,32 @@ import { _ } from '../../lib/utils';
 export interface UserStoreStateInterface {
   user: { firstName: string; lastName: string; userId: string; username: string; roles: string };
   jwt: string;
+
   isAuthenticatingUser: boolean;
   authenticateUserError: any;
-  isPollingRefreshUserToken: boolean;
+
+  isUnauthenticatingUser: boolean;
+  unauthenticateUserError: any;
+
   isRefreshingUserToken: boolean;
   refreshUserTokenError: undefined;
+
+  isPollingRefreshUserToken: boolean;
 }
 
 export const initialUserStoreState: UserStoreStateInterface = {
   user: undefined,
   jwt: '',
+
   isAuthenticatingUser: false,
   authenticateUserError: undefined,
+
+  isUnauthenticatingUser: false,
+  unauthenticateUserError: undefined,
+
   isRefreshingUserToken: false,
   refreshUserTokenError: undefined,
+
   isPollingRefreshUserToken: false
 };
 
