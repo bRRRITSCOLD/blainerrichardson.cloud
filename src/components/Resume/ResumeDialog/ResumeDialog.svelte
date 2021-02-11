@@ -28,7 +28,7 @@
 
 <Dialog bind:active fullscreen>
   <div id="header" class="title-bar" style="position:absolute; top:0px; left:0px; right:0px; overflow:hidden;"> 
-    <div class="d-flex flex-row justify-space-between" style="padding-top: 10px; padding-bottom: 10px; width: 100%;">
+    <div class="d-flex flex-row justify-space-between" style="padding: 10px; width: 100%;">
       <div>Resume</div>
       <span
         on:mouseenter={() => {
@@ -153,7 +153,7 @@
     {/if}
   </div>
   <div id="footer" class="actions-bar" style="position:absolute; bottom:0px; left:0px; right:0px; overflow:hidden;">
-    <div class="d-flex flex-row justify-end" style="padding-top: 10px; padding-bottom: 10px; width: 100%;">
+    <div class="d-flex flex-row justify-end" style="padding: 10px; width: 100%;">
       <Button class="primary-color">
         Download
       </Button>
