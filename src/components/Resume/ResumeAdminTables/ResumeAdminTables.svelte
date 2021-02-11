@@ -165,6 +165,7 @@
             workExperiences={workExperiences}
             currentEditingWorkExperience={currentEditingWorkExperience}
             bind:addWorkExperienceDialogActive={addWorkExperienceDialogActive}
+            bind:isAddingWorkExperience={isAddingWorkExperience}
             on:onAddWorkExperienceDialogOverlayClick={onWorkExperiencesTableAddWorkExperienceDialogOverlayClick}
             on:onAddWorkExperienceDialogSubmitButtonClick={onWorkExperiencesTableAddWorkExperienceDialogSubmitButtonClick}
             on:onAddWorkExperienceDialogCloseButtonClick={onWorkExperiencesTableAddWorkExperienceDialogCloseButtonClick}
@@ -182,6 +183,7 @@
             width={width}
             schoolExperiences={schoolExperiences}
             currentEditingSchoolExperience={currentEditingSchoolExperience}
+            bind:isAddingSchoolExperience={isAddingSchoolExperience}
             bind:addSchoolExperienceDialogActive={addSchoolExperienceDialogActive}
             on:onAddSchoolExperienceDialogOverlayClick={onSchoolExperiencesTableAddSchoolExperienceDialogOverlayClick}
             on:onAddSchoolExperienceDialogSubmitButtonClick={onSchoolExperiencesTableAddSchoolExperienceDialogSubmitButtonClick}
@@ -201,6 +203,7 @@
             certifications={certifications}
             currentEditingCertification={currentEditingCertification}
             bind:addCertificationDialogActive={addCertificationDialogActive}
+            bind:isAddingCertification={isAddingCertification}
             on:onAddCertificationDialogOverlayClick={onCertificationsTableAddCertificationDialogOverlayClick}
             on:onAddCertificationDialogSubmitButtonClick={onCertificationsTableAddCertificationDialogSubmitButtonClick}
             on:onAddCertificationDialogCloseButtonClick={onCertificationsTableAddCertificationDialogCloseButtonClick}
