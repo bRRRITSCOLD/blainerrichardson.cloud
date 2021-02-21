@@ -12,6 +12,10 @@ export interface ResumeStoreSelectorsInterface extends ResumeStoreStateInterface
 export const createResumeStoreSelectors = (resumeStore: Writable<ResumeStoreStateInterface & object>): Readable<ResumeStoreSelectorsInterface> => {
 
   return derived(resumeStore, $resumeStore => ({
+    // resume specific
+    isDownloadingResume: $resumeStore.isDownloadingResume,
+    downloadResumeError: $resumeStore.downloadResumeError,
+
     // work experiences specific
     isSearchingWorkExperiences: $resumeStore.isSearchingWorkExperiences,
     searchWorkExperiencesError: $resumeStore.searchWorkExperiencesError,

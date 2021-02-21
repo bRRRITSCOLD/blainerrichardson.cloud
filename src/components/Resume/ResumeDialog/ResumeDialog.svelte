@@ -154,7 +154,10 @@
   </div>
   <div id="footer" class="actions-bar" style="position:absolute; bottom:0px; left:0px; right:0px; overflow:hidden;">
     <div class="d-flex flex-row justify-end" style="padding: 10px; width: 100%;">
-      <Button class="primary-color">
+      <Button class="primary-color" on:click={() => {
+        console.log('onDownloadButtonClick');
+        dispatch('onDownloadButtonClick', true);
+      }}>
         Download
       </Button>
     </div>

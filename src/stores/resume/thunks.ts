@@ -2,30 +2,72 @@
 import { promiseUtils, _ } from '../../lib/utils';
 import type { AnyObject } from '../../models/common';
 import type { SchoolExperienceInterface, WorkExperienceInterface, CertificationInterface } from '../../models/resume';
+import { saveAs } from 'file-saver';
 
 // store specific
 import type { ResumeStoreActionsInterface } from "./actions";
 
 // services
 import * as resumeServices from '../../services/resume';
+import { async } from 'rxjs';
 
 export interface ResumeStoreThunksInterface {
-  searchWorkExperiences: (searchWorkExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
-  putWorkExperiences: (putWorkExperiencesRequest: { jwt: string; workExperiences: WorkExperienceInterface[]; }) => void;
-  deleteWorkExperiences: (deleteWorkExperiencesRequest: { jwt: string; workExperienceIds: string[]; }) => void;
+  downloadResume: () => Promise<void>;
 
-  searchSchoolExperiences: (searchSchoolExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
-  putSchoolExperiences: (putSchoolExperiencesRequest: { jwt: string; schoolExperiences: SchoolExperienceInterface[]; }) => void;
-  deleteSchoolExperiences: (deleteSchoolExperiencesRequest: { jwt: string; schoolExperienceIds: string[]; }) => void;
+  searchWorkExperiences: (searchWorkExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => Promise<void>;
+  putWorkExperiences: (putWorkExperiencesRequest: { jwt: string; workExperiences: WorkExperienceInterface[]; }) => Promise<void>;
+  deleteWorkExperiences: (deleteWorkExperiencesRequest: { jwt: string; workExperienceIds: string[]; }) => Promise<void>;
 
-  searchCertifications: (searchCertificationsRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => void;
-  putCertifications: (putCertificationsRequest: { jwt: string; certifications: CertificationInterface[]; }) => void;
-  deleteCertifications: (deleteCertificationsRequest: { jwt: string; certificationIds: string[]; }) => void;
+  searchSchoolExperiences: (searchSchoolExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => Promise<void>;
+  putSchoolExperiences: (putSchoolExperiencesRequest: { jwt: string; schoolExperiences: SchoolExperienceInterface[]; }) => Promise<void>;
+  deleteSchoolExperiences: (deleteSchoolExperiencesRequest: { jwt: string; schoolExperienceIds: string[]; }) => Promise<void>;
+
+  searchCertifications: (searchCertificationsRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => Promise<void>;
+  putCertifications: (putCertificationsRequest: { jwt: string; certifications: CertificationInterface[]; }) => Promise<void>;
+  deleteCertifications: (deleteCertificationsRequest: { jwt: string; certificationIds: string[]; }) => Promise<void>;
 }
 
 export const createResumeStoreThunks = (resumeStoreActions: ResumeStoreActionsInterface): ResumeStoreThunksInterface => {
 
   return {
+    downloadResume: async() => {
+      try {
+        resumeStoreActions.setIsDownloadingResume(true);
+        resumeStoreActions.setDownloadResumeError(undefined);
+  
+        // attempt to search system
+        const [
+          downloadResumeResponse
+        ] = await promiseUtils.allSettled([
+          resumeServices.downloadResume()
+        ]);
+        
+        // if our call failed handle appropriately else move on
+        if (downloadResumeResponse.status === 'rejected') {
+          throw downloadResumeResponse.reason;
+        }
+
+        // convert file and save
+        const base64Conversion = await fetch(`data:application/pdf;base64,${downloadResumeResponse.data.bytes}`);
+        const base64ConversionBlob =  await base64Conversion.blob();
+        saveAs(base64ConversionBlob, 'blaine-richardson-resume.pdf');
+
+        resumeStoreActions.setIsDownloadingResume(false);
+
+        // return explicitly
+        return;
+      } catch (err) {
+        console.log(`downloadResumeError=`, err);
+
+        // store error and indicate we are no longer loading
+        resumeStoreActions.setDownloadResumeError(err);
+        resumeStoreActions.setIsDownloadingResume(true);
+
+        // return explicitly
+        return;
+      }
+    },
+
     searchWorkExperiences: async (_searchWorkExperiencesRequest: { searchCriteria: AnyObject; searchOptions: { pageNumber: number; pageSize: number; } }) => {
       try {
         // indicate we are loading and reset any old errors
