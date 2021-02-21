@@ -5,6 +5,9 @@ import { Certification, SchoolExperience, SchoolExperienceInterface, WorkExperie
 import { mdiGestureSwipeLeft } from "@mdi/js";
 
 export interface ResumeStoreActionsInterface {
+  setIsDownloadingResume: (isDownloadingResume: boolean) => void;
+  setDownloadResumeError: (downloadResumeError: any) => void;
+
   setSchoolExperiences: (schoolExperiences: SchoolExperience[]) => void;
   putSchoolExperience: (schoolExperience: SchoolExperience, putSchoolExperienceOptions: { upsert?: boolean }) => void;
   deleteSchoolExperience: (schoolExperienceId: string) => void;
@@ -39,6 +42,27 @@ export interface ResumeStoreActionsInterface {
 export const createResumeStoreActions = (resumeStore: Writable<ResumeStoreStateInterface & object>): ResumeStoreActionsInterface => {
 
   return {
+    setIsDownloadingResume: (isDownloadingResume: boolean) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { isDownloadingResume }
+        )
+      });
+    },
+    setDownloadResumeError: (downloadResumeError: any) => {
+      resumeStore.update(state => {
+        // return the new state
+        return _.assign(
+          {},
+          state,
+          { downloadResumeError }
+        )
+      });
+    },
+
     setSchoolExperiences: (schoolExperiences: SchoolExperience[]) => {
       resumeStore.update(state => {
         // return the new state

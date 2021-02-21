@@ -9,6 +9,9 @@ import { _ } from '../../lib/utils';
 import type { Certification, SchoolExperience, WorkExperience } from '../../models/resume';
 
 export interface ResumeStoreStateInterface {
+  isDownloadingResume: boolean;
+  downloadResumeError: any;
+
   isSearchingWorkExperiences: boolean;
   searchWorkExperiencesError: any;
   isPuttingWorkExperiences: boolean;
@@ -31,6 +34,10 @@ export interface ResumeStoreStateInterface {
 }
 
 export const initialResumeStoreState: ResumeStoreStateInterface = {
+  // resume specific
+  isDownloadingResume: false,
+  downloadResumeError: undefined,
+
   // work experiences specific
   isSearchingWorkExperiences: false,
   searchWorkExperiencesError: undefined,

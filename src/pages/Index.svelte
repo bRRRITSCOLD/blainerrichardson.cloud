@@ -89,6 +89,9 @@ import { resumeStore } from '../stores/resume';
     on:onCloseIconClick={() => {
       uiStore.closeResumeDialog()
     }}
+    on:onDownloadButtonClick={async () => {
+      await resumeStore.downloadResume();
+    }}
   />
 {/if}
 
