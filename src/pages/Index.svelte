@@ -131,6 +131,7 @@ import { resumeStore } from '../stores/resume';
                 window.location.href = link.href;
               }
             }}
+            style="cursor: pointer;"
           >
             <Icon size="70px" style="color: {link.color};" path={link.path} />
           </span>

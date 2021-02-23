@@ -40,6 +40,7 @@
         on:click={() => {
           dispatch('onCloseIconClick', true);
         }}
+        style="cursor: pointer;"
       >
         <Icon style="color: {closeIconColor};" size="30px" path={mdiClose} />
       </span>
